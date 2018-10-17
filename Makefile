@@ -3,8 +3,8 @@
 .PHONY: clean
 
 #target simulator rules
-simulator: simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/overfunctions.o
-	g++ simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/overfunctions.o -o bin/mips_simulator
+simulator: simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o
+	g++ simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o -o bin/mips_simulator
 
 #target testbench rules
 testbench: testbenchfiles/testbench.o
@@ -18,9 +18,9 @@ main.o:
 instructions.o:
 	g++ -c simulatorfiles/instructions.cpp
 
-#overfunctions object file compilation
-overfunctions.o:
-	g++ -c simulatorfiles/overfunctions.cpp
+#memory object file compilation
+memory.o:
+	g++ -c simulatorfiles/memory.cpp
 
 #testbench object file compilation
 testbench.o:
@@ -28,4 +28,4 @@ testbench.o:
 
 #clean function to remove all temp files
 clean: 
-	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/overfunctions.o testbenchfiles/testbench.o 
+	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o testbenchfiles/testbench.o 
