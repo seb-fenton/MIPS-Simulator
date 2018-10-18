@@ -1,6 +1,5 @@
 #include "memory.hpp"
 #include <iostream>
-using namespace std;
 
 //SIMULATOR_REGISTERS FUNCTION DEFINITIONS//
 
@@ -18,15 +17,15 @@ char simulator_registers::get_register(int address){
 
 void simulator_registers::set_register(char input, int address){
     if(input == 0 || 1 || 26 || 27){
-        cerr<<"Fatal error encountered: exit code -11";
-        exit; 
+        std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
+        std::exit; 
     }
     else if(input<32 && input>-1){
         registers[address] = input;
     }
     else{
-        cerr<<"Fatal error encountered: exit code -11";
-        exit;
+        std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
+        std::exit;
     }
 }
 
