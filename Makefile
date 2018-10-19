@@ -4,11 +4,12 @@
 
 #target simulator rules
 simulator: simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o
+	mkdir -p bin
 	g++ simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o -o bin/mips_simulator
 
 #target testbench rules
-testbench: testbenchfiles/testbench.o
-	g++ testbenchfiles/testbench.o -o bin/mips_testbench
+testbench: bin/test.sh
+	bin/test.sh
 
 #main object file compilation
 main.o:

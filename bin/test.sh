@@ -1,6 +1,11 @@
 #!/bin/bash
-echo "poop"
-touch test/testoutput.csv
-echo -n "Proceed? [y/n]: "
+
+#INITIALISATION OF TEST DIRECTORY AND FILES
+echo "Initialising test directory"
+mkdir -p bin/test
+touch bin/test/testoutput.csv
+
+#ASKING FOR USER INPUT
+echo -n "Enter path to simulator executable: "
 read ans
 source $ans

@@ -18,6 +18,7 @@ char simulator_registers::get_register(int address){
 void simulator_registers::set_register(char input, int address){
     if(input == 0 || 1 || 26 || 27){
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
+        ///!!!MOVE -11 INTO REGISTER 2!!!///
         std::exit; 
     }
     else if(input<32 && input>-1){
@@ -25,6 +26,7 @@ void simulator_registers::set_register(char input, int address){
     }
     else{
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
+        ///!!!MOVE -11 INTO REGISTER 2!!!///
         std::exit;
     }
 }
