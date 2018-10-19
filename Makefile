@@ -27,9 +27,11 @@ memory.o:
 testbenchinitialiser.o:
 	g++ -c testbenchfiles/testbenchinitialiser.cpp
 
-#clean function to remove all temp files
+#clean function to remove all temp files that are not testbench outputs
 clean: 
 	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o testbenchfiles/testbenchinitialiser.o
 
+#clean function to remove testbench outputs
 clean_t:
+	rm bin/test/testoutput.csv
 	rm -r bin/test
