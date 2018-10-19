@@ -1,2 +1,6 @@
 simulatorfiles/instructions.o
 simulatorfiles/main.o
+simulatorfiles/memory.o
+bin/ex1.bin
+bin/test
+testbenchfiles/testbenchinitialiser.o
