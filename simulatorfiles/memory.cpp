@@ -42,7 +42,7 @@ void sim_reg::set_reg(char input, int address){
     //functional methods
     void sim_mem::get_byte(int address, char &value){
         //Memory exception (-11): reading from write- only memory zone addr_putc
-        if(writing to read only)
+        if(writing to read only)ab
             break out
     }
     void sim_mem::set_byte(int address, char value){
