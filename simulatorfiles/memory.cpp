@@ -6,12 +6,12 @@
 //Constructor to initialise all register values to 0
 sim_reg::sim_reg(){
     for(int i = 0; i<31; i++){
-        registers[i] = 0;
+        reg[i] = 0;
     }
 }
 
-char sim_reg::get_reg(int address){
-    char output = registers[address];
+int sim_reg::get_reg(int address){
+    char output = reg[address];
     return output;
 }
 
@@ -22,7 +22,7 @@ void sim_reg::set_reg(char input, int address){
         std::exit; 
     }
     else if(input<32 && input>-1){
-        registers[address] = input;
+        reg[address] = input;
     }
     else{
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
@@ -40,7 +40,11 @@ void sim_reg::set_reg(char input, int address){
     }
 
     //functional methods
-    char sim_mem::get_byte(int address){
+    void sim_mem::get_byte(int address, char &value){
+        //Memory exception (-11): reading from write- only memory zone addr_putc
+        if(writing to read only)
+            break out
     }
     void sim_mem::set_byte(int address, char value){
+        //Memory exception (-11): writing to read-only zone addr_getc
     }
