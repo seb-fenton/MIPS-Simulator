@@ -49,9 +49,17 @@ void sim_reg::set_reg(char input, int address){
         //Memory exception (-11): writing to read-only zone addr_getc
     }
 
+<<<<<<< HEAD
     shit
+=======
+    //CONFLICT AREA
+>>>>>>> f0437076dc9a6af637fcf3a2e81e3124d282d41b
 
 
 
 
+<<<<<<< HEAD
     asdasd
+=======
+    //OK HERES ALL MY NEW CODE BLADY BLAH
+>>>>>>> f0437076dc9a6af637fcf3a2e81e3124d282d41b
