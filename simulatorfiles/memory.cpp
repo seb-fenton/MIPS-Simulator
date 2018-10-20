@@ -40,6 +40,11 @@ void sim_reg::set_reg(char input, int address){
     }
 
     //functional methods
+    void sim_mem::addressmap(int address){
+        if(0 < address < 4)
+    }
+
+
     void sim_mem::get_byte(int address, char &value){
         /*Memory exceptions (-11): 
         1. reading from write- only memory zone addr_putc*/
@@ -56,7 +61,12 @@ void sim_reg::set_reg(char input, int address){
 
         //4. Accessing Blank Areas
         
+
+        //ACTUAL FUNCTION
+        //map numerical address to the correct array
     }
+
+
     void sim_mem::set_byte(int address, char value){
         //Memory exceptions (-11): 
         //1. writing to read-only memory zone addr_getc
@@ -75,4 +85,5 @@ void sim_reg::set_reg(char input, int address){
         //5. Writing to instruction memory
         
        
+       //Actual function
     }
