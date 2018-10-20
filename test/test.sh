@@ -4,8 +4,8 @@
 echo "--#Initialising test directory"
 #mkdir -p bin/test
 touch test/output.csv
-touch test/temp.bin
-printf "TestId\tInstruction\tStatus\tAuthor\tMessage\n" >> bin/test/testoutput.csv
+touch test/temp.csv
+printf "TestId\tInstruction\tStatus\tAuthor\tMessage\n" >> test/output.csv
 
 ###TAKES FILE INPUT###                                           
 my_function() {

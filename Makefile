@@ -8,8 +8,8 @@ simulator: simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/me
 	g++ simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o -o bin/mips_simulator
 
 #target testbench rules
-testbench: testbenchfiles/testbenchinitialiser.o
-	g++ testbenchfiles/testbenchinitialiser.o -o bin/mips_testbench
+testbench: test/testbenchinitialiser.o
+	g++ test/testbenchinitialiser.o -o bin/mips_testbench
 
 #main object file compilation
 main.o:
@@ -25,13 +25,12 @@ memory.o:
 
 #testbench object file compilation
 testbenchinitialiser.o:
-	g++ -c testbenchfiles/testbenchinitialiser.cpp
+	g++ -c test/testbenchinitialiser.cpp
 
 #clean function to remove all temp files that are not testbench outputs
 clean: 
-	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o testbenchfiles/testbenchinitialiser.o
+	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o test/testbenchinitialiser.o
 
 #clean function to remove testbench outputs
 clean_t:
-	rm bin/test/testoutput.csv
-	rm -r bin/test
+	rm test/output.csv test/temp.csv
