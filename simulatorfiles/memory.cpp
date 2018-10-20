@@ -41,25 +41,38 @@ void sim_reg::set_reg(char input, int address){
 
     //functional methods
     void sim_mem::get_byte(int address, char &value){
-        //Memory exception (-11): reading from write- only memory zone addr_putc
-        if(writing to read only)
-            break out
+        /*Memory exceptions (-11): 
+        1. reading from write- only memory zone addr_putc*/
+        if((address >= 0x30000004) && (address <= 0x30000007) // if writing to read only
+            std::exit(-11);
+
+        //2. Reading from addr_null
+        if((address >= 0x0) && (address <= 0x4) // if accessing addr_null
+            std::exit(-11);
+
+        //3. Address out of range
+        if((address < 0x0) && (address > 0xFFFFFFFF) // if accessing addr_null
+            std::exit(-11);
+
+        //4. Accessing Blank Areas
+        
     }
     void sim_mem::set_byte(int address, char value){
-        //Memory exception (-11): writing to read-only zone addr_getc
+        //Memory exceptions (-11): 
+        //1. writing to read-only memory zone addr_getc
+        if((address >= 0x3000000) && (address <= 0x30000003)
+            std::exit(-11);
+
+        //2. Writing to addr_null
+        if((address >= 0x0) && (address <= 0x4) // if accessing addr_null
+            std::exit(-11);
+
+        //3. Address Out of range
+        if((address < 0x0) && (address > 0xFFFFFFFF) // if accessing addr_null
+            std::exit(-11);
+        //4. Accessing Blank Areas
+
+        //5. Writing to instruction memory
+        
+       
     }
-
-<<<<<<< HEAD
-    shit
-=======
-    //CONFLICT AREA
->>>>>>> f0437076dc9a6af637fcf3a2e81e3124d282d41b
-
-
-
-
-<<<<<<< HEAD
-    asdasd
-=======
-    //OK HERES ALL MY NEW CODE BLADY BLAH
->>>>>>> f0437076dc9a6af637fcf3a2e81e3124d282d41b
