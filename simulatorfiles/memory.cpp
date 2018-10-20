@@ -4,18 +4,18 @@
 //SIMULATOR_REGISTERS FUNCTION DEFINITIONS//
 
 //Constructor to initialise all register values to 0
-simulator_registers::simulator_registers(){
+sim_reg::sim_reg(){
     for(int i = 0; i<31; i++){
         registers[i] = 0;
     }
 }
 
-char simulator_registers::get_register(int address){
+char sim_reg::get_reg(int address){
     char output = registers[address];
     return output;
 }
 
-void simulator_registers::set_register(char input, int address){
+void sim_reg::set_reg(char input, int address){
     if(input == 0 || 1 || 26 || 27){
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
         ///!!!MOVE -11 INTO REGISTER 2!!!///
@@ -31,4 +31,16 @@ void simulator_registers::set_register(char input, int address){
     }
 }
 
-//SIMULATOR_MEMORY FUNCTION DEFINITIONS//
+    //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
+    //constructor
+    sim_mem::sim_mem(){
+        //load binary into executable memory
+
+        //initialise data memory to zero
+    }
+
+    //functional methods
+    char sim_mem::get_byte(int address){
+    }
+    void sim_mem::set_byte(int address, char value){
+    }
