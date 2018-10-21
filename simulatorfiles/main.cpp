@@ -6,9 +6,8 @@
 #include <map>
 
 int main(int argc, char* argv[]){
-
     //INITIALISE MEMORY AND REGISTERS
-    
+    sim_mem MemModule;
     //LOAD BINARY INTO MEMORY
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT

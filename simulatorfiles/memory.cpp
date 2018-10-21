@@ -64,10 +64,6 @@ char sim_mem::addressmap(int &address){
 
 char sim_mem::get_byte(int address){
     char check = sim_mem::addressmap(address);
-<<<<<<< HEAD
-=======
-        
->>>>>>> 4542053ddd986e851f803b5e9f173c35af83a8a0
     /*Memory exceptions (-11): 
     1. Reading from addr_null
     2. Reading from write-only memory zone addr_putc
