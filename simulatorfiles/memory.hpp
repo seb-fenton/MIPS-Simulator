@@ -18,7 +18,7 @@ class sim_mem{
         char addr_instr[0x1000000]; //0x1000 0000 to 0x10FF FFFF
         //0x1100 0000 to 0x11FF FFFF
 
-        char addr_data[0x4000000] = {0};  //0x2000 0000 to 0x23FF FFFF
+        char addr_data[0x4000000];  //0x2000 0000 to 0x23FF FFFF
         //0x2400 0000 to 0x2FFF FFFF
 
         char addr_getc[4]; //0x3000 0000 to 0x3000 0003 
@@ -31,6 +31,7 @@ class sim_mem{
 
     public:
         sim_mem();
+        void addressmap(int &address);
         char get_byte(int address);
         void set_byte(int address, char value);
 };
