@@ -77,7 +77,7 @@ void sim_reg::set_reg(char input, int address){
         //map numerical address to the correct array
         switch(check){
             case '1': return addr_instr[address];
-            case '2'; return addr_data[address];
+            case '2': return addr_data[address];
             case '3': return addr_getc[address];
         }
     }
@@ -95,7 +95,7 @@ void sim_reg::set_reg(char input, int address){
         
        //Actual function
        switch(check){
-            case '2'; addr_data[address] = value;
+            case '2': addr_data[address] = value;
             case '4': addr_getc[address] = value;
         }
     }
