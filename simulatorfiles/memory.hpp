@@ -12,8 +12,6 @@ class sim_reg{
 
 class sim_mem{
     private:
-    
-        char selector;
     //should we use INT for the 32 bit spaces? null, getc, putc.
         char addr_null[4];          //0-3
         //0x4 to 0x0FFF FFFF
@@ -34,6 +32,6 @@ class sim_mem{
     public:
         sim_mem();
         void addressmap(int &address);
-        void get_byte(int address);
+        char get_byte(int address);
         void set_byte(int address, char value);
 };
