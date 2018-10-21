@@ -2,9 +2,10 @@
 
 ###INITIALISATION OF TEST DIRECTORY AND FILES###
 echo "--#Initialising test directory"
-mkdir -p bin/test
-touch bin/test/testoutput.csv
-printf "TestId\tInstruction\tStatus\tAuthor\tMessage\n" >> bin/test/testoutput.csv
+#mkdir -p bin/test
+touch test/output.csv
+touch test/temp.csv
+printf "TestId\tInstruction\tStatus\tAuthor\tMessage\n" >> test/output.csv
 
 ###TAKES FILE INPUT###                                           
 my_function() {

@@ -30,13 +30,13 @@ void sim_reg::set_reg(char input, int address){
     }
 }
 
-    //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
-    //constructor
-    sim_mem::sim_mem(){
-        //load binary into executable memory
+//SIMULATOR_MEMORY FUNCTION DEFINITIONS//
+//constructor
+sim_mem::sim_mem(){
+    //load binary into executable memory
 
-        //initialise data memory to zero
-    }
+    //initialise data memory to zero
+}
 
 //Checks for a valid address, then subtracts the starting address and maps the appropriate memory region
 //via the return character.
@@ -64,6 +64,10 @@ char sim_mem::addressmap(int &address){
 
 char sim_mem::get_byte(int address){
     char check = sim_mem::addressmap(address);
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 4542053ddd986e851f803b5e9f173c35af83a8a0
     /*Memory exceptions (-11): 
     1. Reading from addr_null
     2. Reading from write-only memory zone addr_putc
@@ -75,7 +79,7 @@ char sim_mem::get_byte(int address){
     //map numerical address to the correct array
     switch(check){
         case '1': return addr_instr[address];
-        case '2'; return addr_data[address];
+        case '2': return addr_data[address];
         case '3': return addr_getc[address];
     }
 }
@@ -91,7 +95,7 @@ void sim_mem::set_byte(int address, char value){
     if(check == '0' || check == '1' || check == '3' || check =='x')
         std::exit(-11);
         
-    //Actual function
+    //Actual function inserts value into address if no errors are thrown
     switch(check){
         case '2': addr_data[address] = value;
         case '4': addr_getc[address] = value;
