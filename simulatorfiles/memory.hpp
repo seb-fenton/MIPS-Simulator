@@ -1,5 +1,4 @@
 #pragma once
-
 class sim_reg{
     public:
         sim_reg();
@@ -13,21 +12,19 @@ class sim_reg{
 class sim_mem{
     private:
     //should we use INT for the 32 bit spaces? null, getc, putc.
-        char addr_null[4];          //0-3
-        //0x4 to 0x0FFF FFFF
-        char addr_instr[0x1000000]; //0x1000 0000 to 0x10FF FFFF
-        //0x1100 0000 to 0x11FF FFFF
-
-        char addr_data[0x4000000];  //0x2000 0000 to 0x23FF FFFF
-        //0x2400 0000 to 0x2FFF FFFF
-
-        char addr_getc[4]; //0x3000 0000 to 0x3000 0003 
-        //READ ONLY, gets input via stdin
-
-        char addr_putc[4]; //0x3000 0004 to 0x3000 0007 
-        //WRITE ONLY, output through stdout?
-
-        //0x3000 0008 0xFFFF FFFF
+        char addr_null[4];              
+        char addr_instr[0x1000000];
+        char addr_data[0x4000000];
+        char addr_getc[4];
+        char addr_putc[4];
+        //0x4 to 0x0FFF FFFF            : Blank
+        //0x1000 0000 to 0x10FF FFFF    : Instruction Space
+        //0x1100 0000 to 0x11FF FFFF    : Blank
+        //0x2000 0000 to 0x23FF FFFF    : Data Space
+        //0x2400 0000 to 0x2FFF FFFF    : Blank
+        //0x3000 0000 to 0x3000 0003    : GetC                  READ ONLY, input via stdin
+        //0x3000 0004 to 0x3000 0007    : PutC                  Write Only, output via stdout
+        //0x3000 0008 to 0xFFFF FFFF    : Blank
 
     public:
         sim_mem();
