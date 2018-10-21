@@ -28,7 +28,7 @@ class sim_mem{
 
     public:
         sim_mem();
-        void addressmap(int &address);
+        char addressmap(int &address);
         char get_byte(int address);
         void set_byte(int address, char value);
 };

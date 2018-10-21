@@ -59,7 +59,7 @@ char sim_mem::addressmap(int &address){
         address = address - 0x30000004;
         return 4; //4 for putc
     }
-    else return x;
+    else return 'x';
 }
 
 char sim_mem::get_byte(int address){
