@@ -5,12 +5,21 @@
 #include <string>
 #include <map>
 
-
-
 int main(int argc, char* argv[]){
 
-    //std::map<std::string> function_map;
+    //INITIALISE MEMORY AND REGISTERS
+    
+    //LOAD BINARY INTO MEMORY
 
+    //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
+        //Obtain instruction
+        //Parse instruction
+        //Function Map  //std::map<std::string> function_map;
+            //instruction does its thing
+        //PC + 4 or branch adjustment
+    
+   
+    /*
     std::string fileName;
     std::cout << argv[0] << std::endl;
 
@@ -21,10 +30,7 @@ int main(int argc, char* argv[]){
         //ISSUE!!! 
         std::cerr<<"ERROR: -01????"<<std::endl;
         std::exit(0);
-    }
-
-
-
+    }*/
 
     return 0;
 }
