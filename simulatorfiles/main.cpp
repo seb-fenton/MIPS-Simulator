@@ -45,7 +45,15 @@ int main(int argc, char* argv[]){
         //std::exit(-11??);
     }
 
+    //create vector of chars/ints holding whole binary string
     std::vector<char> InputBinaryVector;
+
+    //using fstream or something along those lines
+    //separate into instructions here? or in simulator object?
+
+
+
+
 
 
 
