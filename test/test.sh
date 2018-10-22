@@ -5,7 +5,7 @@ echo "--#Initialising test directory"
 #mkdir -p bin/test
 touch test/output.csv
 touch test/temp.csv
-printf "TestId\tInstruction\tStatus\tAuthor\tMessage\n" >> test/output.csv
+printf "TestId , Instruction , Status , Author , Message" >> test/output.csv
 
 ###TAKES FILE INPUT###                                           
 my_function() {
