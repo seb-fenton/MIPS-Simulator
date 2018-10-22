@@ -1,5 +1,5 @@
 #include "main.hpp"
-#include "instructions.hpp"
+//#include "instructions.hpp"
 #include "memory.hpp"
 #include <iostream>
 #include <string>
@@ -9,9 +9,19 @@
 int main(int argc, char* argv[]){
     //INITIALISE MEMORY AND REGISTERS
     sim_mem MemModule;
-    //LOAD BINARY INTO MEMORY
+    char c = 1;
+    int adr;
+    while (c > 0){
+        std::cout << "\n Input a value to set:" << std::endl;
+        std::cin >> c;
+        std::cout << "\n Input a memory address to SET:" << std::endl;
+        std::cin >> adr;
+        MemModule.set_byte(adr, c);
+        std::cout << "\n Input a memory address to check:" << std::endl << MemModule.get_byte(adr);
+    }
 
-    
+    //LOAD BINARY INTO MEMORY
+    /*
     //Defines string to hold the input binary
     std::string InputBinaryFile;
     bool BinaryInputTrueOrFalse;
@@ -48,7 +58,7 @@ int main(int argc, char* argv[]){
         //Function Map  //std::map<std::string> function_map;
             //instruction does its thing
         //PC + 4 or branch adjustment
-    
+    }*/
 
     return 0;
 }
