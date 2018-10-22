@@ -14,7 +14,7 @@ int sim_reg::get_reg(int address){
     return output;
 }
 
-void sim_reg::set_reg(char input, int address){
+void sim_reg::set_reg(int input, int address){
     if(input == 0 || 1 || 26 || 27){
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
         ///!!!MOVE -11 INTO REGISTER 2!!!///
