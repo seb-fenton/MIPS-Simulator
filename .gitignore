@@ -4,3 +4,6 @@ simulatorfiles/memory.o
 bin/ex1.bin
 bin/test
 testbenchfiles/testbenchinitialiser.o
+.vscode
+simulatorfiles/.vscode
+/.metadata/
