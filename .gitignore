@@ -7,3 +7,5 @@ testbenchfiles/testbenchinitialiser.o
 .vscode
 simulatorfiles/.vscode
 /.metadata/
+simulatorfiles/MemoryTest
+simulatorfiles/Makefile
