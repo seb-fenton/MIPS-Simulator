@@ -12,7 +12,7 @@ class sim_reg{
 
 class sim_mem{
     private:
-        char addressmap(int &address) const;
+        int addressmap(int &address) const;
         
         //CHANGE TO VECTORS.
         std::vector<char> addr_null; //size 4             
@@ -34,4 +34,8 @@ class sim_mem{
         //NOT PASSED BY REFERENCE on purpose.
         char get_byte(int address) const;
         void set_byte(int address, char value);
+
+
+        //DELETE US AFTER TESTING
+        char TESTGETBYTE(int address) const;
 };
