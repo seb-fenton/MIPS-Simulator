@@ -133,10 +133,3 @@ char sim_mem::TESTGETBYTE(int address) const{
         case 4: return addr_putc[address];
     }
 }
-
-void sim_mem::TESTSETBYTE(int address, char value){
-    int check = sim_mem::addressmap(address);
-    switch(check){
-        case 2: addr_data[address] = value;
-    }
-}
