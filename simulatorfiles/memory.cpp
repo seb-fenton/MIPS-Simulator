@@ -7,7 +7,6 @@ sim_reg::sim_reg(){
     for(int i = 0; i<31; i++){
         reg[i] = 0;
     }
-
 }
 
 int sim_reg::get_reg(int regNum) const{
@@ -34,9 +33,14 @@ void sim_reg::set_reg(int input, int regNum){
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
 //constructor
 sim_mem::sim_mem(){
+    //initialise data memory to zero
+    addr_null.resize(0x4);; //size 4             
+    addr_instr.resize(0x1000000); //0x1000000
+    addr_data.resize(0x4000000); //0x4000000
+    addr_getc.resize(0x4); //4
+    addr_putc.resize(0x4);//4
     //load binary into executable memory
 
-    //initialise data memory to zero
 }
 
 //Checks for a valid address, then subtracts the starting address and maps the appropriate memory region

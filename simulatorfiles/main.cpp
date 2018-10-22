@@ -7,17 +7,22 @@
 #include <vector>
 
 int main(int argc, char* argv[]){
+    std::cin.unsetf(std::ios::dec);
+    std::cin.unsetf(std::ios::hex);
+    std::cin.unsetf(std::ios::oct);
     //INITIALISE MEMORY AND REGISTERS
     sim_mem MemModule;
     char c = 1;
     int adr;
     while (c > 0){
-        std::cout << "\n Input a value to set:" << std::endl;
+        std::cout << "\n\n Input a value to set:" << std::endl;
         std::cin >> c;
         std::cout << "\n Input a memory address to SET:" << std::endl;
         std::cin >> adr;
         MemModule.set_byte(adr, c);
-        std::cout << "\n Input a memory address to check:" << std::endl << MemModule.get_byte(adr);
+        std::cout << "\n Input a memory address to check:";
+        std::cin >> adr;
+        std::cout << MemModule.get_byte(adr);
     }
 
     //LOAD BINARY INTO MEMORY
