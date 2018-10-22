@@ -2,8 +2,8 @@
 class sim_reg{
     public:
         sim_reg();
-        int get_reg(int address);
-        void set_reg(int input, int address);
+        int get_reg(int regNum) const;
+        void set_reg(int input, int regNum);
 
     private:
         int reg[31];
@@ -30,6 +30,7 @@ class sim_mem{
 
     public:
         sim_mem();
+        //NOT PASSED BY REFERENCE on purpose.
         char get_byte(int address) const;
         void set_byte(int address, char value);
 };

@@ -9,24 +9,24 @@ sim_reg::sim_reg(){
     }
 }
 
-int sim_reg::get_reg(int address){
-    char output = reg[address];
+int sim_reg::get_reg(int regNum) const{
+    char output = reg[regNum];
     return output;
 }
 
-void sim_reg::set_reg(int input, int address){
+void sim_reg::set_reg(int input, int regNum){
     if(input == 0 || 1 || 26 || 27){
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
         ///!!!MOVE -11 INTO REGISTER 2!!!///
-        std::exit; 
+        std::exit(-11); 
     }
     else if(input<32 && input>-1){
-        reg[address] = input;
+        reg[regNum] = input;
     }
     else{
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
         ///!!!MOVE -11 INTO REGISTER 2!!!///
-        std::exit;
+        std::exit(-11);
     }
 }
 
