@@ -85,6 +85,7 @@ char sim_mem::get_byte(int address) const{
     //ACTUAL FUNCTION
     //map numerical address to the correct array
     switch(check){
+        default: break;
         case 1: return addr_instr[address];
         case 2: return addr_data[address];
         case 3: return addr_getc[address];
@@ -92,7 +93,7 @@ char sim_mem::get_byte(int address) const{
 }
 
 //TODO: DELETE PRINTING STATEMENTS AND RESTORE EXIT CODE
-void sim_mem::set_byte(int address, char value){
+void sim_mem::set_byte(int address, char value, bool &success){
     int check = sim_mem::addressmap(address);
     /*Memory exceptions (-11): 
     0. Writing to addr_null
@@ -100,36 +101,15 @@ void sim_mem::set_byte(int address, char value){
     3. Writing to read-only memory zone addr_getc
     -1. Address out of range or Blank Areas
     */
-    if(check == 0 || check == 1 || check == 3 || check ==-1){
-        switch(check){
-        case 0: std::cout << "Addr_Null access";
-        case 1: std::cout << "writing in instruction space";
-        case 3: std::cout << "writing to getc";
-        case -1: std::cout << "Address Blank/OOR";
-        }
-        //std::exit(-11);
-    }
+    if(check == 0 || check == 1 || check == 3 || check ==-1)
+        success = false; //std::exit(-11);
+    else 
+        success = true;
+
     //Actual function inserts value into address if no errors are thrown
     switch(check){
+        default: break;
         case 2: addr_data[address] = value;
         case 4: addr_getc[address] = value;
-    }
-}
-
-
-
-
-
-char sim_mem::TESTGETBYTE(int address) const{
-    int check = sim_mem::addressmap(address);
-
-    //ACTUAL FUNCTION
-    //map numerical address to the correct array
-    switch(check){
-        case 0: return addr_null[address];
-        case 1: return addr_instr[address];
-        case 2: return addr_data[address];
-        case 3: return addr_getc[address];
-        case 4: return addr_putc[address];
     }
 }
