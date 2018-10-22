@@ -7,6 +7,7 @@ sim_reg::sim_reg(){
     for(int i = 0; i<31; i++){
         reg[i] = 0;
     }
+
 }
 
 int sim_reg::get_reg(int regNum) const{
