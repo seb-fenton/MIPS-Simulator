@@ -16,13 +16,10 @@ int main(int argc, char* argv[]){
         //Function Map  //std::map<std::string> function_map;
             //instruction does its thing
         //PC + 4 or branch adjustment
-    
-   
     /*
     std::string fileName;
     std::cout << argv[0] << std::endl;
-
-    if (argc > 1) {
+    
         fileName = argv[1];
         std::cout << fileName << std::endl;
     } else {

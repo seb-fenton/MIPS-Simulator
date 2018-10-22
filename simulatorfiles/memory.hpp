@@ -11,14 +11,14 @@ class sim_reg{
 
 class sim_mem{
     private:
-        char addressmap(int &address);
+        char addressmap(int &address) const;
         
         //should we use INT for the 32 bit spaces? null, getc, putc.
-        char addr_null[4];              
-        char addr_instr[0x1000000];
-        char addr_data[0x4000000];
-        char addr_getc[4];
-        char addr_putc[4];
+        char addr_null[4] = {0};              
+        char addr_instr[0x1000000] ={0};
+        char addr_data[0x4000000] = {0};
+        char addr_getc[4] = {0};
+        char addr_putc[4] = {0};
         //0x4 to 0x0FFF FFFF            : Blank
         //0x1000 0000 to 0x10FF FFFF    : Instruction Space
         //0x1100 0000 to 0x11FF FFFF    : Blank
@@ -30,6 +30,6 @@ class sim_mem{
 
     public:
         sim_mem();
-        char get_byte(int address);
+        char get_byte(int address) const;
         void set_byte(int address, char value);
 };

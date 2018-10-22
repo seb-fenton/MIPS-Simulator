@@ -14,7 +14,7 @@ int sim_reg::get_reg(int address){
     return output;
 }
 
-void sim_reg::set_reg(char input, int address){
+void sim_reg::set_reg(int input, int address){
     if(input == 0 || 1 || 26 || 27){
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
         ///!!!MOVE -11 INTO REGISTER 2!!!///
@@ -40,7 +40,7 @@ sim_mem::sim_mem(){
 
 //Checks for a valid address, then subtracts the starting address and maps the appropriate memory region
 //via the return character.
-char sim_mem::addressmap(int &address){
+char sim_mem::addressmap(int &address) const{
     if(0 <= address && address < 4)
         return 0; // 0 for addr
     if (0x10000000 <= address && address < 0x11000000){
@@ -62,7 +62,7 @@ char sim_mem::addressmap(int &address){
     else return 'x';
 }
 
-char sim_mem::get_byte(int address){
+char sim_mem::get_byte(int address) const{
     char check = sim_mem::addressmap(address);
     /*Memory exceptions (-11): 
     1. Reading from addr_null
