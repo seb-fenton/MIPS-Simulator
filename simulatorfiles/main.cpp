@@ -9,10 +9,12 @@
 #include <vector>
 
 void diagnostics(sim_reg &RegFile, sim_mem &MemModule);
+void SetAccessCheck(sim_mem &memory, bool &success);
+void GetAccessCheck(const sim_mem &memory, bool &success);
 void CheckMemZeroes(const sim_mem &memory, bool &success);
+void CheckBlankRegions(const sim_mem &memory, bool &success);
 
 using namespace std;
-
 
 int main(int argc, char* argv[]){
     //enables hexadecimal input in cin/out?
@@ -122,39 +124,94 @@ void diagnostics(sim_reg &RegFile, sim_mem &memory){
             successfultest = false;
         }
     }
+    
     memory.printmem();
     CheckMemZeroes(memory, successfultest);
-
-
-
+    SetAccessCheck(memory, successfultest);
+    GetAccessCheck(memory, successfultest);
+    CheckBlankRegions(memory, successfultest);
 
     if(successfultest)
-        cout << "\nCONGRATS BOI";
+        cout << "\nCONGRATS BOI\n";
+    else
+        cout << "\nYOU DONE FUCKED UP\n";
 }
 
 
 void CheckMemZeroes(const sim_mem &memory, bool &success){
-    cout << "Checking that all readable memory is set to zero:";
+    bool read = false;
     for(int i=0x10000000; i<0x11000000; i++){ //instr
-        if(memory.get_byte(i) != 0)
+        if(memory.get_byte(i, read) != 0)
             success = false;
     }
 
     for(int i=0x20000000; i<0x24000000; i++){ //data
-        if(memory.get_byte(i) != 0)
+        if(memory.get_byte(i, read) != 0)
             success = false;
     }
 
     for(int i=0x30000000; i<0x30000004; i++){ //getc
-        if(memory.get_byte(i) != 0)
+        if(memory.get_byte(i, read) != 0)
             success = false;
     }
+
+    cout << "\nAll readable memory is set to zero.";
 }
 
-void GetAccessCheck(){
-
+void SetAccessCheck(sim_mem &memory, bool &success){
+    bool written = true;
+    for(int i=0x0; i<0x4; i++){ //null
+        memory.set_byte(i, -1, written);
+        if(written)
+            success = false;
+    }
+    for(int i=0x10000000; i<0x11000000; i++){ //instr
+        memory.set_byte(i, -1, written);
+        if(written)
+            success = false;
+    }
+    for(int i=0x20000000; i<0x24000000; i++){ //data
+        memory.set_byte(i, -1, written);
+        if(!written)
+            success = false;
+    }
+    for(int i=0x30000004; i<0x30000008; i++){ //putc
+        memory.set_byte(i, -1, written);
+        if(!written)
+            success = false;
+    }
+    cout << "\nWrite access is appropriate for all regions.";
 }
 
-void SetAccessCheck(){
-    
+void GetAccessCheck(const sim_mem &memory, bool &success){
+    bool read = true;
+    char readbyte;
+    for(int i=0x0; i<0x4; i++){ //null
+        readbyte = memory.get_byte(i, read);
+        if(read)
+            success = false;
+    }
+
+    for(int i=0x10000000; i<0x11000000; i++){ //instr
+        readbyte = memory.get_byte(i, read);
+        if(!read && readbyte != 0)
+            success = false;
+    }
+
+    for(int i=0x20000000; i<0x24000000; i++){ //data
+        readbyte = memory.get_byte(i, read);
+        if(!read && readbyte != -1)
+            success = false;
+    }
+
+    for(int i=0x30000004; i<0x30000008; i++){ //putc
+        readbyte = memory.get_byte(i, read);
+        if(read)
+            success = false;
+    }
+    cout << "\nRead access is appropriate for all regions.";
+}
+
+void CheckBlankRegions(const sim_mem &memory, bool &success){
+
 }

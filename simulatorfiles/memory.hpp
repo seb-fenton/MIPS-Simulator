@@ -33,7 +33,7 @@ class sim_mem{
         sim_mem();
         void printmem();
         //NOT PASSED BY REFERENCE on purpose.
-        char get_byte(int address) const;
+        char get_byte(int address, bool &read) const;
         void set_byte(int address, char value, bool &success);
 
 };
