@@ -8,7 +8,8 @@
 #include <map>
 #include <vector>
 
-//void diagnostics(sim_reg &RegFile, sim_mem &MemModule);
+void diagnostics(sim_reg &RegFile, sim_mem &MemModule);
+void CheckMemZeroes(const sim_mem &memory, bool &success);
 
 using namespace std;
 
@@ -23,9 +24,9 @@ int main(int argc, char* argv[]){
     sim_reg RegFile;
     sim_mem MemModule;
 
-    //diagnostics(RegFile, MemModule);
+    diagnostics(RegFile, MemModule);
 
-    //LOAD BINARY INTO MEMORY
+    /*LOAD BINARY INTO MEMORY
     
     //declare a string for the input binary file
     std::string InputBinaryFile;
@@ -88,14 +89,14 @@ int main(int argc, char* argv[]){
         //call set_byte command on instruction memory
         MemModule.set_byte(Address, InputValue, InputSuccess);
 
-        if(InputSuccess == false){
+        if(!InputSuccess){
             //THROW SOME ERROR? ISSUE!
         }
 
         //iterate up the memory stack
         Address = Address + 0x4;
     }
-
+    */
 
 
 
@@ -112,7 +113,7 @@ int main(int argc, char* argv[]){
 }
 
 
-/*void diagnostics(sim_reg &RegFile, sim_mem &MemModule){
+void diagnostics(sim_reg &RegFile, sim_mem &memory){
     bool successfultest = true;
     cout << "Starting Memory Test.\nChecking all registers for Zeroes.\n";
     for (int i = 0 ; i<32 ; i++){
@@ -121,112 +122,39 @@ int main(int argc, char* argv[]){
             successfultest = false;
         }
     }
+    memory.printmem();
+    CheckMemZeroes(memory, successfultest);
 
-    cout << "Checking all Memory Areas.\n";
 
 
-    bool setsuccess = false;
-    int i = 0;
-    //should not read or write to addrnull
-    while (i<4){
-        if(MemModule.get_byte(i) != 'a'){
-            successfultest = false;
-            cout << "\nNull is readable at index" << i;
-        }
-        MemModule.set_byte(i, -1, setsuccess);
-        if(setsuccess){
-            successfultest = false;
-            cout << "\nNull is settable at index" << i << MemModule.get_byte(i);
-        }
-        i++;        
-    }
-    cout << "\n AddrNull OK";
-    //blank space
-    while(i<0x10000000){
-        if(MemModule.get_byte(i) != 'c'){
-            successfultest = false;
-            cout << "\nmemory exists at" << i;
-        }
-        i++; 
-    }
-    cout << "\npast Blank Space 1";
-    //should not write to instruction space
-    while (i<0x11000000){
-        MemModule.set_byte(i, -1, setsuccess);
-        if(setsuccess){
-            successfultest = false;
-            cout << "\nNull is settable at index" << i << MemModule.get_byte(i);
-        }
-        i++;
-    }
-    cout << "\n Instruction Space OK";
 
-    //blank space TROUBLE HERE
-    while(i<0x20000000){
-        if(MemModule.get_byte(i) != 'c'){
-            successfultest = false;
-            cout << "\nmemory exists at" << i;
-        }
-        i++; 
-    }
-    cout << "\n Blank Space 2 OK";
-    //data space
-    while(i<0x24000000){
-        if(MemModule.get_byte(i) != 0){
-            successfultest = false;
-        cout << "\ndata[" << i << "] is not readable ";
-        }
-        MemModule.set_byte(i, -1, setsuccess);
-        if(!setsuccess){
-            successfultest = false;
-            cout << "\nNull is not settable at index" << i << MemModule.get_byte(i);
-        }
-        i++;
-    }
-    cout << "\n Data Space OK";
-    //blank space
-    while(i<0x30000000){
-        if(MemModule.get_byte(i) != 'c'){
-            successfultest = false;
-            cout << "\nmemory exists at" << i;
-        }
-        i++; 
-    }
-    cout << "\n Blank Space 3 OK";
-    while(i<0x30000004){
-        if(MemModule.get_byte(i) != 0){
-            successfultest = false;
-        cout << "\ndata[" << i << "] is not readable";
-        }
-        MemModule.set_byte(i, -1, setsuccess);
-        if(setsuccess){
-            successfultest = false;
-            cout << "\nGetC is settable at index" << i-0x30000000 << MemModule.get_byte(i);
-        }
-        i++;
-    }
-    cout << "\n getC OK";
-    while(i<0x30000004){
-        if(MemModule.get_byte(i) == 0){
-            successfultest = false;
-        cout << "\ndata[" << i << "] is readable " << MemModule.get_byte(i);
-        }
-        MemModule.set_byte(i, -1, setsuccess);
-        if(!setsuccess){
-            successfultest = false;
-            cout << "\nGetC is not settable at index" << i-0x30000000 << MemModule.get_byte(i);
-        }
-        i++;
-    }
-    cout << "\nputC OK";
-    while(i<0xFFFFFFFF){
-        if(MemModule.get_byte(i) != 'c'){
-            successfultest = false;
-            cout << "\nmemory exists at" << i;
-        }
-        i++; 
-    }
-    cout << "\n Last Blank OK";
     if(successfultest)
-        cout << "CONGRATS BOI";
-}*/
+        cout << "\nCONGRATS BOI";
+}
+
+
+void CheckMemZeroes(const sim_mem &memory, bool &success){
+    cout << "Checking that all readable memory is set to zero:";
+    for(int i=0x10000000; i<0x11000000; i++){ //instr
+        if(memory.get_byte(i) != 0)
+            success = false;
+    }
+
+    for(int i=0x20000000; i<0x24000000; i++){ //data
+        if(memory.get_byte(i) != 0)
+            success = false;
+    }
+
+    for(int i=0x30000000; i<0x30000004; i++){ //getc
+        if(memory.get_byte(i) != 0)
+            success = false;
+    }
+}
+
+void GetAccessCheck(){
+
+}
+
+void SetAccessCheck(){
+    
+}

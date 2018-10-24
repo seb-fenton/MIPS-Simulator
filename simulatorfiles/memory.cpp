@@ -42,25 +42,33 @@ sim_mem::sim_mem(){
     //load binary into executable memory
 
 }
+void sim_mem::printmem(){
+    std::cout << "\nMemsizes:";
+    std::cout << std::endl << addr_null.size();
+    std::cout << std::endl << addr_instr.size();
+    std::cout << std::endl << addr_data.size();
+    std::cout << std::endl << addr_getc.size();
+    std::cout << std::endl << addr_putc.size();
 
+}
 //Checks for a valid address, then subtracts the starting address and maps the appropriate memory region
 //via the return character.
 int sim_mem::addressmap(int &address) const{
     if(0 <= address && address < 4)
         return 0; // 0 for addr
-    if (0x10000000 <= address && address < 0x11000000){
+    else if (0x10000000 <= address && address < 0x11000000){
         address = address - 0x10000000;
         return 1; //1 for inst
     }
-    if (0x20000000 <= address && address < 0x24000000){
+    else if (0x20000000 <= address && address < 0x24000000){
         address = address - 0x20000000;
         return 2; //2 for data
     }  
-    if (0x30000000<= address && address < 0x30000004){
+    else if (0x30000000 <= address && address < 0x30000004){
         address = address - 0x30000000;
         return 3; //3 for getc
     }
-    if (0x30000004 <= address && address < 0x30000008){
+    else if (0x30000004 <= address && address < 0x30000008){
         address = address - 0x30000004;
         return 4; //4 for putc
     }
