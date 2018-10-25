@@ -227,5 +227,32 @@ void GetAccessCheck(const sim_mem &memory, bool &success){
 }
 
 void CheckBlankRegions(const sim_mem &memory, bool &success){
-
+    bool read = true;
+    char readbyte;
+    
+    for(int i=0x4; i<0x10000000; i++){ //null
+        readbyte = memory.get_byte(i, read);
+        if(read && readbyte != -1)
+            success = false;
+    }
+    
+    for(int i=0x11000000; i<0x20000000; i++){ //null
+        readbyte = memory.get_byte(i, read);
+        if(read && readbyte != -1)
+            success = false;
+    }
+    
+    for(int i=0x24000000; i<0x30000000; i++){ //null
+        readbyte = memory.get_byte(i, read);
+        if(read && readbyte != -1)
+            success = false;
+    }
+    
+    for(int i=0x30000008; i<=0xFFFFFFFF; i++){ //null
+        readbyte = memory.get_byte(i, read);
+        if(read && readbyte != -1)
+            success = false;
+    }
+    
+    
 }
