@@ -10,3 +10,4 @@ simulatorfiles/.vscode
 simulatorfiles/MemoryTest
 simulatorfiles/memtest
 simulatorfiles/Makefile
+bin/mips.bin
