@@ -13,6 +13,7 @@ class sim_reg{
 class sim_mem{
     private:
         int addressmap(int &address) const;
+        void set_instruc_byte(int address, char value, bool &success);
         
         //CHANGE TO VECTORS.
         std::vector<char> addr_null; //size 4             
@@ -30,8 +31,7 @@ class sim_mem{
         //0x3000 0008 to 0xFFFF FFFF    : Blank
 
     public:
-        sim_mem();
-        void printmem();
+        sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess);
         //NOT PASSED BY REFERENCE on purpose.
         char get_byte(int address, bool &read) const;
         void set_byte(int address, char value, bool &success);

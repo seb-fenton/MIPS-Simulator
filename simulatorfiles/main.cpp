@@ -8,6 +8,10 @@
 #include <map>
 #include <vector>
 
+std::string get_filename(int argc, char* argv[]);
+bool write_binary_in(std::string FileName);
+
+
 void diagnostics(sim_reg &RegFile, sim_mem &MemModule);
 void SetAccessCheck(sim_mem &memory, bool &success);
 void GetAccessCheck(const sim_mem &memory, bool &success);
@@ -22,14 +26,43 @@ int main(int argc, char* argv[]){
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
 
-    //INITIALISE MEMORY AND REGISTERS
+
+    //INITIALISE REGISTERS
     sim_reg RegFile;
-    sim_mem MemModule;
 
-    diagnostics(RegFile, MemModule);
+    //diagnostics(RegFile, MemModule);
 
-    /*LOAD BINARY INTO MEMORY
+
+    //LOAD BINARY INTO MEMORY
+
+    //get filename
+    std::string FileName = get_filename(argc, argv);
+
+    //write into memory
+    bool WriteInSuccess = write_binary_in(FileName);
+
+    //if write in fails
+    if(WriteInSuccess == false){
+        //exit with bad memory acces code
+        std::exit(-11);
+    }
+
+
+    //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
+        //Obtain instruction
+        //Parse instruction
+        //Function Map  //std::map<std::string> function_map;
+            //instruction does its thing
+        //PC + 4 or branch adjustment
     
+
+    return 0;
+}
+
+
+
+std::string get_filename(int argc, char* argv[]){
+
     //declare a string for the input binary file
     std::string InputBinaryFile;
 
@@ -45,9 +78,13 @@ int main(int argc, char* argv[]){
         std::cerr<<"No binary file given. Ctrl + x to exit."<<std::endl;
         //std::exit(-11??); - dont exit as should be able to run independently.
     }
-    
+
+}
+
+bool write_binary_in(std::string FileName){
+
     //open the file using fstream library
-    std::ifstream InputBinary(InputBinaryFile, std::ifstream::binary);
+    std::ifstream InputBinary(FileName, std::ifstream::binary);
     //initialise an array of chars to hold the incoming filestream
     char* Memblock;
     //initialise an integer to determine the amount of bytes in the binary file
@@ -57,13 +94,11 @@ int main(int argc, char* argv[]){
     if(InputBinary){
 
         //move the file reader pointer to the end of the binary
-        InputBinary.seekg (0, InputBinary.end);
+        InputBinary.seekg(0, InputBinary.end);
         //find the value of the pointer i.e. find the length of the binary as pointer is at end
         LengthOfBinary = InputBinary.tellg();
         //move pointer back to beginnning of binary file
-        InputBinary.seekg (0, InputBinary.beg);
-
-        //WHAT TO DO IF BINARY DOES NOT HAVE CORRECT LENGTH? ISSUE!!!
+        InputBinary.seekg(0, InputBinary.beg);
 
         //allocate sufficient memory for Memblock to contain full binary
         Memblock = new char[LengthOfBinary];
@@ -73,46 +108,22 @@ int main(int argc, char* argv[]){
 
         //close binary file once finished
         InputBinary.close();
+
+        bool InputSuccess;
+
+        sim_mem MemModule(LengthOfBinary, Memblock, InputSuccess);
+
+        return(InputSuccess);
     }
 
     else{
         std::cerr<<"\nUnable to read file.\n";
     }
 
-    //Initialise stack counter to first value of instruction area of memory
-    int Address = 0x10000000;
-
-    //for each byte of binary
-    for(int i = 0; i<LengthOfBinary; i++){
-        //value to be input in set_byte command; reset to 0 each time
-        char InputValue = Memblock[i];
-        //bool to satisfy set_byte parameters
-        bool InputSuccess;
-        //call set_byte command on instruction memory
-        MemModule.set_byte(Address, InputValue, InputSuccess);
-
-        if(!InputSuccess){
-            //THROW SOME ERROR? ISSUE!
-        }
-
-        //iterate up the memory stack
-        Address = Address + 0x4;
-    }
-    */
-
-
-
-
-    //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
-        //Obtain instruction
-        //Parse instruction
-        //Function Map  //std::map<std::string> function_map;
-            //instruction does its thing
-        //PC + 4 or branch adjustment
-    
-
-    return 0;
 }
+
+
+
 
 
 void diagnostics(sim_reg &RegFile, sim_mem &memory){
@@ -125,7 +136,6 @@ void diagnostics(sim_reg &RegFile, sim_mem &memory){
         }
     }
     
-    memory.printmem();
     CheckMemZeroes(memory, successfultest);
     SetAccessCheck(memory, successfultest);
     GetAccessCheck(memory, successfultest);

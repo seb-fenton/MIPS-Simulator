@@ -32,3 +32,49 @@ echo $?
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#BINARY FILE GENERATING CODE
+
+
+#MIPS_CC = mips-linux-gnu-gcc
+#MIPS_OBJCOPY = mips-linux-gnu-objcopy 
+
+#MIPS_CPPFLAGS = -W -Wall -03 -fno-bullitin -march=mips1 -mfp32
+#MIPS_LDFLAGS = -nostdlib -Wl,-melf32bitsnip -march=mips1 -nostartfile =mno-check-zero-division -Wl, --gpsize=0 -static -Wl, -BStatic
+#MIPS_LDFLAGS += -Wl, --build-id=none
+
+#s.mips.o: %.mips.s
+#    $(MIPS_CC) $(MIPS_CPPFLAGS) -c $< -o $@
+
+#%.mips.elf: %.mips.o
+#    $(MIPS_CC) $(MIPS_CPPFLAGS) $(MIPS_LDFLAGS) -T linker.id $< -o $@
+
+#bin/mips_simulator: src/simulator.cpp
+#    mkdir -p bin
+#    g++ -W Wall src/simulator.cpp -o bin/mips_simulator

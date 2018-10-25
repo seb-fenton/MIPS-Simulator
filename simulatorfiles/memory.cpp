@@ -32,25 +32,42 @@ void sim_reg::set_reg(int input, int regNum){
 
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
 //constructor
-sim_mem::sim_mem(){
+sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
     //initialise data memory to zero
     addr_null.resize(0x4); //size 4             
     addr_instr.resize(0x1000000); //0x1000000
     addr_data.resize(0x4000000); //0x4000000
     addr_getc.resize(0x4);//4
     addr_putc.resize(0x4);//4
+
     //load binary into executable memory
 
-}
-void sim_mem::printmem(){
-    std::cout << "\nMemsizes:";
-    std::cout << std::endl << addr_null.size();
-    std::cout << std::endl << addr_instr.size();
-    std::cout << std::endl << addr_data.size();
-    std::cout << std::endl << addr_getc.size();
-    std::cout << std::endl << addr_putc.size();
+    //Initialise stack counter to first value of instruction area of memory
+    int Address = 0x10000000;
+
+    //for each byte of binary
+    for(int i = 0; i<LengthOfBinary; i++){
+        //value to be input in set_byte command; reset to 0 each time
+        char InputValue = Memblock[i];
+        //bool to satisfy set_byte parameters
+        bool InputSuccess;
+        //call set_byte command on instruction memory
+        sim_mem::set_instruc_byte(Address, InputValue, InputSuccess);
+
+        //if unsuccesful write to instructions
+        if(!InputSuccess){
+            //exit for loop with inputsuccess returned as false
+            i=LengthOfBinary;
+        }
+
+        //iterate up the memory stack to write in the next instruction byte
+        Address = Address + 0x1;
+    }
+    
+
 
 }
+
 //Checks for a valid address, then subtracts the starting address and maps the appropriate memory region
 //via the return character.
 int sim_mem::addressmap(int &address) const{
@@ -113,5 +130,18 @@ void sim_mem::set_byte(int address, char value, bool &success){
         success = true;
         if(check == 2)  addr_data[address] = value;
         if(check == 4)  addr_getc[address] = value;
+    }
+}
+
+void sim_mem::set_instruc_byte(int address, char value, bool &success){
+    if ((0x10000000 <= address) && (address < 0x11000000)){     //CHECK ADDRESS IN RANGE
+        address = address - 0x10000000;                         //Subtract Instruction Offset
+        addr_instr[address] = value;                            //Assign byte
+        success = true;
+        return;
+    }
+    else{
+        success = false;
+        return;
     }
 }
