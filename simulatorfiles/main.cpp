@@ -63,7 +63,6 @@ std::string get_filename(int argc, char* argv[]){
 
     //declare a string for the input binary file
     std::string InputBinaryFile;
-
     //if argc holds more than executable path
     if(argc>1){
         //let filename string = first input in command line after executable
