@@ -18,24 +18,16 @@ void GetAccessCheck(const sim_mem &memory, bool &success);
 void CheckMemZeroes(const sim_mem &memory, bool &success);
 void CheckBlankRegions(const sim_mem &memory, bool &success);
 
-using namespace std; //ISSUE - WE SHOULDNT USE THIS, I think he said not to?
+using namespace std; //ISSUE - WE SHOULDNT USE THIS, I think he said not to? #not in classes. it's fine in main.
 
 int main(int argc, char* argv[]){
     //enables hexadecimal input in cin/out?
     std::cin.unsetf(std::ios::dec);
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
-
-
-    //INITIALISE REGISTERS
     sim_reg RegFile;
 
-    //diagnostics(RegFile, MemModule);
-
-
     //LOAD BINARY INTO MEMORY
-
-    //get filename
     std::string FileName = get_filename(argc, argv);
 
     //initialise integer to record amount of bytes in binary file
@@ -52,7 +44,7 @@ int main(int argc, char* argv[]){
 
     //if write in fails
     if(WriteInSuccess == false){
-        //exit with bad memory acces code
+        std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
     }
 
@@ -62,11 +54,9 @@ int main(int argc, char* argv[]){
         //Function Map  //std::map<std::string> function_map;
             //instruction does its thing
         //PC + 4 or branch adjustment
-    
 
     return 0;
 }
-
 
 //string to get filename
 std::string get_filename(int argc, char* argv[]){
@@ -92,28 +82,17 @@ std::string get_filename(int argc, char* argv[]){
 //function to write binary data into memory; returns a boolean to check for memory exception -11
 char* write_binary_in(std::string FileName, int& LengthOfBinary){
 
-    //open the file using fstream library
-    std::ifstream InputBinary(FileName, std::ifstream::binary);
-    //initialise an array of chars to hold the incoming filestream
+    std::ifstream InputBinary(FileName, std::ifstream::binary);     //open the file using fstream library
     char* Memblock;
 
     //if a file has managed to be initialised using std::ifstream
     if(InputBinary){
+        InputBinary.seekg(0, InputBinary.end);              //move the file reader pointer to the end of the binary
+        LengthOfBinary = InputBinary.tellg();               //find value of pointer
+        InputBinary.seekg(0, InputBinary.beg);              //move pointer back to beginnning of binary file
 
-        //move the file reader pointer to the end of the binary
-        InputBinary.seekg(0, InputBinary.end);
-        //find the value of the pointer i.e. find the length of the binary as pointer is at end
-        LengthOfBinary = InputBinary.tellg();
-        //move pointer back to beginnning of binary file
-        InputBinary.seekg(0, InputBinary.beg);
-
-        //allocate sufficient memory for Memblock to contain full binary
-        Memblock = new char[LengthOfBinary];
-        
-        //read binary into memblock
+        Memblock = new char[LengthOfBinary];                //allocate sufficient memory for Memblock to contain full binary
         InputBinary.read(Memblock, LengthOfBinary);
-
-        //close binary file once finished
         InputBinary.close();
 
         //return whether or not memory write was succesful
@@ -126,9 +105,6 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
     }
 
 }
-
-
-
 
 
 void diagnostics(sim_reg &RegFile, sim_mem &memory){
