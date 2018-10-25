@@ -63,20 +63,6 @@ sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
         //iterate up the memory stack to write in the next instruction byte
         Address = Address + 0x1;
     }
-
-
-    //testing print function
-
-    Address = 0x10000000;
-
-    for(int i = 0; i<LengthOfBinary; i++){
-        char printout = get_byte(Address, InputSuccess);
-        std::cout<<"\nAddress number "<<i<<":";
-        std::cout<<printout;
-    }
-    
-
-
 }
 
 //Checks for a valid address, then subtracts the starting address and maps the appropriate memory region
@@ -102,6 +88,7 @@ int sim_mem::addressmap(int &address) const{
     }
     else return -1;
 }
+
 //TODO: DELETE PRINTING STATEMENTS AND RESTORE EXIT CODE
 char sim_mem::get_byte(int address, bool &read) const{
     int check = sim_mem::addressmap(address);
@@ -111,6 +98,8 @@ char sim_mem::get_byte(int address, bool &read) const{
     -1. Address out of range or blank areas*/
     if(check == 0 || check == 4 || check == -1){
         read = false;
+        char error = 0x00;
+        return error;
         //std::exit(-11);
     }
     else{

@@ -68,18 +68,21 @@ std::string get_filename(int argc, char* argv[]){
         //let filename string = first input in command line after executable
         InputBinaryFile = argv[1];
         //std::cout << InputBinaryFile << std::endl;
+        return InputBinaryFile;
     }     
     else{
         //ISSUE!!!
         //How do we handle having no binary input? does it just initialise and sit there on its own, or does the program exit?
-        std::cerr<<"No binary file given. Ctrl + x to exit."<<std::endl;
-        //std::exit(-11??); - dont exit as should be able to run independently.
+        std::cerr<<"No binary file given. Exit with error code -11"<<std::endl;
+        std::exit(-11); //- dont exit as should be able to run independently.
     }
 
 }
 
 //function to write binary data into memory; returns a boolean to check for memory exception -11
 char* write_binary_in(std::string FileName, int& LengthOfBinary){
+
+    std::cout<<LengthOfBinary;
 
     std::ifstream InputBinary(FileName, std::ifstream::binary);     //open the file using fstream library
     char* Memblock;
@@ -106,7 +109,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
 }
 
 
-void diagnostics(sim_reg &RegFile, sim_mem &memory){
+/*void diagnostics(sim_reg &RegFile, sim_mem &memory){
     bool successfultest = true;
     cout << "Starting Memory Test.\nChecking all registers for Zeroes.\n";
     for (int i = 0 ; i<32 ; i++){
@@ -230,4 +233,4 @@ void CheckBlankRegions(const sim_mem &memory, bool &success){
     }
     
     
-}
+}*/
