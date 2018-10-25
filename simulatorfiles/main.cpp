@@ -9,7 +9,7 @@
 #include <vector>
 
 std::string get_filename(int argc, char* argv[]);
-bool write_binary_in(std::string FileName);
+char* write_binary_in(std::string FileName, int& LengthOfBinary);
 
 
 void diagnostics(sim_reg &RegFile, sim_mem &MemModule);
@@ -38,15 +38,23 @@ int main(int argc, char* argv[]){
     //get filename
     std::string FileName = get_filename(argc, argv);
 
+    //initialise integer to record amount of bytes in binary file
+    int LengthOfBinary;
+
     //write into memory
-    bool WriteInSuccess = write_binary_in(FileName);
+    char* Memblock = write_binary_in(FileName, LengthOfBinary);
+
+    //declare boolean to measure success of writing into instruction memory
+    bool WriteInSuccess;
+
+    //call constructor for sim_mem object MemModule passing in parametric data from the binary
+    sim_mem MemModule(LengthOfBinary, Memblock, WriteInSuccess);
 
     //if write in fails
     if(WriteInSuccess == false){
         //exit with bad memory acces code
         std::exit(-11);
     }
-
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
         //Obtain instruction
@@ -82,14 +90,12 @@ std::string get_filename(int argc, char* argv[]){
 }
 
 //function to write binary data into memory; returns a boolean to check for memory exception -11
-bool write_binary_in(std::string FileName){
+char* write_binary_in(std::string FileName, int& LengthOfBinary){
 
     //open the file using fstream library
     std::ifstream InputBinary(FileName, std::ifstream::binary);
     //initialise an array of chars to hold the incoming filestream
     char* Memblock;
-    //initialise an integer to determine the amount of bytes in the binary file
-    int LengthOfBinary;
 
     //if a file has managed to be initialised using std::ifstream
     if(InputBinary){
@@ -110,14 +116,8 @@ bool write_binary_in(std::string FileName){
         //close binary file once finished
         InputBinary.close();
 
-        //declare boolean to measure success of writing into instruction memory
-        bool InputSuccess;
-
-        //call constructor for sim_mem object MemModule passing in parametric data from the binary
-        sim_mem MemModule(LengthOfBinary, Memblock, InputSuccess);
-
         //return whether or not memory write was succesful
-        return(InputSuccess);
+        return(Memblock);
     }
 
     else{
