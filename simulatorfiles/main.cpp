@@ -18,7 +18,7 @@ void GetAccessCheck(const sim_mem &memory, bool &success);
 void CheckMemZeroes(const sim_mem &memory, bool &success);
 void CheckBlankRegions(const sim_mem &memory, bool &success);
 
-using namespace std;
+using namespace std; //ISSUE - WE SHOULDNT USE THIS, I think he said not to?
 
 int main(int argc, char* argv[]){
     //enables hexadecimal input in cin/out?
@@ -60,7 +60,7 @@ int main(int argc, char* argv[]){
 }
 
 
-
+//string to get filename
 std::string get_filename(int argc, char* argv[]){
 
     //declare a string for the input binary file
@@ -81,6 +81,7 @@ std::string get_filename(int argc, char* argv[]){
 
 }
 
+//function to write binary data into memory; returns a boolean to check for memory exception -11
 bool write_binary_in(std::string FileName){
 
     //open the file using fstream library
@@ -109,15 +110,19 @@ bool write_binary_in(std::string FileName){
         //close binary file once finished
         InputBinary.close();
 
+        //declare boolean to measure success of writing into instruction memory
         bool InputSuccess;
 
+        //call constructor for sim_mem object MemModule passing in parametric data from the binary
         sim_mem MemModule(LengthOfBinary, Memblock, InputSuccess);
 
+        //return whether or not memory write was succesful
         return(InputSuccess);
     }
 
     else{
         std::cerr<<"\nUnable to read file.\n";
+        std::exit(-11); //-ISSUE - IS THIS CORRECT???
     }
 
 }
@@ -146,7 +151,6 @@ void diagnostics(sim_reg &RegFile, sim_mem &memory){
     else
         cout << "\nYOU DONE FUCKED UP\n";
 }
-
 
 void CheckMemZeroes(const sim_mem &memory, bool &success){
     bool read = false;
