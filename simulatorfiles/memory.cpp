@@ -24,7 +24,7 @@ void sim_reg::set_reg(int input, int regNum){
         reg[regNum] = input;
     }
     else{
-        std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
+        std::cerr<<"\n"<<"Fatal error encountered: exit code -11"<<"\n";
         ///!!!MOVE -11 INTO REGISTER 2!!!///
         std::exit(-11);
     }
@@ -62,6 +62,17 @@ sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
 
         //iterate up the memory stack to write in the next instruction byte
         Address = Address + 0x1;
+    }
+
+
+    //testing print function
+
+    Address = 0x10000000;
+
+    for(int i = 0; i<LengthOfBinary; i++){
+        char printout = get_byte(Address, InputSuccess);
+        std::cout<<"\nAddress number "<<i<<":";
+        std::cout<<printout;
     }
     
 
