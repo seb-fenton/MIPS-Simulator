@@ -11,7 +11,7 @@ class simulator{
     public:
         //is the initializer list needed here?
         //fixed attempt?
-        simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess);// : memory(LengthOfBinary, Memblock, InputSuccess);
+        simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess);
         bool finished_sim();
         int fetch(sim_mem &memory, int pc);
         int decode(int instruction);
