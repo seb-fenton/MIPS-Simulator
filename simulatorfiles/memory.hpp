@@ -34,6 +34,6 @@ class sim_mem{
         sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess);
         //NOT PASSED BY REFERENCE on purpose.
         char get_byte(int address, bool &read) const;
-        void set_byte(int address, char value, bool &success);
+        void set_byte(int address, char value, bool &write);
 
 };

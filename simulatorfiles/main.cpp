@@ -1,5 +1,5 @@
 #include "main.hpp"
-#include "instructions.hpp"
+#include "simulator.hpp"
 #include "memory.hpp"
 #include <iostream>
 #include <fstream>
@@ -25,7 +25,6 @@ int main(int argc, char* argv[]){
     std::cin.unsetf(std::ios::dec);
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
-    sim_reg RegFile;
 
     //LOAD BINARY INTO MEMORY
     std::string FileName = get_filename(argc, argv);
@@ -33,22 +32,18 @@ int main(int argc, char* argv[]){
     int LengthOfBinary;
     char* Memblock = write_binary_in(FileName, LengthOfBinary);     //write into memory
     bool WriteInSuccess;
-    sim_mem MemModule(LengthOfBinary, Memblock, WriteInSuccess);
-
+    simulator mips_sim(LengthOfBinary, Memblock, WriteInSuccess);
     if(WriteInSuccess == false){
         std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
     }
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
-    bool finished = false;
-    while(!finished){
-        //Fetch and decode, R I or J
-        //Function Map
-            //instruction does its thing
-        //PC + 4 or branch adjustment
+    while(!mips_sim.finished_sim()){
+        //execute simulator
     }
-        
+    
+    cout << "\nSimulation Completed.";
     return 0;
 }
 
