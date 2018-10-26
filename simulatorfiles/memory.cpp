@@ -1,5 +1,8 @@
 #include "memory.hpp"
 #include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <stdio.h>
 
 //SIMULATOR_REGISTERS FUNCTION DEFINITIONS
 //Constructor to initialise all register values to 0
@@ -53,9 +56,8 @@ sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
         bool InputSuccess;
         //call set_byte command on instruction memory
         sim_mem::set_instruc_byte(Address, InputValue, InputSuccess);
-
         //if unsuccesful write to instructions
-        if(!InputSuccess){
+        if(InputSuccess==false){
             //exit for loop with inputsuccess returned as false
             i=LengthOfBinary;
         }
