@@ -11,14 +11,14 @@
 std::string get_filename(int argc, char* argv[]);
 char* write_binary_in(std::string FileName, int& LengthOfBinary);
 
-
+//memory checking functions
 void diagnostics(sim_reg &RegFile, sim_mem &MemModule);
 void SetAccessCheck(sim_mem &memory, bool &success);
 void GetAccessCheck(const sim_mem &memory, bool &success);
 void CheckMemZeroes(const sim_mem &memory, bool &success);
 void CheckBlankRegions(const sim_mem &memory, bool &success);
 
-using namespace std; //ISSUE - WE SHOULDNT USE THIS, I think he said not to? #not in classes. it's fine in main.
+using namespace std;
 
 int main(int argc, char* argv[]){
     //enables hexadecimal input in cin/out?
@@ -30,19 +30,11 @@ int main(int argc, char* argv[]){
     //LOAD BINARY INTO MEMORY
     std::string FileName = get_filename(argc, argv);
 
-    //initialise integer to record amount of bytes in binary file
     int LengthOfBinary;
-
-    //write into memory
-    char* Memblock = write_binary_in(FileName, LengthOfBinary);
-
-    //declare boolean to measure success of writing into instruction memory
+    char* Memblock = write_binary_in(FileName, LengthOfBinary);     //write into memory
     bool WriteInSuccess;
-
-    //call constructor for sim_mem object MemModule passing in parametric data from the binary
     sim_mem MemModule(LengthOfBinary, Memblock, WriteInSuccess);
 
-    //if write in fails
     if(WriteInSuccess == false){
         std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
@@ -54,7 +46,6 @@ int main(int argc, char* argv[]){
         //Function Map  //std::map<std::string> function_map;
             //instruction does its thing
         //PC + 4 or branch adjustment
-
     return 0;
 }
 
