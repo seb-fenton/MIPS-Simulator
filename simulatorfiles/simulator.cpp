@@ -7,20 +7,32 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     programCounter = 0x10000000;
 }
 
+ //instruction fetches and appends 4 bytes to create a full 32 bit instruction
 int simulator::fetch(sim_mem &memory, int pc){
+    //initialise instruction word
     int instruction = 0;
-    for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
-        int temp = memory.get_byte(pc + i);
-        temp = temp << (8*(3-i));
+    //redundant boolean to parse into get_byte structure
+    bool redundant;
+   
+   //for integer values 0-4
+    for(int i=0; i<4; i++){      
+        //temporary int = byte of location+offset i                       
+        int temp = memory.get_byte((pc + i), redundant);
+        //left shift retrieved byte to conform to big-endianness
+        temp = temp << (8*(3-i)); //(could also do temp=temp << 8 ? either way, same results)
+        //bitwise or with temp to append bytes into word instruction
         instruction = instruction | temp;
     }
-    //return the int
+    //return the int instruction word
     return instruction;
 }
 
+//decode an instruction into the function type that it is - ISSUE?
 int simulator::decode(int instruction){
+    //declare char type to take opcode
     char type;
-    instruction = instruction >> 24;
+    //instruction now contains opcode
+    instruction = instruction >> 24; //- ISSUE? DOES THIS LOSE INFORMATION?
     if(instruction == 0)
         type = 'r';
     if(instruction )
@@ -28,15 +40,15 @@ int simulator::decode(int instruction){
     //return the instruction number
 }
 
-char simulator::classification(int instruct){
+char simulator::classification(int instruction){
 
 
 }
 
 //R INSTRUCTIONS//
-int instruction::R_add(){
+/*int instruction::R_add(){
     return 0;
-}
+}*/
 
 
 //I INSTRUCTIONS//

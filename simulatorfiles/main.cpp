@@ -93,4 +93,4 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         std::cout<<"\nAddress "<<Address<<": "<<ss.str();
         std::cout<<"\n"<<read;
         Address = Address+0x1;
-    }
+    }*/

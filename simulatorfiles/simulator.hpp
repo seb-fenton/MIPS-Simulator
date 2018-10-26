@@ -10,9 +10,10 @@ class simulator{
 
     public:
         //is the initializer list needed here?
-        simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess);
+        simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess); //-this doesnt work : memory(LengthOfBinary, Memblock, InputSuccess);
         bool finished_sim();
-        void fetch(sim_mem &memory);
+        int fetch(sim_mem &memory, int pc);
+        int decode(int instruction);
         char classification(int instruct);
 
         //memory checking functions
