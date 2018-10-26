@@ -31,34 +31,24 @@ int main(int argc, char* argv[]){
     std::string FileName = get_filename(argc, argv);
 
     int LengthOfBinary;
-<<<<<<< HEAD
     char* Memblock = write_binary_in(FileName, LengthOfBinary);     //write into memory
     bool WriteInSuccess;
     sim_mem MemModule(LengthOfBinary, Memblock, WriteInSuccess);
 
-=======
-
-    //write into memory
-    char* Memblock = write_binary_in(FileName, LengthOfBinary);
-
-    //declare boolean to measure success of writing into instruction memory
-    bool WriteInSuccess = true;
-
-    //call constructor for sim_mem object MemModule passing in parametric data from the binary
-    sim_mem MemModule(LengthOfBinary, Memblock, WriteInSuccess);
-    //if write in fails
->>>>>>> ed4e70c1a2a99a1035c3e9e6ad76e0ef902e0748
     if(WriteInSuccess == false){
         std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
     }
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
-        //Obtain instruction
-        //Parse instruction
-        //Function Map  //std::map<std::string> function_map;
+    bool finished = false;
+    while(!finished){
+        //Fetch and decode, R I or J
+        //Function Map
             //instruction does its thing
         //PC + 4 or branch adjustment
+    }
+        
     return 0;
 }
 
@@ -111,7 +101,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
 }
 
 
-/*void diagnostics(sim_reg &RegFile, sim_mem &memory){
+void diagnostics(sim_reg &RegFile, sim_mem &memory){
     bool successfultest = true;
     cout << "Starting Memory Test.\nChecking all registers for Zeroes.\n";
     for (int i = 0 ; i<32 ; i++){
@@ -235,7 +225,7 @@ void CheckBlankRegions(const sim_mem &memory, bool &success){
     }
     
     
-}*/
+}
 
 //MEMORY WRITEIN TESTING
     /*int Address = 0x10000000;
@@ -248,4 +238,4 @@ void CheckBlankRegions(const sim_mem &memory, bool &success){
         std::cout<<"\nAddress "<<Address<<": "<<ss.str();
         std::cout<<"\n"<<read;
         Address = Address+0x1;
-    }*/
+    }
