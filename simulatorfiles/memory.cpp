@@ -34,7 +34,6 @@ void sim_reg::set_reg(int input, int regNum){
 }
 
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
-//constructor
 sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
     //initialise data memory to zero
     addr_null.resize(0x4); //size 4             
@@ -67,8 +66,6 @@ sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
     }
 }
 
-//Checks for a valid address, then subtracts the starting address and maps the appropriate memory region
-//via the return character.
 int sim_mem::addressmap(int &address) const{
     if(0 <= address && address < 4)
         return 0; // 0 for null
@@ -91,7 +88,6 @@ int sim_mem::addressmap(int &address) const{
     else return -1;
 }
 
-//TODO: DELETE PRINTING STATEMENTS AND RESTORE EXIT CODE
 char sim_mem::get_byte(int address, bool &read) const{
     int check = sim_mem::addressmap(address);
     /*Memory exceptions (-11): 
@@ -100,9 +96,9 @@ char sim_mem::get_byte(int address, bool &read) const{
     -1. Address out of range or blank areas*/
     if(check == 0 || check == 4 || check == -1){
         read = false;
+        std::exit(-11);
         char error = 0x00;
         return error;
-        //std::exit(-11);
     }
     else{
         read = true;
@@ -115,21 +111,20 @@ char sim_mem::get_byte(int address, bool &read) const{
 }
 
 //TODO: DELETE PRINTING STATEMENTS AND RESTORE EXIT CODE
-void sim_mem::set_byte(int address, char value, bool &success){
-    //std::cout << std::hex << "addr before: " << address << std::endl;
+void sim_mem::set_byte(int address, char value, bool &write){
     int check = sim_mem::addressmap(address);
-    //std::cout << std::hex << "addr after: " << address << "check: " << check << std::endl;
-
     /*Memory exceptions (-11): 
     0. Writing to addr_null
     1. Writing to instruction Memory
     3. Writing to read-only memory zone addr_getc
     -1. Address out of range or Blank Areas
     */
-    if(check == 0 || check == 1 || check == 3 || check ==-1)
-        success = false; //std::exit(-11);
+    if(check == 0 || check == 1 || check == 3 || check ==-1){
+        write = false; 
+        std::exit(-11);
+    }
     else {
-        success = true;
+        write = true;
         if(check == 2)  addr_data[address] = value;
         if(check == 4)  addr_getc[address] = value;
     }
