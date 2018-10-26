@@ -31,10 +31,23 @@ int main(int argc, char* argv[]){
     std::string FileName = get_filename(argc, argv);
 
     int LengthOfBinary;
+<<<<<<< HEAD
     char* Memblock = write_binary_in(FileName, LengthOfBinary);     //write into memory
     bool WriteInSuccess;
     sim_mem MemModule(LengthOfBinary, Memblock, WriteInSuccess);
 
+=======
+
+    //write into memory
+    char* Memblock = write_binary_in(FileName, LengthOfBinary);
+
+    //declare boolean to measure success of writing into instruction memory
+    bool WriteInSuccess = true;
+
+    //call constructor for sim_mem object MemModule passing in parametric data from the binary
+    sim_mem MemModule(LengthOfBinary, Memblock, WriteInSuccess);
+    //if write in fails
+>>>>>>> ed4e70c1a2a99a1035c3e9e6ad76e0ef902e0748
     if(WriteInSuccess == false){
         std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
@@ -72,8 +85,6 @@ std::string get_filename(int argc, char* argv[]){
 
 //function to write binary data into memory; returns a boolean to check for memory exception -11
 char* write_binary_in(std::string FileName, int& LengthOfBinary){
-
-    std::cout<<LengthOfBinary;
 
     std::ifstream InputBinary(FileName, std::ifstream::binary);     //open the file using fstream library
     char* Memblock;
@@ -225,3 +236,16 @@ void CheckBlankRegions(const sim_mem &memory, bool &success){
     
     
 }*/
+
+//MEMORY WRITEIN TESTING
+    /*int Address = 0x10000000;
+    for(int i=0; i<LengthOfBinary; i++){
+        bool read;
+        MemModule.get_byte(Address, read);
+        std::stringstream ss;
+        ss << std::hex;
+        ss << /*std::setw(2) << std::setfill('0') << (unsigned int)Memblock[i];
+        std::cout<<"\nAddress "<<Address<<": "<<ss.str();
+        std::cout<<"\n"<<read;
+        Address = Address+0x1;
+    }*/
