@@ -3,9 +3,9 @@
 .PHONY: clean
 
 #target simulator rules
-simulator: simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o
+simulator: simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o
 	mkdir -p bin
-	g++ simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o -o bin/mips_simulator
+	g++ simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o -o bin/mips_simulator
 
 #target testbench rules
 testbench: test/testbenchinitialiser.o
@@ -15,9 +15,9 @@ testbench: test/testbenchinitialiser.o
 main.o:
 	g++ -c simulatorfiles/main.cpp
 
-#instructions object file compilation
-instructions.o:
-	g++ -c simulatorfiles/instructions.cpp
+#simulator object file compilation
+simulator.o:
+	g++ -c simulatorfiles/simulator.cpp
 
 #memory object file compilation
 memory.o:
@@ -29,7 +29,7 @@ testbenchinitialiser.o:
 
 #clean function to remove all temp files that are not testbench outputs
 clean: 
-	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/instructions.o simulatorfiles/memory.o test/testbenchinitialiser.o
+	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o test/testbenchinitialiser.o
 
 #clean function to remove testbench outputs
 clean_t:

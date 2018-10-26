@@ -12,3 +12,4 @@ simulatorfiles/memtest
 simulatorfiles/Makefile
 bin/mips.bin
 bin/samplebinfile
+simulatorfiles/simulatorfile.o

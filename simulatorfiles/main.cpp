@@ -17,18 +17,21 @@ int main(int argc, char* argv[]){
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
 
-    //Process binary file to stream into memory
+    //process binary file to stream into memory
     std::string FileName = get_filename(argc, argv);
+    //initialise integer to tell length of binary file
     int LengthOfBinary;
+    //initialise array of pointers and write into it from the binary file
     char* Memblock = write_binary_in(FileName, LengthOfBinary);
-    bool WriteInSuccess;
+    //create boolean to measure 
+    bool WriteInSuccess = false;
     simulator mips_sim(LengthOfBinary, Memblock, WriteInSuccess);   //move into instruction memory
     if(WriteInSuccess == false){
         std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
     }
 
-    mips_sim.diagnostics();
+    //mips_sim.diagnostics();
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
     //while(!mips_sim.finished_sim()){
