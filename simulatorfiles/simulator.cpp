@@ -3,7 +3,10 @@
 
 //UNSURE HOW TO CREATE OBJECTS IN THIS CONSTRUCTOR
 //regFile needs no initialisation since it has a explicitly defined default constructor. memory thus needs one.
-simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
+
+//fix could be to call parametrized sim_mem constructor inside the simulator constructor?
+simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess){
+    sim_mem memory(LengthOfBinary, Memblock, InputSuccess);
     programCounter = 0x10000000;
 }
 

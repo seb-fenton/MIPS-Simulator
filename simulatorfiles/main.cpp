@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
         std::exit(-11);
     }
 
-    //mips_sim.diagnostics();
+    mips_sim.diagnostics();
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
     //while(!mips_sim.finished_sim()){

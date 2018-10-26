@@ -33,6 +33,10 @@ void sim_reg::set_reg(int input, int regNum){
     }
 }
 
+//above fix requires a default constructor
+sim_mem::sim_mem(){
+}
+
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
 sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
     //initialise data memory to zero

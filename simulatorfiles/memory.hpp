@@ -31,6 +31,7 @@ class sim_mem{
         //0x3000 0008 to 0xFFFF FFFF    : Blank
 
     public:
+        sim_mem();
         sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess);
         //NOT PASSED BY REFERENCE on purpose.
         char get_byte(int address, bool &read) const;
