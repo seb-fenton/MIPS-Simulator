@@ -11,4 +11,4 @@ simulatorfiles/MemoryTest
 simulatorfiles/memtest
 simulatorfiles/Makefile
 bin/mips.bin
-simulatorfiles/simulatorfile.o
+simulatorfiles/simulator.o
