@@ -116,6 +116,7 @@ int simulator::branch_classification(int instruction){
 
 void simulator::execute(int instruction){
     switch(instruction){
+
         //--------R Instructions--------//
         case 1:     //ADD
         case 4:     //ADDU
@@ -151,6 +152,48 @@ void simulator::execute(int instruction){
         case 49:    //SUB
         case 50:    //SUBU
         case 52:    //XOR
+
+        //--------I Instructions--------//
+        case 2: return ;    //addi
+        case 3: return ;    //addiu
+
+        case 6: return ;    //andi
+
+        case 7: return ;    //beq
+
+        case 8:              //bgez, bgezal, bltz, bltzal
+        case 9:              //bgezal
+        case 12:             //bltz
+        case 13:             //bltzal
+
+        case 10: return ;   //bgtz
+        case 11: return ;   //blez
+        
+        case 14: return ;   //bne
+
+        case 21: return ;   //lb
+        case 22: return ;   //lbu
+        case 23: return ;   //lh
+        case 24: return ;   //lhu
+        case 25: return ;   //lui
+        case 26: return ;   //lw
+        case 27: return ;   //lwl
+        case 28: return ;   //lwr
+
+        case 36: return ;   //ori
+
+        case 37: return ;   //sb
+        case 38: return ;   //sh
+
+        case 42: return ;   //slti
+        case 43: return ;   //sltiu
+        case 51: return ;   //sw
+
+        case 53: return ;  //xori
+
+        //--------J Instructions--------//
+        case 17: return ;   //j
+        case 18: return ;   //jal
     }
 }
 
