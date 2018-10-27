@@ -14,19 +14,18 @@ int simulator::fetch(sim_mem &memory, int pc){
         temp = temp << (8*(3-i));
         instruction = instruction | temp;
     }
-    //return the int
     return instruction;
 }
 
 int simulator::decode(int instruction){
     int opcode = instruction >> 26;
     switch(opcode){
-        //R
-        case 0b000000: return simulator::Rclassification(instruction);
-        //J
+        //--------R Instructions--------//
+        case 0b000000: return simulator::r_classification(instruction);
+        //--------J Instructions--------//
         case 0b000010: return 17;   //j
         case 0b000011: return 18;   //jal
-        //I
+        //--------I Instructions--------//
         case 0b001000: return 2;    //addi
         case 0b001001: return 3;    //addiu
 
@@ -60,20 +59,13 @@ int simulator::decode(int instruction){
         case 0b101011: return 51;   //sw
 
         case 0b001110: return 53;   //xori
-
-
-        
-
-
     }
 }
 
-//R INSTRUCTIONS//
+int simulator::r_classification(int instruction){
+    instruction = instruction & 0b111111;
 
-int simulator::Rclassification(int instruct){
-    instruct = instruct & 0b111111;
-
-    switch(instruct){
+    switch(instruction){
         case 0b100000: return 1;    //ADD
         case 0b100001: return 4;    //ADDU
 
@@ -111,9 +103,7 @@ int simulator::Rclassification(int instruct){
     }
 }
 
-//I INSTRUCTIONS//
-
-int branch_classifications(int instruction){
+int simulator::branch_classification(int instruction){
     instruction = instruction >> 16;
     int destination = instruction & 0b11111;
     switch(destination){
@@ -124,7 +114,60 @@ int branch_classifications(int instruction){
     }
 }
 
-//J INSTRUCTIONS//
+void simulator::execute(int instruction){
+    switch(instruction){
+        //--------R Instructions--------//
+        case 1:     //ADD
+        case 4:     //ADDU
+
+        case 5:     //AND
+
+        case 15:    //DIV
+        case 16:    //DIVU
+
+        case 18:    //JALR
+        case 20:    //JR
+
+        case 29:    //MFHI
+        case 30:    //MFLO
+        case 31:    //MTHI
+        case 32:    //MTLO
+
+        case 33:    //MULT
+        case 34:    //MULTU
+
+        case 35:    //OR
+
+        case 39:    //SLL
+        case 40:    //SLLV
+        case 41:    //SLT
+        case 44:    //SLTU
+
+        case 45:    //SRA
+        case 46:    //SRAV
+        case 47:    //SRL
+        case 48:    //SRLV
+
+        case 49:    //SUB
+        case 50:    //SUBU
+        case 52:    //XOR
+    }
+}
+
+
+//--------R Instructions--------//
+void simulator::r_add(int instruction){
+
+}
+
+//--------I Instructions--------//
+
+
+//--------J Instructions--------//
+
+
+
+
 
 void simulator::diagnostics(){
     bool successfultest = true;

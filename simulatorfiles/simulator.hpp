@@ -15,8 +15,9 @@ class simulator{
         bool finished_sim();
         int fetch(sim_mem &memory, int pc);
         int decode(int instruction);
-        int Rclassification(int instruct);
+        int r_classification(int instruction);
         int branch_classification(int instruction);
+        void execute(int instruction);
 
         //memory checking functions
         void diagnostics();
@@ -26,6 +27,7 @@ class simulator{
         void CheckBlankRegions(bool &success);
         
         //R INSTRUCTIONS//
+        void r_add(int instruction);
 
         //I INSTRUCTIONS//
         
