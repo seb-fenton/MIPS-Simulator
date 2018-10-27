@@ -16,6 +16,7 @@ class simulator{
         int fetch(sim_mem &memory, int pc);
         int decode(int instruction);
         int Rclassification(int instruct);
+        int branch_classification(int instruction);
 
         //memory checking functions
         void diagnostics();

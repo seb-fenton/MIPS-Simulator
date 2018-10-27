@@ -34,7 +34,7 @@ int simulator::decode(int instruction){
 
         case 0b000100: return 7;    //beq
 
-        case 0b000001: return branch_classification(instruction);             //bgez, bgezal, bltz, bltzal
+        case 0b000001: return simulator::branch_classification(instruction);             //bgez, bgezal, bltz, bltzal
         
         case 0b000111: return 10;   //bgtz
         case 0b000110: return 11;   //blez
