@@ -24,35 +24,45 @@ int simulator::decode(int instruction){
         //R
         case 0b000000: return simulator::Rclassification(instruction);
         //J
-        case 0b000010: return 17; //j
-        case 0b000011: return 18;//jal
+        case 0b000010: return 17;   //j
+        case 0b000011: return 18;   //jal
         //I
-        case 0b001000: //addi
-        case 0b001001: //addiu
-        case 0b001100: //andi
-        case 0b000100: //beq
+        case 0b001000: return 2;    //addi
+        case 0b001001: return 3;    //addiu
+
+        case 0b001100: return 6;    //andi
+
+        case 0b000100: return 7;    //beq
+
         case 0b000001: //bgez - ISSUE
         case 0b000001: //bgezal - ISSUE
-        case 0b000111: //bgtz
-        case 0b000110: //blez
         case 0b000001: //bltz
         case 0b000001: //bltzal
-        case 0b000101: //bne
-        case 0b100000: //lb
-        case 0b100100: //lbu
-        case 0b100001: //lh
-        case 0b100101: //lhu
-        case 0b001111: //lui
-        case 0b100011: //lw
-        case 0b100010: //lwl
-        case 0b100110: //lwr
-        case 0b001101: //ori
-        case 0b101000: //sv
-        case 0b101001: //sh
-        case 0b001010: //slti
-        case 0b001011: //sltiu
-        case 0b101011: //sw
-        case 0b001110: //xori
+        
+        case 0b000111: return 10;   //bgtz
+        case 0b000110: return 11;   //blez
+        
+        case 0b000101: return 14;   //bne
+
+        case 0b100000: return 21;   //lb
+        case 0b100100: return 22;   //lbu
+        case 0b100001: return 23;   //lh
+        case 0b100101: return 24;   //lhu
+        case 0b001111: return 25;   //lui
+        case 0b100011: return 26;   //lw
+        case 0b100010: return 27;   //lwl
+        case 0b100110: return 28;   //lwr
+
+        case 0b001101: return 36;   //ori
+
+        case 0b101000: return 37;   //sb
+        case 0b101001: return 38;   //sh
+
+        case 0b001010: return 42;   //slti
+        case 0b001011: return 43;   //sltiu
+        case 0b101011: return 51;   //sw
+
+        case 0b001110: return 53;   //xori
 
 
         
