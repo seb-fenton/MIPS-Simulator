@@ -1,6 +1,5 @@
 #include "simulator.hpp"
 
-
 //UNSURE HOW TO CREATE OBJECTS IN THIS CONSTRUCTOR
 //regFile needs no initialisation since it has a explicitly defined default constructor. memory thus needs one.
 simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
@@ -20,30 +19,29 @@ int simulator::fetch(sim_mem &memory, int pc){
 }
 
 int simulator::decode(int instruction){
-    char type;
-    instruction = instruction >> 24;
-    if(instruction == 0)
-        type = 'r';
-    if(instruction )
-        type = 'j';
-    //return the instruction number
+    int opcode = instruction >> 26;
+    switch(opcode){
+        //R
+        case 0b0: return simulator::Rclassification(instruction);
+        //J
+        case 0b10: //j
+        case 0b11: //jal
+
+        
+
+
+    }
 }
 
-char simulator::classification(int instruct){
+int simulator::Rclassification(int instruct){
+    
 }
 
 //R INSTRUCTIONS//
-int instruction::R_add(){
-    return 0;
-}
-
 
 //I INSTRUCTIONS//
 
-
 //J INSTRUCTIONS//
-
-
 
 void simulator::diagnostics(){
     bool successfultest = true;

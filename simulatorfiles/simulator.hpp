@@ -15,7 +15,7 @@ class simulator{
         bool finished_sim();
         int fetch(sim_mem &memory, int pc);
         int decode(int instruction);
-        char classification(int instruct);
+        int Rclassification(int instruct);
 
         //memory checking functions
         void diagnostics();
