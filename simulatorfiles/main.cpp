@@ -17,20 +17,19 @@ int main(int argc, char* argv[]){
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
 
-    //process binary file to stream into memory
-    std::string FileName = get_filename(argc, argv);
-    //initialise integer to tell length of binary file
-    int LengthOfBinary;
-    //initialise array of pointers and write into it from the binary file
-    char* Memblock = write_binary_in(FileName, LengthOfBinary);
-    //create boolean to measure 
-    bool WriteInSuccess = false;
-    simulator mips_sim(LengthOfBinary, Memblock, WriteInSuccess);   //move into instruction memory
+    std::cerr<<"\nRetrieving file name..."<<std::endl;              
+    std::string FileName = get_filename(argc, argv);                                    //process binary file to stream into memory
+    int LengthOfBinary;                                                                 //initialise integer to tell length of binary file
+    std::cerr<<"Writing binary data to character array..."<<std::endl;                  
+    char* Memblock = write_binary_in(FileName, LengthOfBinary);                         //initialise array of pointers and write into it from the binary file
+    bool WriteInSuccess = false;                                                        //create boolean to measure
+    simulator mips_sim(LengthOfBinary, Memblock, WriteInSuccess);                       //move into instruction memory
     if(WriteInSuccess == false){
         std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
     }
 
+    std::cerr<<"Starting diagnostics..."<<std::endl;
     mips_sim.diagnostics();
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
