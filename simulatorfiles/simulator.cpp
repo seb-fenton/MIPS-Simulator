@@ -10,7 +10,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 int simulator::fetch(sim_mem &memory, int pc){
     int instruction = 0;
     for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
-        int temp = memory.get_byte(pc + i);
+        bool nullbool;
+        int temp = memory.get_byte((pc + i), nullbool);
         temp = temp << (8*(3-i));
         instruction = instruction | temp;
     }
