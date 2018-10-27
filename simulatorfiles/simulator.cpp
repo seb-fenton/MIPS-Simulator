@@ -37,41 +37,40 @@ int simulator::Rclassification(int instruct){
     instruct = instruct & 0b111111;
 
     switch(instruct){
-        case 0b100000: //ADD
-        case 0b100001: //ADDU
+        case 0b100000: return 1;    //ADD
+        case 0b100001: return 4;    //ADDU
 
-        case 0b100100: //AND
+        case 0b100100: return 5;    //AND
 
-        case 0b011010: //DIV
-        case 0b011011: //DIVU
+        case 0b011010: return 15;   //DIV
+        case 0b011011: return 16;   //DIVU
 
-        case 0b001001: //JALR
-        case 0b001000: //JR
+        case 0b001001: return 18;   //JALR
+        case 0b001000: return 20;   //JR
 
-        case 0b010000: //MFHI
-        case 0b010010: //MFLO
-        case 0b010001: //MTHI
-        case 0b010011: //MTLO
+        case 0b010000: return 29;   //MFHI
+        case 0b010010: return 30;   //MFLO
+        case 0b010001: return 31;   //MTHI
+        case 0b010011: return 32;   //MTLO
 
-        case 0b011000: //MULT
-        case 0b011001: //MULTU
+        case 0b011000: return 33;   //MULT
+        case 0b011001: return 34;   //MULTU
 
-        case 0b100101: //OR
+        case 0b100101: return 35;   //OR
 
-        case 0b000000: //SLL
-        case 0b000100: //SLLV
-        case 0b101010: //SLT
-        case 0b101011: //SLTU
+        case 0b000000: return 39;   //SLL
+        case 0b000100: return 40;   //SLLV
+        case 0b101010: return 41;   //SLT
+        case 0b101011: return 44;   //SLTU
 
-        case 0b000011: //SRA
-        case 0b000111: //SRAV
-        case 0b000010: //SRL
-        case 0b000110: //SRLV
+        case 0b000011: return 45;   //SRA
+        case 0b000111: return 46;   //SRAV
+        case 0b000010: return 47;   //SRL
+        case 0b000110: return 48;   //SRLV
 
-        case 0b100010: //SUB
-        case 0b100011: //SUBU
-        case 0b100110: //XOR
-
+        case 0b100010: return 49;   //SUB
+        case 0b100011: return 50;   //SUBU
+        case 0b100110: return 52;   //XOR
     }
 }
 
