@@ -22,10 +22,38 @@ int simulator::decode(int instruction){
     int opcode = instruction >> 26;
     switch(opcode){
         //R
-        case 0b0: return simulator::Rclassification(instruction);
+        case 0b000000: return simulator::Rclassification(instruction);
         //J
-        case 0b10: //j
-        case 0b11: //jal
+        case 0b000010: return 17; //j
+        case 0b000011: return 18;//jal
+        //I
+        case 0b001000: //addi
+        case 0b001001: //addiu
+        case 0b001100: //andi
+        case 0b000100: //beq
+        case 0b000001: //bgez - ISSUE
+        case 0b000001: //bgezal - ISSUE
+        case 0b000111: //bgtz
+        case 0b000110: //blez
+        case 0b000001: //bltz
+        case 0b000001: //bltzal
+        case 0b000101: //bne
+        case 0b100000: //lb
+        case 0b100100: //lbu
+        case 0b100001: //lh
+        case 0b100101: //lhu
+        case 0b001111: //lui
+        case 0b100011: //lw
+        case 0b100010: //lwl
+        case 0b100110: //lwr
+        case 0b001101: //ori
+        case 0b101000: //sv
+        case 0b101001: //sh
+        case 0b001010: //slti
+        case 0b001011: //sltiu
+        case 0b101011: //sw
+        case 0b001110: //xori
+
 
         
 
