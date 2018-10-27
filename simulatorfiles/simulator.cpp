@@ -34,10 +34,7 @@ int simulator::decode(int instruction){
 
         case 0b000100: return 7;    //beq
 
-        case 0b000001: //bgez - ISSUE
-        case 0b000001: //bgezal - ISSUE
-        case 0b000001: //bltz
-        case 0b000001: //bltzal
+        case 0b000001: return branch_classification(instruction);             //bgez, bgezal, bltz, bltzal
         
         case 0b000111: return 10;   //bgtz
         case 0b000110: return 11;   //blez
@@ -70,6 +67,8 @@ int simulator::decode(int instruction){
 
     }
 }
+
+//R INSTRUCTIONS//
 
 int simulator::Rclassification(int instruct){
     instruct = instruct & 0b111111;
@@ -112,9 +111,18 @@ int simulator::Rclassification(int instruct){
     }
 }
 
-//R INSTRUCTIONS//
-
 //I INSTRUCTIONS//
+
+int branch_classifications(int instruction){
+    instruction = instruction >> 16;
+    int destination = instruction & 0b11111;
+    switch(destination){
+        case 0b00001: return 8;  //BGEZ
+        case 0b10001: return 9;  //BGEZAL
+        case 0b00000: return 12;  //BLTZ
+        case 0b10000: return 13;  //BLTZAL
+    }
+}
 
 //J INSTRUCTIONS//
 
