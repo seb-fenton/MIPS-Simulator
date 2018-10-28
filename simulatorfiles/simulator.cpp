@@ -156,10 +156,10 @@ void simulator::execute(int instruction){
 
 
         //--------I Instructions--------//
-        case 2: return ;    //addi
-        case 3: return ;    //addiu
+        case 2: simulator::i_addi(instruction);    //addi
+        case 3: simulator::i_addiu(instruction);    //addiu
 
-        case 6: return ;    //andi
+        case 6: simulator::i_andi(instruction);    //andi
 
         case 7: return ;    //beq
 
@@ -281,8 +281,53 @@ void simulator::r_divu(int instruction){     //WIP
 }
 
 //--------I Instructions--------//
+void simulator::i_addi(int instruction){     //WIP
+    bool overflow = false;
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
 
+    int rt = instruction & 0x1F0000;
+    rt = rt >> 16;
+    rt = regFile.get_reg(rt);               //src2
 
+    int imm = instruction & 0xFFFF;          //dest
+
+    int result = rs + imm;
+    //detect overflow here
+    if(overflow)
+        std::exit(-10);
+    else
+        regFile.set_reg(result, rt);
+}
+
+void simulator::i_addiu(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction & 0x1F0000;
+    rt = rt >> 16;
+    rt = regFile.get_reg(rt);               //dest
+
+    int imm = instruction & 0xFFFF;
+
+    regFile.set_reg(rs + imm, rt);
+}
+
+void simulator::i_andi(int instruction){    //WIP
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction & 0x1F0000;
+    rt = rt >> 16;
+    rt = regFile.get_reg(rt);               //dest
+
+    int imm = instruction & 0xFFFF;         //0 EXTENSION?
+
+    regFile.set_reg(rs & imm, rt);
+}
 //--------J Instructions--------//
 
 

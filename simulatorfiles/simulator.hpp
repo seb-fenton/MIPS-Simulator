@@ -34,7 +34,9 @@ class simulator{
         void r_divu(int instruction);   //WIP
 
         //I INSTRUCTIONS//
-        
+        void i_addi(int instruction);
+        void i_addiu(int instruction);
+        void i_andi(int instruction);
         //J INSTRUCTIONS//  
 
 };
