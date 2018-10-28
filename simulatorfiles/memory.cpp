@@ -84,6 +84,7 @@ int sim_mem::addressmap(int &address) const{
     else return -1;
 }
 
+//!!REMOVE BOOL BEFORE SUBMISSION!!
 char sim_mem::get_byte(int address, bool &read) const{
     int check = sim_mem::addressmap(address);
     /*Memory exceptions (-11): 
@@ -91,10 +92,11 @@ char sim_mem::get_byte(int address, bool &read) const{
     4. Reading from write-only memory zone addr_putc
     -1. Address out of range or blank areas*/
     if(check == 0 || check == 4 || check == -1){
-        read = false;
-        //std::exit(-11);
-        char error = 0x00;
-        return error;
+        //read = false;
+        //char error = 0x00;
+        //return error;
+        std::exit(-11);
+        
     }
     else{
         read = true;
@@ -106,7 +108,7 @@ char sim_mem::get_byte(int address, bool &read) const{
     }
 }
 
-//TODO: DELETE PRINTING STATEMENTS AND RESTORE EXIT CODE
+//!!REMOVE BOOL BEFORE SUBMISSION!!
 void sim_mem::set_byte(int address, char value, bool &write){
     int check = sim_mem::addressmap(address);
     /*Memory exceptions (-11): 
@@ -116,8 +118,8 @@ void sim_mem::set_byte(int address, char value, bool &write){
     -1. Address out of range or Blank Areas
     */
     if(check == 0 || check == 1 || check == 3 || check ==-1){
-        write = false; 
-        //std::exit(-11);
+        //write = false; 
+        std::exit(-11);
     }
     else {
         write = true;

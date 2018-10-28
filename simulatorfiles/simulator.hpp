@@ -27,7 +27,11 @@ class simulator{
         void CheckBlankRegions(bool &success);
         
         //R INSTRUCTIONS//
-        void r_add(int instruction);
+        void r_add(int instruction);    //WIP
+        void r_addu(int instruction);
+        void r_and(int instruction);    //WIP
+        void r_div(int instruction);    //WIP
+        void r_divu(int instruction);   //WIP
 
         //I INSTRUCTIONS//
         
