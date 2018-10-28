@@ -32,11 +32,19 @@ class simulator{
         void r_and(int instruction);    //WIP
         void r_div(int instruction);    //WIP
         void r_divu(int instruction);   //WIP
+        void r_or(int instruction);
+        void r_sub(int instruction);
+        void r_subu(int instruction);
+        void r_xor(int instruction);
 
         //I INSTRUCTIONS//
         void i_addi(int instruction);
         void i_addiu(int instruction);
         void i_andi(int instruction);
+        void i_ori(int instruction);
+        void i_xori(int instruction);
+        
         //J INSTRUCTIONS//  
+        void j_j(int instruction);
 
 };

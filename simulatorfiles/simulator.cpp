@@ -221,13 +221,16 @@ void simulator::r_add(int instruction){     //WIP
     int beforeMSB, afterMSB;
     beforeMSB = rs & 0x7FFFFFFF;
     afterMSB = result & 0x7FFFFFF;
-    if(beforeMSB != afterMSB)
+    if(beforeMSB != afterMSB){
         overflow = true;
-
-    if(overflow)
+    }
+    if(overflow){
+        std::cerr<<"Exiting with error -10";
         std::exit(-10);
-    else
+    }
+    else{
         regFile.set_reg(result, rd);
+    }
 }
 
 void simulator::r_addu(int instruction){
@@ -286,6 +289,77 @@ void simulator::r_divu(int instruction){     //WIP
     regFile.set_reg(rs%rt, );               //remainder into HI
 }
 
+void simulator::r_or(int instruction){
+
+    int rs = instruction>>21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction>>16;
+    rt = regFile.get_reg(rt & 0x5);         //src2
+
+    int rd = instruction>>11;               //destination
+
+    regFile.set_reg((rs|rt), (rd & 0x5));
+}
+
+void simulator::r_sub(int instruction){     
+    bool overflow = false;
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction & 0x1F0000;
+    rt = rt >> 16;
+    rt = regFile.get_reg(rt);               //src2
+
+    int rd = instruction & 0xF800;          //dest
+    rd = rd >> 11;
+
+    int result = rs-rt;
+    //detect overflow here
+    int beforeMSB, afterMSB;
+    beforeMSB = rs & 0x7FFFFFFF;
+    afterMSB = result & 0x7FFFFFF;
+    if(beforeMSB != afterMSB){
+        overflow = true;
+    }
+    if(overflow){
+        std::cerr<<"Exiting with error -10";
+        std::exit(-10);
+    }
+    else{
+        regFile.set_reg(result, rd);
+    }
+}
+
+void simulator::r_subu(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction & 0x1F0000;
+    rt = rt >> 16;
+    rt = regFile.get_reg(rt);               //src2
+
+    int rd = instruction & 0xF800;          //dest
+    rd = rd >> 11;
+
+    regFile.set_reg(rs-rt, rd);             //no overflow
+}
+
+void simulator::r_xor(int instruction){
+
+    int rs = instruction>>21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction>>16;
+    rt = regFile.get_reg(rt & 0x5);         //src2
+
+    int rd = instruction>>11;               //destination
+
+    regFile.set_reg((rs^rt), (rd & 0x5));
+}
+
 //--------I Instructions--------//
 void simulator::i_addi(int instruction){     //WIP
     bool overflow = false;
@@ -342,9 +416,40 @@ void simulator::i_andi(int instruction){    //WIP
     regFile.set_reg(rs & imm, rt);
 }
 
+void simulator::i_ori(int instruction){
+    int rs = instruction>>21;
+    rs = rs & 0x5;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction>>16;               //destination
+
+    int immediate = instruction & 0xF;               
+
+    regFile.set_reg((rs|immediate), (rt & 0x5));
+}
+
+void simulator::i_xori(int instruction){
+
+    int rs = instruction>>21;
+    rs = rs & 0x5;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction>>16;               //destination
+
+    int immediate = instruction & 0xF;               
+
+    regFile.set_reg((rs^immediate), (rt & 0x5));
+}
+
 //--------J Instructions--------//
 
+void simulator::j_j(int instruction){ //WIP - IS THIS CORRECT?
+    int rs = instruction >> 21;
+    rs = regFile.get_reg(rs);
+    programCounter = rs;
 
+    //ERROR HANDLING?
+}
 
 
 
