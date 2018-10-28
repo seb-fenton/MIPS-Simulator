@@ -218,6 +218,12 @@ void simulator::r_add(int instruction){     //WIP
 
     int result = rt+rs;
     //detect overflow here
+    int beforeMSB, afterMSB;
+    beforeMSB = rs & 0x7FFFFFFF;
+    afterMSB = result & 0x7FFFFFF;
+    if(beforeMSB != afterMSB)
+        overflow = true;
+
     if(overflow)
         std::exit(-10);
     else
@@ -295,6 +301,13 @@ void simulator::i_addi(int instruction){     //WIP
 
     int result = rs + imm;
     //detect overflow here
+     //detect overflow here
+    int beforeMSB, afterMSB;
+    beforeMSB = rs & 0x7FFFFFFF;
+    afterMSB = result & 0x7FFFFFF;
+    if(beforeMSB != afterMSB)
+        overflow = true;
+
     if(overflow)
         std::exit(-10);
     else
@@ -328,6 +341,7 @@ void simulator::i_andi(int instruction){    //WIP
 
     regFile.set_reg(rs & imm, rt);
 }
+
 //--------J Instructions--------//
 
 
