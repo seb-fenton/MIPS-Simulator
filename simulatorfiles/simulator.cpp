@@ -6,6 +6,14 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     programCounter = 0x10000000;
 }
 
+void simulator::updatePC(bool jump, int offset){    //WIP, might require more thought
+    if(jump){
+        programCounter = programCounter + offset + 4;
+    }
+    else
+        programCounter = programCounter + 4;
+}
+
 int simulator::fetch(sim_mem &memory, int pc){
     int instruction = 0;
     for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
@@ -213,7 +221,7 @@ void simulator::execute(int instruction){
 
 
 //--------R Instructions--------//
-void simulator::r_add(int instruction){     //WIP
+void simulator::r_add(int instruction){
     bool overflow = false;
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -280,8 +288,10 @@ void simulator::r_div(int instruction){     //WIP
     rt = rt >> 16;
     rt = regFile.get_reg(rt);               //src2
 
-    regFile.set_reg(rs/rt, );               //quotient into LO
-    regFile.set_reg(rs%rt, );               //remainder into HI
+    //OVERFLOW CHECKING
+
+    regFile.set_lo(rs/rt);                //quotient into LO
+    regFile.set_hi(rs%rt);                  //remainder into HI
 }
 
 void simulator::r_divu(int instruction){     //WIP
@@ -293,8 +303,8 @@ void simulator::r_divu(int instruction){     //WIP
     rt = rt >> 16;
     rt = regFile.get_reg(rt);               //src2
 
-    regFile.set_reg(rs/rt, );               //quotient into LO
-    regFile.set_reg(rs%rt, );               //remainder into HI
+    regFile.set_lo(rs/rt);               //quotient into LO
+    regFile.set_hi(rs%rt);               //remainder into HI
 }
 
 void simulator::r_mfhi(int instruction){
@@ -447,7 +457,7 @@ void simulator::r_srlv(int instruction){
 
 }
 
-void simulator::r_sub(int instruction){     //WIP
+void simulator::r_sub(int instruction){
     bool overflow = false;
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -474,7 +484,7 @@ void simulator::r_sub(int instruction){     //WIP
     }
 }
 
-void simulator::r_subu(int instruction){    //WIP
+void simulator::r_subu(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
     rs = regFile.get_reg(rs);               //src1
@@ -503,7 +513,7 @@ void simulator::r_xor(int instruction){
 }
 
 //--------I Instructions--------//
-void simulator::i_addi(int instruction){     //WIP
+void simulator::i_addi(int instruction){
     bool overflow = false;
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;

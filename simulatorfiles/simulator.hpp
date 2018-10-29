@@ -9,10 +9,10 @@ class simulator{
         sim_mem memory;
 
     public:
-        //is the initializer list needed here?
-        //fixed attempt?
         simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess);
+        void updatePC(bool jump, int offset);
         bool finished_sim();
+
         int fetch(sim_mem &memory, int pc);
         int decode(int instruction);
         int r_classification(int instruction);
@@ -36,6 +36,7 @@ class simulator{
         void r_mflo(int instruction);
         void r_mthi(int instruction);
         void r_mtlo(int instruction);
+
         void r_or(int instruction);
         void r_sll(int instruction);
         void r_sllv(int instruction);
@@ -43,6 +44,8 @@ class simulator{
         void r_srav(int instruction);
         void r_srl(int instruction);
         void r_srlv(int instruction);
+
+        
         void r_sub(int instruction);
         void r_subu(int instruction);
         void r_xor(int instruction);
@@ -53,7 +56,7 @@ class simulator{
         void i_andi(int instruction);
         void i_ori(int instruction);
         void i_xori(int instruction);
-
+        
         //J INSTRUCTIONS//  
         void j_j(int instruction);
 
