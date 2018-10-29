@@ -196,8 +196,8 @@ void simulator::execute(int instruction){
 
 
         //--------J Instructions--------//
-        case 17: return ;   //j
-        case 19: return ;   //jal
+        case 17: return;;   //j
+        case 19: return;   //jal
     }
 }
 
@@ -217,11 +217,9 @@ void simulator::r_add(int instruction){     //WIP
     rd = rd >> 11;
 
     int result = rt+rs;
-    //detect overflow here
-    int beforeMSB, afterMSB;
-    beforeMSB = rs & 0x7FFFFFFF;
-    afterMSB = result & 0x7FFFFFF;
-    if(beforeMSB != afterMSB){
+
+    //if both operands are same sign, set overflow if result sign is different
+    if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
         overflow = true;
     }
     if(overflow){
@@ -374,16 +372,14 @@ void simulator::i_addi(int instruction){     //WIP
     int imm = instruction & 0xFFFF;          //dest
 
     int result = rs + imm;
-    //detect overflow here
-     //detect overflow here
-    int beforeMSB, afterMSB;
-    beforeMSB = rs & 0x7FFFFFFF;
-    afterMSB = result & 0x7FFFFFF;
-    if(beforeMSB != afterMSB)
+    //if both operands are same sign, set overflow if result sign is different
+    if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
         overflow = true;
-
-    if(overflow)
+    }
+    if(overflow){
+        std::cerr<<"Exiting with error -10";
         std::exit(-10);
+    }
     else
         regFile.set_reg(result, rt);
 }
