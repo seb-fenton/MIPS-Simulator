@@ -4,14 +4,35 @@
 //regFile needs no initialisation since it has a explicitly defined default constructor. memory thus needs one.
 simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
     programCounter = 0x10000000;
+
+    pcOffSet = 0;
+    branch = false;
+    delayedOp = false;
 }
 
-void simulator::updatePC(bool jump, int offset){    //WIP, might require more thought
-    if(jump){
-        programCounter = programCounter + offset + 4;
+void simulator::updatePC(){    //WIP
+    
+    if(branch && delayedOp){                    //UNPREDICTABLE BEHAVIOUR
+        //do something architecturally convenient
+        return;
+    }                     
+    
+    else if(branch){                                 //if it was a branch, set up a delayed branch
+        programCounter = programCounter + 4;    //stage for delayed branch
+        delayedOp = true;                       //forewarning for next cycle
+        branch = false;                         //reset branch
+        return;
+    }
+
+    else if(delayedOp){
+        programCounter = programCounter + pcOffSet;
+        pcOffSet = 0;
+        delayedOp = false;
+        return;
     }
     else
-        programCounter = programCounter + 4;
+        programCounter = programCounter + 4;    //if not a branch, proceed as per normal;
+
 }
 
 int simulator::fetch(sim_mem &memory, int pc){
@@ -512,6 +533,7 @@ void simulator::r_xor(int instruction){
     regFile.set_reg((rs^rt), (rd & 0x5));
 }
 
+
 //--------I Instructions--------//
 void simulator::i_addi(int instruction){
     bool overflow = false;
@@ -564,6 +586,23 @@ void simulator::i_andi(int instruction){    //WIP
     int imm = instruction & 0xFFFF;         //0 EXTENSION?
 
     regFile.set_reg(rs & imm, rt);
+}
+
+void simulator::i_beq(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction & 0x1F0000;
+    rt = rt >> 16;
+    rt = regFile.get_reg(rt);               //dest
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+    if(rs == rt)
+        pcOffSet = imm;
 }
 
 void simulator::i_ori(int instruction){

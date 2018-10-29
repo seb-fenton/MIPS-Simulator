@@ -4,13 +4,14 @@
 
 class simulator{
     private:
-        int programCounter;
+        int programCounter, pcOffSet;
+        bool delayedOp, branch;
         sim_reg regFile;
         sim_mem memory;
 
     public:
         simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess);
-        void updatePC(bool jump, int offset);
+        void updatePC();
         bool finished_sim();
 
         int fetch(sim_mem &memory, int pc);
@@ -44,7 +45,6 @@ class simulator{
         void r_srav(int instruction);
         void r_srl(int instruction);
         void r_srlv(int instruction);
-
         
         void r_sub(int instruction);
         void r_subu(int instruction);
@@ -54,6 +54,9 @@ class simulator{
         void i_addi(int instruction);
         void i_addiu(int instruction);
         void i_andi(int instruction);
+
+        void i_beq(int instruction);
+
         void i_ori(int instruction);
         void i_xori(int instruction);
         
