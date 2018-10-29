@@ -10,7 +10,7 @@ class sim_reg{
         void set_hi(int input);
         int get_lo() const;
         void set_lo(int input);
-        
+
     private:
         int reg[31];
         int hi;
@@ -24,7 +24,7 @@ class sim_mem{
         
         //CHANGE TO VECTORS.
         std::vector<char> addr_null; //size 4             
-        std::vector<char> addr_instr; //0x1000000
+        std::vector<char> addr_instr; //0x1000000 
         std::vector<char> addr_data; //0x4000000
         std::vector<char> addr_getc; //4
         std::vector<char> addr_putc;//4

@@ -297,6 +297,27 @@ void simulator::r_divu(int instruction){     //WIP
     regFile.set_reg(rs%rt, );               //remainder into HI
 }
 
+void simulator::r_mfhi(int instruction){
+    int rt = instruction>>16;                     //src
+    regFile.set_reg(regFile.get_hi(), rt);        //destination 
+}
+
+void simulator::r_mflo(int instruction){
+    int rt = instruction>>16;                     //src
+    regFile.set_reg(regFile.get_lo(), rt);        //destination 
+}
+        
+
+void simulator::r_mthi(int instruction){
+    int rt = instruction>>26;                   //src
+    regFile.set_hi(regFile.get_reg(rt));        //destination 
+}                   
+
+void simulator::r_mtlo(int instruction){
+    int rt = instruction>>26;                   //src
+    regFile.set_lo(regFile.get_reg(rt));        //destination 
+}
+
 void simulator::r_or(int instruction){
 
     int rs = instruction>>21;
@@ -308,6 +329,123 @@ void simulator::r_or(int instruction){
     int rd = instruction>>11;               //destination
 
     regFile.set_reg((rs|rt), (rd & 0x5));
+}
+
+void simulator::r_sll(int instruction){
+
+    int rt = instruction>>21;          
+    rt = regFile.get_reg(rt);            //src1
+
+    int sa = instruction>>11;            //shifting amount
+    sa = sa & 0x5;
+
+    int rd = instruction>>16;           //destination
+
+    regFile.set_reg((rt<<sa), (rd & 0x5));
+
+}
+
+void simulator::r_sllv(int instruction){
+
+    int rs = instruction>>26;           
+    rs = regFile.get_reg(rs & 0x5);     //src1
+
+    int rt = instruction>>21;           // src2
+    rt = regFile.get_reg(rt & 0x5);
+
+    int rd = instruction>>16;           //destination
+
+    regFile.set_reg((rt<<rs), (rd & 0x5));
+
+}
+
+void simulator::r_sra(int instruction){
+
+    int rt = instruction>>21;          
+    rt = regFile.get_reg(rt);            //src1
+
+    bool signExtend = false;
+
+    if(rt>>31 == 1){
+        signExtend = true;
+    }
+
+    int sa = instruction>>11;            //shifting amount
+    sa = sa & 0x5;
+
+    rt = rt>>sa;
+    if(signExtend){
+        int temp;
+        for(int i = 0; i<sa; i++){
+            temp = temp+1;
+            temp = temp << 1;
+        }
+        temp = temp << sa;
+        rt = rt + temp;
+    }
+
+    int rd = instruction>>16;           //destination
+
+    regFile.set_reg((rt), (rd & 0x5));
+}
+
+void simulator::r_srav(int instruction){
+
+    int rt = instruction>>21; 
+    rt = rt & 0x5;         
+    rt = regFile.get_reg(rt);            //src1
+
+    bool signExtend = false;
+
+    if(rt>>31 == 1){
+        signExtend = true;
+    }
+
+    int rs = instruction>>26;            //shifting amount
+    rs = regFile.get_reg(rs);
+
+    rt = rt>>rs;
+    if(signExtend){
+        int temp;
+        for(int i = 0; i<rs; i++){
+            temp = temp+1;
+            temp = temp << 1;
+        }
+        temp = temp << rs;
+        rt = rt + temp;
+    }
+
+    int rd = instruction>>16;           //destination
+
+    regFile.set_reg((rt), (rd & 0x5));
+}
+
+void simulator::r_srl(int instruction){
+
+    int rt = instruction>>21;          
+    rt = regFile.get_reg(rt);            //src1
+
+    int sa = instruction>>11;            //shifting amount
+    sa = sa & 0x5;
+
+    int rd = instruction>>16;           //destination
+
+    regFile.set_reg((rt>>sa), (rd & 0x5));
+
+}
+
+void simulator::r_srlv(int instruction){
+
+    int rs = instruction>>26;           
+    rs = regFile.get_reg(rs & 0x5);     //src1
+
+    int rt = instruction>>21;           // src2
+    rt = regFile.get_reg(rt & 0x5);
+
+    int rd = instruction>>16;           //destination
+
+    regFile.set_reg((rt>>rs), (rd & 0x5));
+
 }
 
 void simulator::r_sub(int instruction){     //WIP
