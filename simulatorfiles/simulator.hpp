@@ -57,6 +57,11 @@ class simulator{
 
         void i_beq(int instruction);
 
+        void i_lb(int instruction);
+        void i_lbu(int instruction);
+        void i_lh(int instruction);
+        void i_lhu(int instruction);
+        void i_lui(int instruction);
         void i_ori(int instruction);
         void i_xori(int instruction);
         
