@@ -324,11 +324,8 @@ void simulator::r_sub(int instruction){     //WIP
     rd = rd >> 11;
 
     int result = rs-rt;
-    //detect overflow here
-    int beforeMSB, afterMSB;
-    beforeMSB = rs & 0x7FFFFFFF;
-    afterMSB = result & 0x7FFFFFF;
-    if(beforeMSB != afterMSB){
+    //if both operands are same sign, set overflow if result sign is different
+    if(((rs >> 31) != (rt >>31)) && (result>>31 != rs>>31)){
         overflow = true;
     }
     if(overflow){

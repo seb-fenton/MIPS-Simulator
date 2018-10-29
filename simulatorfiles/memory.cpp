@@ -44,6 +44,7 @@ void sim_reg::set_hi(int input){
 int sim_reg::get_lo() const{
     return lo;
 }
+
 void sim_reg::set_lo(int input){
     lo = input;
 }
