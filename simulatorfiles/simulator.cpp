@@ -139,29 +139,29 @@ void simulator::execute(int instruction){
         case 18:    //JALR
         case 20:    //JR
 
-        case 29:    //MFHI
-        case 30:    //MFLO
-        case 31:    //MTHI
-        case 32:    //MTLO
+        case 29: simulator::r_mfhi(instruction);   //MFHI
+        case 30: simulator::r_mflo(instruction);   //MFLO
+        case 31: simulator::r_mthi(instruction);   //MTHI
+        case 32: simulator::r_mtlo(instruction);   //MTLO
 
         case 33:    //MULT
         case 34:    //MULTU
 
-        case 35:    //OR
+        case 35: simulator::r_or(instruction);   //OR
 
-        case 39:    //SLL
-        case 40:    //SLLV
-        case 41:    //SLT
-        case 44:    //SLTU
+        case 39: simulator::r_sll(instruction);   //SLL
+        case 40: simulator::r_sllv(instruction);   //SLLV
+        case 41: //simulator::r_slt(instruction);   //SLT
+        case 44: //simulator::r_sltu(instruction);   //SLTU
 
-        case 45:    //SRA
-        case 46:    //SRAV
-        case 47:    //SRL
-        case 48:    //SRLV
+        case 45: simulator::r_sra(instruction);   //SRA
+        case 46: simulator::r_srav(instruction);   //SRAV
+        case 47: simulator::r_srl(instruction);   //SRL
+        case 48: simulator::r_srlv(instruction);   //SRLV
 
-        case 49:    //SUB
-        case 50:    //SUBU
-        case 52:    //XOR
+        case 49: simulator::r_sub(instruction);   //SUB
+        case 50: simulator::r_subu(instruction);  //SUBU
+        case 52: simulator::r_xor(instruction);   //XOR
 
 
 
@@ -192,7 +192,7 @@ void simulator::execute(int instruction){
         case 27: return ;   //lwl
         case 28: return ;   //lwr
 
-        case 36: return ;   //ori
+        case 36: simulator::i_ori(instruction);  //ori
 
         case 37: return ;   //sb
         case 38: return ;   //sh
@@ -201,12 +201,12 @@ void simulator::execute(int instruction){
         case 43: return ;   //sltiu
         case 51: return ;   //sw
 
-        case 53: return ;  //xori
+        case 53: return simulator::i_xori(instruction);;  //xori
 
 
 
         //--------J Instructions--------//
-        case 17: return;;   //j
+        case 17: return;   //j
         case 19: return;   //jal
     }
 }
@@ -305,8 +305,7 @@ void simulator::r_mfhi(int instruction){
 void simulator::r_mflo(int instruction){
     int rt = instruction>>16;                     //src
     regFile.set_reg(regFile.get_lo(), rt);        //destination 
-}
-        
+}  
 
 void simulator::r_mthi(int instruction){
     int rt = instruction>>26;                   //src
