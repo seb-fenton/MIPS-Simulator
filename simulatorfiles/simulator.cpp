@@ -59,6 +59,10 @@ int simulator::decode(int instruction){
         case 0b101011: return 51;   //sw
 
         case 0b001110: return 53;   //xori
+
+        default:    std::cerr<<"Instruction decoding failed - invalid instruction. Exiting program...";
+                    std::exit(-12);
+                  
     }
 }
 
@@ -100,6 +104,9 @@ int simulator::r_classification(int instruction){
         case 0b100010: return 49;   //SUB
         case 0b100011: return 50;   //SUBU
         case 0b100110: return 52;   //XOR
+
+        default:    std::cerr<<"R_instruction decoding failed - invalid instruction. Exiting program...";
+                    std::exit(-12);
     }
 }
 
@@ -111,6 +118,9 @@ int simulator::branch_classification(int instruction){
         case 0b10001: return 9;  //BGEZAL
         case 0b00000: return 12;  //BLTZ
         case 0b10000: return 13;  //BLTZAL
+
+        default:    std::cerr<<"Branch instruction decoding failed - invalid instruction. Exiting program...";
+                    std::exit(-12);
     }
 }
 
@@ -302,7 +312,7 @@ void simulator::r_or(int instruction){
     regFile.set_reg((rs|rt), (rd & 0x5));
 }
 
-void simulator::r_sub(int instruction){     
+void simulator::r_sub(int instruction){     //WIP
     bool overflow = false;
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -332,7 +342,7 @@ void simulator::r_sub(int instruction){
     }
 }
 
-void simulator::r_subu(int instruction){
+void simulator::r_subu(int instruction){    //WIP
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
     rs = regFile.get_reg(rs);               //src1

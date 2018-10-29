@@ -33,6 +33,22 @@ void sim_reg::set_reg(int input, int regNum){
     }
 }
 
+int sim_reg::get_hi() const{
+    return hi;
+}
+
+void sim_reg::set_hi(int input){
+    hi = input;
+}
+
+int sim_reg::get_lo() const{
+    return lo;
+}
+void sim_reg::set_lo(int input){
+    lo = input;
+}
+
+
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
 sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
     //initialise data memory to zero
