@@ -34,15 +34,15 @@ int main(int argc, char* argv[]){
     std::cerr<<"Starting diagnostics..."<<std::endl;
     mips_sim.diagnostics();
 
-    int exitCode;
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
     int instr, index;
+    char exitCode;
     while(!mips_sim.finished_sim()){
         instr = mips_sim.fetch();
         index = mips_sim.decode(instr);
         mips_sim.execute(index);
         mips_sim.updatePC();
-        //write reg2 8 bits to exit code
+        mips_sim.update_exit_code(exitCode);
     }
     
     std::cerr << "\nSimulation Completed.";

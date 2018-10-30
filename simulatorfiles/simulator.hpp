@@ -13,6 +13,7 @@ class simulator{
         simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess);
         void updatePC();
         bool finished_sim();
+        void update_exit_code(char& exitCode);
 
         int fetch();
         int decode(int instruction);

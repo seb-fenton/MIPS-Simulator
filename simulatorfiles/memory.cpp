@@ -13,7 +13,7 @@ sim_reg::sim_reg(){
 }
 
 int sim_reg::get_reg(int regNum) const{
-    char output = reg[regNum];
+    int output = reg[regNum];
     return output;
 }
 

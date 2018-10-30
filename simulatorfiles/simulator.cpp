@@ -39,6 +39,11 @@ void simulator::updatePC(){    //WIP
 
 }
 
+void simulator::update_exit_code(char& exitCode){
+    int retrieval = regFile.get_reg(2);
+    exitCode = retrieval & 0xFF;
+}
+
 int simulator::fetch(){
     int instruction = 0;
     for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
