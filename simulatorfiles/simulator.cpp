@@ -39,9 +39,8 @@ void simulator::updatePC(){    //WIP
 
 }
 
-void simulator::update_exit_code(char& exitCode){
-    int retrieval = regFile.get_reg(2);
-    exitCode = retrieval & 0xFF;
+void simulator::update_exit_code(int& exitCode){
+    exitCode = (regFile.get_reg(2)) & 0xFF;
 }
 
 int simulator::fetch(){

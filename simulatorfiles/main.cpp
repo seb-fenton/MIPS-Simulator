@@ -35,8 +35,7 @@ int main(int argc, char* argv[]){
     mips_sim.diagnostics();
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
-    int instr, index;
-    char exitCode;
+    int instr, index, exitCode;
     while(!mips_sim.finished_sim()){
         instr = mips_sim.fetch();
         index = mips_sim.decode(instr);
