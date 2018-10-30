@@ -63,6 +63,10 @@ class simulator{
         void i_lhu(int instruction);
         void i_lui(int instruction);
         void i_ori(int instruction);
+
+        void i_sb(int instruction);
+        void i_sh(int instruction);
+        void i_sw(int instruction);
         void i_xori(int instruction);
         
         //J INSTRUCTIONS//  

@@ -805,6 +805,82 @@ void simulator::i_ori(int instruction){
     regFile.set_reg((rs|immediate), (rt & 0x1F));
 }
 
+void simulator::i_sb(int instruction){
+    signed short int offset = instruction & 0xFFFF;     //address src1
+
+    int base = instruction>>21;                         //address src2
+    base = base & 0xFF;
+
+    bool nullbool;
+
+    int rt = instruction>>16;
+    rt = regFile.get_reg(rt&0x1F);
+    char input = rt&0b11111111;
+
+    memory.set_byte((base + offset), input, nullbool);
+}
+
+void simulator::i_sh(int instruction){
+    signed short int offset = instruction & 0xFFFF;     //address src1
+
+    int test = offset>>15;
+    if(test==1){                                        //test for memory access restriction on load halfword
+        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+        std::exit(-11);
+    }
+
+    int base = instruction>>21;             //address src2
+    base = base & 0xFF;
+
+    int memoryAddress = base + offset;
+
+    int registerAddress = instruction>>16;
+
+    int hword = regFile.get_reg(registerAddress & 0x1F);        //get hword
+    hword = hword & 0xFFFF;
+
+    bool nullbool;
+
+    char msb = hword>>8;                                        //msb to be loaded into memory first
+    memory.set_byte((memoryAddress), msb, nullbool);
+
+    char lsb = hword & 0xFF;                                    //lsb then loaded into memory
+    memory.set_byte((memoryAddress + 1), msb, nullbool);        
+}
+
+void simulator::i_sw(int instruction){
+    signed short int offset = instruction & 0xFFFF;
+
+    int test1 = offset>>15;
+    int test2 = ((offset>>14)&1);
+    if((test1||test2)==1){                                        //test for memory access restriction on load word
+        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+        std::exit(-11);
+    }
+
+    int base = instruction>>21;                                    //address src2
+    base = base & 0xFF;
+
+    int memoryAddress = base + offset;
+
+    int registerAddress = instruction>>16;
+    int word = regFile.get_reg((registerAddress&0x1F));             //retrieve word
+
+    bool nullbool;
+
+    char b1 = word>>24;                                             //msb
+    memory.set_byte((memoryAddress), b1, nullbool);
+
+    char b2 = ((word>>16)&0xFF);
+    memory.set_byte((memoryAddress + 1), b2, nullbool);
+
+    char b3 = ((word>>8)&0xFF);
+    memory.set_byte((memoryAddress + 2), b3, nullbool);
+
+    char b4 = ((word&0xFF));                                        //lsb
+    memory.set_byte((memoryAddress + 3), b4, nullbool);    
+}
+
 void simulator::i_xori(int instruction){
 
     int rs = instruction>>21;
