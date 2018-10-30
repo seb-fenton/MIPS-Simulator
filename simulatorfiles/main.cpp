@@ -36,12 +36,14 @@ int main(int argc, char* argv[]){
 
     int exitCode;
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
-    //while(!mips_sim.finished_sim()){
-        //execute simulator
-
-
-        //pass out lowest 8 bits into exitCode;
-    //}
+    int instr, index;
+    while(!mips_sim.finished_sim()){
+        instr = mips_sim.fetch();
+        index = mips_sim.decode(instr);
+        mips_sim.execute(index);
+        mips_sim.updatePC();
+        //write reg2 8 bits to exit code
+    }
     
     std::cerr << "\nSimulation Completed.";
     std::exit(exitCode);
