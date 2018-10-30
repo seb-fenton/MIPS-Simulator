@@ -100,39 +100,55 @@ int simulator::r_classification(int instruction){
 
     switch(instruction){
         case 0b100000: return 1;    //ADD
+             
         case 0b100001: return 4;    //ADDU
-
+             
         case 0b100100: return 5;    //AND
-
+             
         case 0b011010: return 15;   //DIV
+             
         case 0b011011: return 16;   //DIVU
-
+             
         case 0b001001: return 18;   //JALR
+             
         case 0b001000: return 20;   //JR
-
+             
         case 0b010000: return 29;   //MFHI
+             
         case 0b010010: return 30;   //MFLO
+             
         case 0b010001: return 31;   //MTHI
+             
         case 0b010011: return 32;   //MTLO
-
+             
         case 0b011000: return 33;   //MULT
+             
         case 0b011001: return 34;   //MULTU
-
+             
         case 0b100101: return 35;   //OR
-
+             
         case 0b000000: return 39;   //SLL
+             
         case 0b000100: return 40;   //SLLV
+             
         case 0b101010: return 41;   //SLT
+             
         case 0b101011: return 44;   //SLTU
-
+             
         case 0b000011: return 45;   //SRA
+             
         case 0b000111: return 46;   //SRAV
+             
         case 0b000010: return 47;   //SRL
+             
         case 0b000110: return 48;   //SRLV
-
+             
         case 0b100010: return 49;   //SUB
+             
         case 0b100011: return 50;   //SUBU
+             
         case 0b100110: return 52;   //XOR
+            
 
         default:    std::cerr<<"R_instruction decoding failed - invalid instruction. Exiting program...";
                     std::exit(-12);
@@ -140,12 +156,18 @@ int simulator::r_classification(int instruction){
 }
 
 int simulator::branch_classification(int instruction){
+
     instruction = instruction >> 16;
     int destination = instruction & 0b11111;
+
     switch(destination){
+
         case 0b00001: return 8;  //BGEZ
+         
         case 0b10001: return 9;  //BGEZAL
+         
         case 0b00000: return 12;  //BLTZ
+             
         case 0b10000: return 13;  //BLTZAL
 
         default:    std::cerr<<"Branch instruction decoding failed - invalid instruction. Exiting program...";
@@ -157,86 +179,133 @@ void simulator::execute(int instruction){
     switch(instruction){
 
         //--------R Instructions--------//
-        case 1: simulator::r_add(instruction);   //ADD
-        case 4: simulator::r_addu(instruction);  //ADDU
 
+        case 1: simulator::r_add(instruction);   //ADD
+            break;
+        case 4: simulator::r_addu(instruction);  //ADDU
+            break;             
         case 5: simulator::r_and(instruction);   //AND
+            break;             
 
         case 15: simulator::r_div(instruction);   //DIV
+             break;            
         case 16: simulator::r_divu(instruction);   //DIVU
-
+            break;             
         case 18:    //JALR
+            break;            
         case 20:    //JR
+            break;
 
         case 29: simulator::r_mfhi(instruction);   //MFHI
+            break; 
         case 30: simulator::r_mflo(instruction);   //MFLO
+            break; 
         case 31: simulator::r_mthi(instruction);   //MTHI
+            break;
         case 32: simulator::r_mtlo(instruction);   //MTLO
+            break;
 
         case 33:    //MULT
+            break;
         case 34:    //MULTU
+            break;
 
         case 35: simulator::r_or(instruction);   //OR
+            break;
 
         case 39: simulator::r_sll(instruction);   //SLL
+            break;
         case 40: simulator::r_sllv(instruction);   //SLLV
+            break;
         case 41: //simulator::r_slt(instruction);   //SLT
+            break;
         case 44: //simulator::r_sltu(instruction);   //SLTU
+            break;
 
         case 45: simulator::r_sra(instruction);   //SRA
+            break;
         case 46: simulator::r_srav(instruction);   //SRAV
+            break;
         case 47: simulator::r_srl(instruction);   //SRL
+            break;
         case 48: simulator::r_srlv(instruction);   //SRLV
+            break;
 
         case 49: simulator::r_sub(instruction);   //SUB
+            break;
         case 50: simulator::r_subu(instruction);  //SUBU
+            break;
         case 52: simulator::r_xor(instruction);   //XOR
-
-
+            break;
 
         //--------I Instructions--------//
+
         case 2: simulator::i_addi(instruction);    //addi
+            break;
         case 3: simulator::i_addiu(instruction);    //addiu
-
+            break;
         case 6: simulator::i_andi(instruction);    //andi
-
-        case 7: return ;    //beq
+            break;
+        case 7: ;    //beq
+            break;
 
         case 8:              //bgez, bgezal, bltz, bltzal
+            break;
         case 9:              //bgezal
+            break;
         case 12:             //bltz
+            break;
         case 13:             //bltzal
+            break;
 
-        case 10: return ;   //bgtz
+        case 10:  ;   //bgtz
+            break;
         case 11: return ;   //blez
+            break;
         
         case 14: return ;   //bne
+            break;
 
-        case 21: simulator::i_lb(instruction);;   //lb
-        case 22: simulator::i_lbu(instruction);;   //lbu
+        case 21: simulator::i_lb(instruction);   //lb
+            break;
+        case 22: simulator::i_lbu(instruction);   //lbu
+            break;
         case 23: simulator::i_lh(instruction);;   //lh
+            break;
         case 24: simulator::i_lhu(instruction);;   //lhu
+            break;
         case 25: simulator::i_lui(instruction);;   //lui
+            break;
         case 26: return ;   //lw
+            break;
         case 27: return ;   //lwl
+            break;
         case 28: return ;   //lwr
+            break;
 
         case 36: simulator::i_ori(instruction);  //ori
+            break;
 
         case 37: return ;   //sb
+            break;
         case 38: return ;   //sh
+            break;
 
         case 42: return ;   //slti
+            break;
         case 43: return ;   //sltiu
+            break;
         case 51: return ;   //sw
+            break;
 
         case 53: return simulator::i_xori(instruction);;  //xori
-
-
+            break;
 
         //--------J Instructions--------//
         case 17: return;   //j
+            break;
         case 19: return;   //jal
+            break;
     }
 }
 
