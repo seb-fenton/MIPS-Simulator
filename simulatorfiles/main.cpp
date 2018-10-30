@@ -20,10 +20,12 @@ int main(int argc, char* argv[]){
     std::cerr<<"\nRetrieving file name..."<<std::endl;              
     std::string FileName = get_filename(argc, argv);                                    //process binary file to stream into memory
     int LengthOfBinary;                                                                 //initialise integer to tell length of binary file
+
     std::cerr<<"Writing binary data to character array..."<<std::endl;                  
     char* Memblock = write_binary_in(FileName, LengthOfBinary);                         //initialise array of pointers and write into it from the binary file
     bool WriteInSuccess = false;                                                        //create boolean to measure
     simulator mips_sim(LengthOfBinary, Memblock, WriteInSuccess);                       //move into instruction memory
+
     if(WriteInSuccess == false){
         std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
@@ -32,13 +34,18 @@ int main(int argc, char* argv[]){
     std::cerr<<"Starting diagnostics..."<<std::endl;
     mips_sim.diagnostics();
 
+    int exitCode;
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
     //while(!mips_sim.finished_sim()){
         //execute simulator
+
+
+        //pass out lowest 8 bits into exitCode;
     //}
     
     std::cerr << "\nSimulation Completed.";
-    return 0;
+    std::exit(exitCode);
+    //return 0;
 }
 
 std::string get_filename(int argc, char* argv[]){

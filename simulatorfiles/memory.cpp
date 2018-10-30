@@ -18,17 +18,18 @@ int sim_reg::get_reg(int regNum) const{
 }
 
 void sim_reg::set_reg(int input, int regNum){
-    if(input == 0 || 1 || 26 || 27){
+    if(input == 1 || 26 || 27){
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
-        ///!!!MOVE -11 INTO REGISTER 2!!!///
         std::exit(-11); 
+    }
+    else if(input == 0){
+        std::cerr<<"Register 0 written to. No action taken";
     }
     else if(input<32 && input>-1){
         reg[regNum] = input;
     }
     else{
         std::cerr<<"\n"<<"Fatal error encountered: exit code -11"<<"\n";
-        ///!!!MOVE -11 INTO REGISTER 2!!!///
         std::exit(-11);
     }
 }
