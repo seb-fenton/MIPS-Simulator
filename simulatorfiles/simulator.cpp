@@ -10,6 +10,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     delayedOp = false;
 }
 
+bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
+
+}
+
 void simulator::updatePC(){    //WIP
     
     if(branch && delayedOp){                    //UNPREDICTABLE BEHAVIOUR
@@ -35,11 +39,11 @@ void simulator::updatePC(){    //WIP
 
 }
 
-int simulator::fetch(sim_mem &memory, int pc){
+int simulator::fetch(){
     int instruction = 0;
     for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
         bool nullbool;
-        int temp = memory.get_byte((pc + i), nullbool);
+        int temp = memory.get_byte((programCounter + i), nullbool);
         temp = temp << (8*(3-i));
         instruction = instruction | temp;
     }
@@ -249,19 +253,20 @@ void simulator::execute(int instruction){
         case 7: ;    //beq
             break;
 
-        case 8:              //bgez, bgezal, bltz, bltzal
+        case 8:              //bgez
             break;
         case 9:              //bgezal
+            break;
+        case 10:  ;   //bgtz
+            break;
+        case 11: return ;   //blez
             break;
         case 12:             //bltz
             break;
         case 13:             //bltzal
             break;
 
-        case 10:  ;   //bgtz
-            break;
-        case 11: return ;   //blez
-            break;
+        
         
         case 14: return ;   //bne
             break;
@@ -670,8 +675,121 @@ void simulator::i_beq(int instruction){
     if(imm >> 17 == 1)
         imm = imm | 0xFFFC0000;             //if signed, signed extension
 
-    if(rs == rt)
+    if(rs == rt){
+        branch = true;
         pcOffSet = imm;
+    }
+}
+
+void simulator::i_bgez(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+    if(rs >= 0){
+        branch = true;
+        pcOffSet = imm;
+    }
+}
+
+void simulator::i_bgezal(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);                   //src1
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;                 //if signed, signed extension
+
+    if(rs >= 0){
+        branch = true;                          //branch
+        pcOffSet = imm;
+        regFile.set_reg(programCounter+8, 31);  //link I THINK
+    }
+}
+
+void simulator::i_bgtz(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+    if(rs > 0){
+        branch = true;
+        pcOffSet = imm;
+    }
+}
+
+void simulator::i_blez(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+    if(rs <= 0){
+        branch = true;
+        pcOffSet = imm;
+    }
+}
+
+void simulator::i_bltz(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+    if(rs < 0){
+        branch = true;
+        pcOffSet = imm;
+    }
+}
+
+void simulator::i_bltzal(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+    if(rs < 0){
+        branch = true;
+        pcOffSet = imm;
+        regFile.set_reg(programCounter+8, 31);
+    }
+}
+
+void simulator::i_bne(int instruction){
+    int rs = instruction & 0x3E00000;
+    rs = rs >> 21;
+    rs = regFile.get_reg(rs);               //src1
+
+    int rt = instruction & 0x1F0000;
+    rt = rt >> 16;
+    rt = regFile.get_reg(rt);               //dest
+
+    int imm = (instruction & 0xFFFF) << 2;
+    if(imm >> 17 == 1)
+        imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+    if(rs != rt){
+        branch = true;
+        pcOffSet = imm;
+    }
 }
 
 void simulator::i_lb(int instruction){
@@ -819,13 +937,16 @@ void simulator::i_xori(int instruction){
 }
 
 //--------J Instructions--------//
-
 void simulator::j_j(int instruction){ //WIP - IS THIS CORRECT?
     int rs = instruction >> 21;
     rs = regFile.get_reg(rs);
     programCounter = rs;
 
     //ERROR HANDLING?
+}
+
+void simulator::j_jal(int instruction){
+
 }
 
 

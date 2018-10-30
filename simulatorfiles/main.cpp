@@ -33,9 +33,13 @@ int main(int argc, char* argv[]){
     mips_sim.diagnostics();
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
-    //while(!mips_sim.finished_sim()){
-        //execute simulator
-    //}
+    int instr, index;
+    while(!mips_sim.finished_sim()){
+        instr = mips_sim.fetch();
+        index = mips_sim.decode(instr);
+        mips_sim.execute(index);
+        mips_sim.updatePC();
+    }
     
     std::cerr << "\nSimulation Completed.";
     return 0;

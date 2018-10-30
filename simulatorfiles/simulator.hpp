@@ -14,7 +14,7 @@ class simulator{
         void updatePC();
         bool finished_sim();
 
-        int fetch(sim_mem &memory, int pc);
+        int fetch();
         int decode(int instruction);
         int r_classification(int instruction);
         int branch_classification(int instruction);
@@ -28,11 +28,11 @@ class simulator{
         void CheckBlankRegions(bool &success);
         
         //R INSTRUCTIONS//
-        void r_add(int instruction);    //WIP
+        void r_add(int instruction);
         void r_addu(int instruction);
-        void r_and(int instruction);    //WIP
-        void r_div(int instruction);    //WIP
-        void r_divu(int instruction);   //WIP
+        void r_and(int instruction);
+        void r_div(int instruction);    //not done
+        void r_divu(int instruction);   //not done
         void r_mfhi(int instruction);
         void r_mflo(int instruction);
         void r_mthi(int instruction);
@@ -56,6 +56,13 @@ class simulator{
         void i_andi(int instruction);
 
         void i_beq(int instruction);
+        void i_bgez(int instruction);
+        void i_bgezal(int instruction);
+        void i_bgtz(int instruction);
+        void i_blez(int instruction);
+        void i_bltz(int instruction);
+        void i_bltzal(int instruction);
+        void i_bne(int instruction);
 
         void i_lb(int instruction);
         void i_lbu(int instruction);
@@ -67,5 +74,6 @@ class simulator{
         
         //J INSTRUCTIONS//  
         void j_j(int instruction);
+        void j_jal(int instruction);
 
 };
