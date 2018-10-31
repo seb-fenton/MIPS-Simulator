@@ -467,6 +467,40 @@ void simulator::r_sllv(int instruction){
 
 }
 
+void simulator::r_slt(int instruction){
+
+    int rs = ((instruction>>21) & 0x1F);
+    rs = regFile.get_reg(rs);
+
+    int rt = ((instruction>>16) & 0x1F);
+    rt = regFile.get_reg(rs);
+
+    int comparison;
+
+    if(rs<rt){comparison = 1;}
+    else{comparison = 0;}
+
+    int rd = ((instruction>>11) & 0x1F);
+    regFile.set_reg(comparison, rd);
+}
+
+void simulator::r_sltu(int instruction){
+
+    int rs = ((instruction>>21) & 0x1F);
+    unsigned int rsu = regFile.get_reg(rs);
+
+    int rt = ((instruction>>16) & 0x1F);
+    unsigned int rtu = regFile.get_reg(rs);
+
+    int comparison;
+
+    if(rsu<rtu){comparison = 1;}
+    else{comparison = 0;}
+
+    int rd = ((instruction>>11) & 0x1F);
+    regFile.set_reg(comparison, rd);
+}
+
 void simulator::r_sra(int instruction){
 
     int rt = instruction>>16;          
@@ -968,6 +1002,45 @@ void simulator::i_sh(int instruction){
 
     char lsb = hword & 0xFF;                                    //lsb then loaded into memory
     memory.set_byte((memoryAddress + 1), msb, nullbool);        
+}
+
+void simulator::i_slti(int instruction){
+    int rs = (instruction>>21) & 0x1F;
+    rs = regFile.get_reg(rs);
+
+    signed short int immediate = instruction & 0xFFFF;
+
+    int comparison;
+
+    if(rs<immediate){
+        comparison = 1;
+    }
+    else{
+        comparison = 0;
+    }
+
+    int rt = (instruction>>16) & 0x1F;
+    regFile.set_reg(comparison, rt);
+
+}
+
+void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
+    int rs = (instruction>>21) & 0x1F;
+    rs = regFile.get_reg(rs);
+
+    signed short int immediate = instruction & 0xFFFF; //ISSUE AREA
+
+    int comparison;
+
+    if(rs<immediate){
+        comparison = 1;
+    }
+    else{
+        comparison = 0;
+    }
+
+    int rt = (instruction>>16) & 0x1F;
+    regFile.set_reg(comparison, rt);
 }
 
 void simulator::i_sw(int instruction){
