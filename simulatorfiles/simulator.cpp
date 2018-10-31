@@ -955,7 +955,7 @@ void simulator::i_lw(int instruction){
     int test1 = offset>>15;
     int test2 = ((offset>>14)&1);
     if((test1||test2)==1){                                        //test for memory access restriction on load word
-        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+        std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
         std::exit(-11);
     }
 
@@ -983,6 +983,7 @@ void simulator::i_lw(int instruction){
     regFile.set_reg(input, rt&0x1F);
     
 }
+
 void simulator::i_ori(int instruction){
     int rs = instruction>>21;
     rs = rs & 0x1F;
@@ -1015,7 +1016,7 @@ void simulator::i_sh(int instruction){
 
     int test = offset>>15;
     if(test==1){                                        //test for memory access restriction on load halfword
-        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+        std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
         std::exit(-11);
     }
 
@@ -1083,7 +1084,7 @@ void simulator::i_sw(int instruction){
     int test1 = offset>>15;
     int test2 = ((offset>>14)&1);
     if((test1||test2)==1){                                        //test for memory access restriction on load word
-        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+        std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
         std::exit(-11);
     }
 
