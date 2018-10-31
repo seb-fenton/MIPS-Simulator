@@ -74,6 +74,8 @@ class simulator{
         void i_lh(int instruction);
         void i_lhu(int instruction);
         void i_lui(int instruction);
+        void i_lw(int instruction);
+
         void i_ori(int instruction);
 
         void i_sb(int instruction);

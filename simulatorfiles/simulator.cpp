@@ -949,6 +949,40 @@ void simulator::i_lui(int instruction){
 
 }
 
+void simulator::i_lw(int instruction){
+    signed short int offset = instruction & 0xFFFF;
+
+    int test1 = offset>>15;
+    int test2 = ((offset>>14)&1);
+    if((test1||test2)==1){                                        //test for memory access restriction on load word
+        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+        std::exit(-11);
+    }
+
+    int base = instruction>>21;                                    //address src2
+    base = base & 0x1F;
+
+    int memoryAddress = base + offset;
+    bool nullbool;
+
+    int input = memory.get_byte(memoryAddress, nullbool);
+    input = input<<8;
+
+    int temp = memory.get_byte(memoryAddress + 1, nullbool);
+    input = input + temp;
+    input = input<<8;
+    
+    temp = memory.get_byte(memoryAddress + 2, nullbool);
+    input = input + temp;
+    input = input<<8;
+
+    temp = memory.get_byte(memoryAddress + 3, nullbool);
+    input = input + temp;
+
+    int rt = instruction>>16;
+    regFile.set_reg(input, rt&0x1F);
+    
+}
 void simulator::i_ori(int instruction){
     int rs = instruction>>21;
     rs = rs & 0x1F;
@@ -1054,7 +1088,7 @@ void simulator::i_sw(int instruction){
     }
 
     int base = instruction>>21;                                    //address src2
-    base = base & 0xFF;
+    base = base & 0x1F;
 
     int memoryAddress = base + offset;
 
