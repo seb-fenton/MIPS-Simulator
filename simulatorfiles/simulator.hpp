@@ -5,7 +5,7 @@
 class simulator{
     private:
         int programCounter, pcOffSet;
-        bool delayedOp, branch;
+        bool delayedBranch, delayedJump, branch, jump; //could change into a 4 bit char as a control for switch statements
         sim_reg regFile;
         sim_mem memory;
 
