@@ -1,0 +1,10 @@
+LUI $3, 0x8000
+ADDIU $3, $5, 0x00FF
+LUI $4, 0x8000
+ADDIU $4, $5, 0x00FF
+ADDU $2, $3, $4
+JR $0
+
+
+#expectedOutcome = 254
+#expectedExitCode = 0
