@@ -103,7 +103,7 @@ int sim_mem::addressmap(int &address) const{
 }
 
 //!!REMOVE BOOL BEFORE SUBMISSION!!
-char sim_mem::get_byte(int address, bool &read) const{
+char sim_mem::get_byte(int address) const{
     int check = sim_mem::addressmap(address);
     /*Memory exceptions (-11): 
     0. Reading from addr_null
@@ -117,17 +117,19 @@ char sim_mem::get_byte(int address, bool &read) const{
         
     }
     else{
-        read = true;
-        switch(check){
-            case 1: return addr_instr[address];
-            case 2: return addr_data[address];
-            case 3: return addr_getc[address];
+        if(check == 1)  return addr_instr[address];
+        if(check == 2)  return addr_data[address];
+        if(check == 3){
+            if(address == 3){
+                char c = getchar();
+                return c;
+            }
         }
     }
 }
 
 //!!REMOVE BOOL BEFORE SUBMISSION!!
-void sim_mem::set_byte(int address, char value, bool &write){
+void sim_mem::set_byte(int address, char value){
     int check = sim_mem::addressmap(address);
     /*Memory exceptions (-11): 
     0. Writing to addr_null
@@ -140,9 +142,11 @@ void sim_mem::set_byte(int address, char value, bool &write){
         std::exit(-11);
     }
     else {
-        write = true;
         if(check == 2)  addr_data[address] = value;
-        if(check == 4)  addr_getc[address] = value;
+        if(check == 4){
+            if(address == 3)
+                putchar(value);         //WIP
+        } 
     }
 }
 

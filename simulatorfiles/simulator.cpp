@@ -6,37 +6,44 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     programCounter = 0x10000000;
 
     pcOffSet = 0;
+    jump = false;
     branch = false;
-    delayedOp = false;
+    delayedBranch = false;
+    delayedJump = false;
 }
 
 bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
-
+    return false;
 }
 
-void simulator::updatePC(){    //WIP
-    
-    if(branch && delayedOp){                    //UNPREDICTABLE BEHAVIOUR
-        //do something architecturally convenient
-        return;
-    }                     
-    
-    else if(branch){                                 //if it was a branch, set up a delayed branch
-        programCounter = programCounter + 4;    //stage for delayed branch
-        delayedOp = true;                       //forewarning for next cycle
-        branch = false;                         //reset branch
+void simulator::updatePC(){    //NOT ELEGANT WIP
+//if branch in delayed slot, just follows latest branch.
+    if(branch){                                     //if it was a branch, set up a delayed branch
+        programCounter = programCounter + 4;        //stage for delayed branch
+        delayedBranch = true;                       //forewarning for next cycle
+        branch = false;                             //reset branch
         return;
     }
-
-    else if(delayedOp){
+    else if(delayedBranch){
         programCounter = programCounter + pcOffSet;
         pcOffSet = 0;
-        delayedOp = false;
+        delayedBranch = false;
         return;
     }
-    else
-        programCounter = programCounter + 4;    //if not a branch, proceed as per normal;
 
+    if(jump){
+        programCounter = programCounter + 4;        //stage for delayed jump
+        delayedJump = true;                         //forewarning for next cycle
+        jump = false;                               //reset jump
+        return;
+    }
+    else if(delayedJump){
+        programCounter = pcOffSet;
+        pcOffSet = 0;
+        delayedBranch = false;
+        return;
+    }
+    programCounter = programCounter + 4;            //if not a branch or jump, proceed as per normal;
 }
 
 void simulator::update_exit_code(int& exitCode){
@@ -46,8 +53,7 @@ void simulator::update_exit_code(int& exitCode){
 int simulator::fetch(){
     int instruction = 0;
     for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
-        bool nullbool;
-        int temp = memory.get_byte((programCounter + i), nullbool);
+        int temp = memory.get_byte((programCounter + i));
         temp = temp << (8*(3-i));
         instruction = instruction | temp;
     }
@@ -839,9 +845,8 @@ void simulator::i_lb(int instruction){
 
     int memoryAddress = base + offset;
 
-    bool nullbool;
-    char byte = memory.get_byte(memoryAddress, nullbool);
-    unsigned char ucbyte = memory.get_byte(memoryAddress, nullbool);
+    char byte = memory.get_byte(memoryAddress);
+    unsigned char ucbyte = memory.get_byte(memoryAddress);
 
     int output;
 
@@ -867,8 +872,7 @@ void simulator::i_lbu(int instruction){
 
 
     int memoryAddress = base + offset;
-    bool nullbool;
-    char byte = memory.get_byte(memoryAddress, nullbool);
+    char byte = memory.get_byte(memoryAddress);
     int castedByte = byte;
 
     int registerAddress = instruction>>16;
@@ -890,15 +894,13 @@ void simulator::i_lh(int instruction){
 
     int memoryAddress = base + offset;
 
-    bool nullbool;
-
-    signed short int hword = memory.get_byte(memoryAddress, nullbool);
+    signed short int hword = memory.get_byte(memoryAddress);
     hword = hword<<8;
-    hword = hword + memory.get_byte(memoryAddress + 1, nullbool);
+    hword = hword + memory.get_byte(memoryAddress + 1);
 
-    unsigned short int uhword = memory.get_byte(memoryAddress, nullbool);
+    unsigned short int uhword = memory.get_byte(memoryAddress);
     uhword = uhword<<8;
-    uhword = uhword + memory.get_byte(memoryAddress + 1, nullbool);
+    uhword = uhword + memory.get_byte(memoryAddress + 1);
 
     int output;
 
@@ -930,9 +932,8 @@ void simulator::i_lhu(int instruction){
 
     int memoryAddress = base + offset;
 
-    bool nullbool;
-    int output = memory.get_byte(memoryAddress, nullbool);
-    output = output + memory.get_byte(memoryAddress + 1, nullbool);
+    int output = memory.get_byte(memoryAddress);
+    output = output + memory.get_byte(memoryAddress + 1);
 
     int registerAddress = instruction>>16;
     regFile.set_reg(output, (registerAddress & 0x1F));
@@ -963,20 +964,19 @@ void simulator::i_lw(int instruction){
     base = base & 0x1F;
 
     int memoryAddress = base + offset;
-    bool nullbool;
 
-    int input = memory.get_byte(memoryAddress, nullbool);
+    int input = memory.get_byte(memoryAddress);
     input = input<<8;
 
-    int temp = memory.get_byte(memoryAddress + 1, nullbool);
+    int temp = memory.get_byte(memoryAddress + 1);
     input = input + temp;
     input = input<<8;
     
-    temp = memory.get_byte(memoryAddress + 2, nullbool);
+    temp = memory.get_byte(memoryAddress + 2);
     input = input + temp;
     input = input<<8;
 
-    temp = memory.get_byte(memoryAddress + 3, nullbool);
+    temp = memory.get_byte(memoryAddress + 3);
     input = input + temp;
 
     int rt = instruction>>16;
@@ -1002,13 +1002,11 @@ void simulator::i_sb(int instruction){
     int base = instruction>>21;                         //address src2
     base = base & 0xFF;
 
-    bool nullbool;
-
     int rt = instruction>>16;
     rt = regFile.get_reg(rt&0x1F);
     char input = rt&0b11111111;
 
-    memory.set_byte((base + offset), input, nullbool);
+    memory.set_byte((base + offset), input);
 }
 
 void simulator::i_sh(int instruction){
@@ -1030,13 +1028,11 @@ void simulator::i_sh(int instruction){
     int hword = regFile.get_reg(registerAddress & 0x1F);        //get hword
     hword = hword & 0xFFFF;
 
-    bool nullbool;
-
     char msb = hword>>8;                                        //msb to be loaded into memory first
-    memory.set_byte((memoryAddress), msb, nullbool);
+    memory.set_byte((memoryAddress), msb);
 
     char lsb = hword & 0xFF;                                    //lsb then loaded into memory
-    memory.set_byte((memoryAddress + 1), msb, nullbool);        
+    memory.set_byte((memoryAddress + 1), msb);        
 }
 
 void simulator::i_slti(int instruction){
@@ -1109,19 +1105,17 @@ void simulator::i_sw(int instruction){
     int registerAddress = instruction>>16;
     int word = regFile.get_reg((registerAddress&0x1F));             //retrieve word
 
-    bool nullbool;
-
     char b1 = word>>24;                                             //msb
-    memory.set_byte((memoryAddress), b1, nullbool);
+    memory.set_byte((memoryAddress), b1);
 
     char b2 = ((word>>16)&0xFF);
-    memory.set_byte((memoryAddress + 1), b2, nullbool);
+    memory.set_byte((memoryAddress + 1), b2);
 
     char b3 = ((word>>8)&0xFF);
-    memory.set_byte((memoryAddress + 2), b3, nullbool);
+    memory.set_byte((memoryAddress + 2), b3);
 
     char b4 = ((word&0xFF));                                        //lsb
-    memory.set_byte((memoryAddress + 3), b4, nullbool);    
+    memory.set_byte((memoryAddress + 3), b4);    
 }
 
 void simulator::i_xori(int instruction){
@@ -1175,17 +1169,17 @@ void simulator::diagnostics(){
 void simulator::CheckMemZeroes(bool &success){
     bool read = false;
     for(int i=0x10000000; i<0x11000000; i++){ //instr
-        if(memory.get_byte(i, read) != 0)
+        if(memory.get_byte(i) != 0)
             success = false;
     }
 
     for(int i=0x20000000; i<0x24000000; i++){ //data
-        if(memory.get_byte(i, read) != 0)
+        if(memory.get_byte(i) != 0)
             success = false;
     }
 
     for(int i=0x30000000; i<0x30000004; i++){ //getc
-        if(memory.get_byte(i, read) != 0)
+        if(memory.get_byte(i) != 0)
             success = false;
     }
 }
@@ -1193,22 +1187,22 @@ void simulator::CheckMemZeroes(bool &success){
 void simulator::SetAccessCheck(bool &success){
     bool written = true;
     for(int i=0x0; i<0x4; i++){ //null
-        memory.set_byte(i, -1, written);
+        memory.set_byte(i, -1);
         if(written)
             success = false;
     }
     for(int i=0x10000000; i<0x11000000; i++){ //instr
-        memory.set_byte(i, -1, written);
+        memory.set_byte(i, -1);
         if(written)
             success = false;
     }
     for(int i=0x20000000; i<0x24000000; i++){ //data
-        memory.set_byte(i, -1, written);
+        memory.set_byte(i, -1);
         if(!written)
             success = false;
     }
     for(int i=0x30000004; i<0x30000008; i++){ //putc
-        memory.set_byte(i, -1, written);
+        memory.set_byte(i, -1);
         if(!written)
             success = false;
     }
@@ -1218,25 +1212,25 @@ void simulator::GetAccessCheck(bool &success){
     bool read = true;
     char readbyte;
     for(int i=0x0; i<0x4; i++){ //null
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(read)
             success = false;
     }
 
     for(int i=0x10000000; i<0x11000000; i++){ //instr
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(!read && readbyte != 0)
             success = false;
     }
 
     for(int i=0x20000000; i<0x24000000; i++){ //data
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(!read && readbyte != -1)
             success = false;
     }
 
     for(int i=0x30000004; i<0x30000008; i++){ //putc
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(read)
             success = false;
     }
@@ -1247,25 +1241,25 @@ void simulator::CheckBlankRegions(bool &success){
     char readbyte;
     
     for(int i=0x4; i<0x10000000; i++){ //null
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(read && readbyte != -1)
             success = false;
     }
     
     for(int i=0x11000000; i<0x20000000; i++){ //null
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(read && readbyte != -1)
             success = false;
     }
     
     for(int i=0x24000000; i<0x30000000; i++){ //null
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(read && readbyte != -1)
             success = false;
     }
     
     for(int i=0x30000008; i<=0xFFFFFFFF; i++){ //null
-        readbyte = memory.get_byte(i, read);
+        readbyte = memory.get_byte(i);
         if(read && readbyte != -1)
             success = false;
     }
