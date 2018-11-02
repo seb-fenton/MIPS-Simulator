@@ -12,7 +12,7 @@ std::string get_filename(int argc, char* argv[]);
 char* write_binary_in(std::string FileName, int& LengthOfBinary);
 
 int main(int argc, char* argv[]){
-    //enables hexadecimal input in cin/out?
+    //enables hexadecimal input in cin/out? WIP
     std::cin.unsetf(std::ios::dec);
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
@@ -81,7 +81,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         InputBinary.read(Memblock, LengthOfBinary);
         InputBinary.close();
 
-        //return whether or not memory write was succesful
+        //return whether or not memory write was successful
         return(Memblock);
     }
 
@@ -89,7 +89,6 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         std::cerr<<"\nUnable to read file.\n";
         std::exit(-11); //-ISSUE - IS THIS CORRECT???
     }
-
 }
 
 //MEMORY WRITEIN TESTING

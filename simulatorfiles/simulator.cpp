@@ -353,7 +353,6 @@ void simulator::r_add(int instruction){
         regFile.set_reg(result, rd);
     }
 }
-
 void simulator::r_addu(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -368,7 +367,6 @@ void simulator::r_addu(int instruction){
 
     regFile.set_reg(rt+rs, rd);             //no overflow
 }
-
 void simulator::r_and(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -383,7 +381,6 @@ void simulator::r_and(int instruction){
 
     regFile.set_reg(rt & rs, rd);
 }
-
 void simulator::r_div(int instruction){     //WIP
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -398,7 +395,6 @@ void simulator::r_div(int instruction){     //WIP
     regFile.set_lo(rs/rt);                //quotient into LO
     regFile.set_hi(rs%rt);                  //remainder into HI
 }
-
 void simulator::r_divu(int instruction){     //WIP
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -411,27 +407,22 @@ void simulator::r_divu(int instruction){     //WIP
     regFile.set_lo(rs/rt);               //quotient into LO
     regFile.set_hi(rs%rt);               //remainder into HI
 }
-
 void simulator::r_mfhi(int instruction){
     int rt = instruction>>11;                     //src
     regFile.set_reg(regFile.get_hi(), rt);        //destination 
 }
-
 void simulator::r_mflo(int instruction){
     int rt = instruction>>11;                     //src
     regFile.set_reg(regFile.get_lo(), rt);        //destination 
 }  
-
 void simulator::r_mthi(int instruction){
     int rt = instruction>>21;                   //src
     regFile.set_hi(regFile.get_reg(rt));        //destination 
 }                   
-
 void simulator::r_mtlo(int instruction){
     int rt = instruction>>21;                   //src
     regFile.set_lo(regFile.get_reg(rt));        //destination 
 }
-
 void simulator::r_or(int instruction){
 
     int rs = instruction>>21;
@@ -444,7 +435,6 @@ void simulator::r_or(int instruction){
 
     regFile.set_reg((rs|rt), (rd & 0x1F));
 }
-
 void simulator::r_sll(int instruction){
 
     int rt = instruction>>16;          
@@ -458,7 +448,6 @@ void simulator::r_sll(int instruction){
     regFile.set_reg((rt<<sa), (rd & 0x1F));
 
 }
-
 void simulator::r_sllv(int instruction){
 
     int rs = instruction>>21;           
@@ -472,7 +461,6 @@ void simulator::r_sllv(int instruction){
     regFile.set_reg((rt<<rs), (rd & 0x1F));
 
 }
-
 void simulator::r_slt(int instruction){
 
     int rs = ((instruction>>21) & 0x1F);
@@ -489,7 +477,6 @@ void simulator::r_slt(int instruction){
     int rd = ((instruction>>11) & 0x1F);
     regFile.set_reg(comparison, rd);
 }
-
 void simulator::r_sltu(int instruction){
 
     int rs = ((instruction>>21) & 0x1F);
@@ -506,7 +493,6 @@ void simulator::r_sltu(int instruction){
     int rd = ((instruction>>11) & 0x1F);
     regFile.set_reg(comparison, rd);
 }
-
 void simulator::r_sra(int instruction){
 
     int rt = instruction>>16;          
@@ -536,7 +522,6 @@ void simulator::r_sra(int instruction){
 
     regFile.set_reg((rt), (rd & 0x1F));
 }
-
 void simulator::r_srav(int instruction){
 
     int rt = instruction>>16; 
@@ -567,7 +552,6 @@ void simulator::r_srav(int instruction){
 
     regFile.set_reg((rt), (rd & 0x1F));
 }
-
 void simulator::r_srl(int instruction){
 
     int rt = instruction>>16;          
@@ -581,7 +565,6 @@ void simulator::r_srl(int instruction){
     regFile.set_reg((rt>>sa), (rd & 0x1F));
 
 }
-
 void simulator::r_srlv(int instruction){
 
     int rs = instruction>>21;           
@@ -595,7 +578,6 @@ void simulator::r_srlv(int instruction){
     regFile.set_reg((rt>>rs), (rd & 0x1F));
 
 }
-
 void simulator::r_sub(int instruction){
     bool overflow = false;
     int rs = instruction & 0x3E00000;
@@ -622,7 +604,6 @@ void simulator::r_sub(int instruction){
         regFile.set_reg(result, rd);
     }
 }
-
 void simulator::r_subu(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -637,7 +618,6 @@ void simulator::r_subu(int instruction){
 
     regFile.set_reg(rs-rt, rd);             //no overflow
 }
-
 void simulator::r_xor(int instruction){
 
     int rs = instruction>>21;
@@ -650,6 +630,7 @@ void simulator::r_xor(int instruction){
 
     regFile.set_reg((rs^rt), (rd & 0x1F));
 }
+
 
 
 //--------I Instructions--------//
@@ -677,7 +658,6 @@ void simulator::i_addi(int instruction){
     else
         regFile.set_reg(result, rt);
 }
-
 void simulator::i_addiu(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -691,7 +671,6 @@ void simulator::i_addiu(int instruction){
 
     regFile.set_reg(rs + imm, rt);
 }
-
 void simulator::i_andi(int instruction){    //WIP
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -705,7 +684,6 @@ void simulator::i_andi(int instruction){    //WIP
 
     regFile.set_reg(rs & imm, rt);
 }
-
 void simulator::i_beq(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -724,7 +702,6 @@ void simulator::i_beq(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bgez(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -739,7 +716,6 @@ void simulator::i_bgez(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bgezal(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -755,7 +731,6 @@ void simulator::i_bgezal(int instruction){
         regFile.set_reg(programCounter+8, 31);  //link I THINK
     }
 }
-
 void simulator::i_bgtz(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -770,7 +745,6 @@ void simulator::i_bgtz(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_blez(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -785,7 +759,6 @@ void simulator::i_blez(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bltz(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -800,7 +773,6 @@ void simulator::i_bltz(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bltzal(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -816,7 +788,6 @@ void simulator::i_bltzal(int instruction){
         regFile.set_reg(programCounter+8, 31);
     }
 }
-
 void simulator::i_bne(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -835,7 +806,6 @@ void simulator::i_bne(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_lb(int instruction){
 
     signed short int offset = instruction & 0xFFFF;     //address src1
@@ -862,7 +832,6 @@ void simulator::i_lb(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(output, (registerAddress & 0x1F));
 }
-
 void simulator::i_lbu(int instruction){
 
     signed short int offset = instruction & 0xFFFF;          //address src1
@@ -878,7 +847,6 @@ void simulator::i_lbu(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(castedByte, (registerAddress & 0x1F));
 }
-
 void simulator::i_lh(int instruction){
 
     signed short int offset = instruction & 0xFFFF;     //address src1
@@ -916,7 +884,6 @@ void simulator::i_lh(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(output, (registerAddress & 0x1F));
 }
-
 void simulator::i_lhu(int instruction){
 
     signed short int offset = instruction & 0xFFFF;     //address src1
@@ -938,7 +905,6 @@ void simulator::i_lhu(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(output, (registerAddress & 0x1F));
 }
-
 void simulator::i_lui(int instruction){
 
     int offset = instruction & 0xFFFF; 
@@ -949,7 +915,6 @@ void simulator::i_lui(int instruction){
     regFile.set_reg(offset, (rt & 0x1F));
 
 }
-
 void simulator::i_lw(int instruction){
     signed short int offset = instruction & 0xFFFF;
 
@@ -983,7 +948,6 @@ void simulator::i_lw(int instruction){
     regFile.set_reg(input, rt&0x1F);
     
 }
-
 void simulator::i_ori(int instruction){
     int rs = instruction>>21;
     rs = rs & 0x1F;
@@ -995,7 +959,6 @@ void simulator::i_ori(int instruction){
 
     regFile.set_reg((rs|immediate), (rt & 0x1F));
 }
-
 void simulator::i_sb(int instruction){
     signed short int offset = instruction & 0xFFFF;     //address src1
 
@@ -1008,7 +971,6 @@ void simulator::i_sb(int instruction){
 
     memory.set_byte((base + offset), input);
 }
-
 void simulator::i_sh(int instruction){
     signed short int offset = instruction & 0xFFFF;     //address src1
 
@@ -1034,7 +996,6 @@ void simulator::i_sh(int instruction){
     char lsb = hword & 0xFF;                                    //lsb then loaded into memory
     memory.set_byte((memoryAddress + 1), msb);        
 }
-
 void simulator::i_slti(int instruction){
     int rs = (instruction>>21) & 0x1F;
     rs = regFile.get_reg(rs);
@@ -1054,7 +1015,6 @@ void simulator::i_slti(int instruction){
     regFile.set_reg(comparison, rt);
 
 }
-
 void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
     int rs = (instruction>>21) & 0x1F;
     rs = regFile.get_reg(rs);
@@ -1073,7 +1033,6 @@ void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
     int rt = (instruction>>16) & 0x1F;
     regFile.set_reg(comparison, rt);
 }
-
 void simulator::i_sw(int instruction){
     signed short int offset = instruction & 0xFFFF;
 
@@ -1104,7 +1063,6 @@ void simulator::i_sw(int instruction){
     char b4 = ((word&0xFF));                                        //lsb
     memory.set_byte((memoryAddress + 3), b4);    
 }
-
 void simulator::i_xori(int instruction){
 
     int rs = instruction>>21;
@@ -1117,6 +1075,8 @@ void simulator::i_xori(int instruction){
 
     regFile.set_reg((rs^immediate), (rt & 0x1F));
 }
+
+
 
 //--------J Instructions--------//
 void simulator::j_j(int instruction){ //WIP - IS THIS CORRECT?

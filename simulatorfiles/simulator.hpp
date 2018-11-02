@@ -90,5 +90,4 @@ class simulator{
         //J INSTRUCTIONS//  
         void j_j(int instruction);
         void j_jal(int instruction);
-
 };
