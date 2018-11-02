@@ -23,6 +23,8 @@ my_function
 
 #TestId , Instruction , Status , Author [, Message]
 
+
+
 #This command gives the return exit code of the main function, by default 0
 #N.B. this is a uint therefore -10 will be represented as 246
 echo $?

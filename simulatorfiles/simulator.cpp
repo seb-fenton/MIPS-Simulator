@@ -1019,7 +1019,20 @@ void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
     int rs = (instruction>>21) & 0x1F;
     rs = regFile.get_reg(rs);
 
-    signed short int immediate = instruction & 0xFFFF; //ISSUE AREA
+    unsigned int immediate = instruction & 0xFFFF; //ISSUE AREA
+
+    unsigned int temp;
+    int immediatetest = immediate >> 15;
+    if(immediatetest==1){
+
+        temp = 0;
+        for (int i = 0; i<16; i++){
+            temp = temp << 1;
+            temp = temp + 1;
+        }
+        temp = temp << 16;
+        immediate = temp + immediate;
+    }
 
     int comparison;
 
@@ -1030,7 +1043,7 @@ void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
         comparison = 0;
     }
 
-    int rt = (instruction>>16) & 0x1F;
+    int rt = ((instruction>>16) & 0x1F);
     regFile.set_reg(comparison, rt);
 }
 void simulator::i_sw(int instruction){
