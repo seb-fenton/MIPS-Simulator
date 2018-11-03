@@ -102,7 +102,6 @@ char sim_mem::get_byte(int address) const{
     -1. Address out of range or blank areas*/
     if(check == 0 || check == 4 || check == -1){
         std::exit(-11);
-        
     }
     else{
         if(check == 1)  return addr_instr[address];
@@ -126,12 +125,9 @@ void sim_mem::set_byte(int address, char value){
     if(check == 0 || check == 1 || check == 3 || check ==-1){
         std::exit(-11);
     }
-    else {
+    else{
         if(check == 2)  addr_data[address] = value;
-        if(check == 4){
-            if(address == 3)
-                putchar(value);         //WIP
-        } 
+        if(check == 4 && address == 3)  putchar(value);         //WIP
     }
 }
 

@@ -23,7 +23,6 @@ class simulator{
 
         //memory checking functions
         void diagnostics();
-        void SetAccessCheck(bool &success);
         void GetAccessCheck(bool &success);
         void CheckMemZeroes(bool &success);
         void CheckBlankRegions(bool &success);
