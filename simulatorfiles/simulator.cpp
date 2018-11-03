@@ -4,7 +4,6 @@
 //regFile needs no initialisation since it has a explicitly defined default constructor. memory thus needs one.
 simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
     programCounter = 0x10000000;
-
     pcOffSet = 0;
     jump = false;
     branch = false;
@@ -17,33 +16,30 @@ bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
 }
 
 void simulator::updatePC(){    //NOT ELEGANT WIP
-//if branch in delayed slot, just follows latest branch.
-    if(branch){                                     //if it was a branch, set up a delayed branch
-        programCounter = programCounter + 4;        //stage for delayed branch
-        delayedBranch = true;                       //forewarning for next cycle
-        branch = false;                             //reset branch
+    programCounter = programCounter + 4;
+    //if branch in delayed slot, just follows latest branch.
+    if(branch || jump){                 //stage for delayed branch
+        if(branch){
+            delayedBranch = true;       //forewarning for next cycle
+            branch = false;             //reset branch
+        }
+        if(jump){
+            delayedJump = true;
+            jump = false;
+        }    
         return;
     }
-    else if(delayedBranch){
-        programCounter = programCounter + pcOffSet;
+    else if(delayedBranch || delayedJump){
+        if(delayedBranch){
+            programCounter = programCounter + pcOffSet - 4;
+            delayedBranch = false;
+        }   
+        if(delayedJump){
+            programCounter = pcOffSet;
+            delayedJump = false;
+        }   
         pcOffSet = 0;
-        delayedBranch = false;
-        return;
     }
-
-    if(jump){
-        programCounter = programCounter + 4;        //stage for delayed jump
-        delayedJump = true;                         //forewarning for next cycle
-        jump = false;                               //reset jump
-        return;
-    }
-    else if(delayedJump){
-        programCounter = pcOffSet;
-        pcOffSet = 0;
-        delayedBranch = false;
-        return;
-    }
-    programCounter = programCounter + 4;            //if not a branch or jump, proceed as per normal;
 }
 
 void simulator::update_exit_code(int& exitCode){
@@ -51,13 +47,21 @@ void simulator::update_exit_code(int& exitCode){
 }
 
 int simulator::fetch(){
-    int instruction = 0;
-    for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
-        int temp = memory.get_byte((programCounter + i));
-        temp = temp << (8*(3-i));
-        instruction = instruction | temp;
+    int instruction = programCounter;               //CHECK that PC is in an executable area
+    instruction = memory.addressmap(instruction);
+
+    if(instruction > 1)
+        std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
+
+    else{
+        for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
+            int temp = memory.get_byte((programCounter + i));
+            temp = temp << (8*(3-i));
+            instruction = instruction | temp;
+        }
+        return instruction;
     }
-    return instruction;
+    
 }
 
 int simulator::decode(int instruction){
@@ -163,7 +167,6 @@ int simulator::r_classification(int instruction){
              
         case 0b100110: return 52;   //XOR
             
-
         default:    std::cerr<<"R_instruction decoding failed - invalid instruction. Exiting program...";
                     std::exit(-12);
     }
@@ -1092,12 +1095,10 @@ void simulator::i_xori(int instruction){
 
 
 //--------J Instructions--------//
-void simulator::j_j(int instruction){ //WIP - IS THIS CORRECT?
-    int rs = instruction >> 21;
-    rs = regFile.get_reg(rs);
-    programCounter = rs;
-
-    //ERROR HANDLING?
+void simulator::j_j(int instruction){ //WIP
+    int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
+    jump = true;
+    pcOffSet = instr;
 }
 
 void simulator::j_jal(int instruction){

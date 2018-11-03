@@ -19,7 +19,6 @@ class sim_reg{
 
 class sim_mem{
     private:
-        int addressmap(int &address) const;
         void set_instruc_byte(int address, char value, bool &success);
         
         //CHANGE TO VECTORS.
@@ -39,7 +38,8 @@ class sim_mem{
 
     public:
         sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess);
-        //NOT PASSED BY REFERENCE on purpose.
+        
+        int addressmap(int &address) const;
         char get_byte(int address) const;
         void set_byte(int address, char value);
 
