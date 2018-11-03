@@ -39,7 +39,7 @@ int main(int argc, char* argv[]){
     while(!mips_sim.finished_sim()){
         instr = mips_sim.fetch();
         index = mips_sim.decode(instr);
-        mips_sim.execute(index);
+        mips_sim.execute(index, instr);
         mips_sim.updatePC();
         mips_sim.update_exit_code(exitCode);
     }

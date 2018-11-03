@@ -101,9 +101,6 @@ char sim_mem::get_byte(int address) const{
     4. Reading from write-only memory zone addr_putc
     -1. Address out of range or blank areas*/
     if(check == 0 || check == 4 || check == -1){
-        //read = false;
-        //char error = 0x00;
-        //return error;
         std::exit(-11);
         
     }
@@ -127,7 +124,6 @@ void sim_mem::set_byte(int address, char value){
     3. Writing to read-only memory zone addr_getc
     -1. Address out of range or Blank Areas*/
     if(check == 0 || check == 1 || check == 3 || check ==-1){
-        //write = false; 
         std::exit(-11);
     }
     else {
