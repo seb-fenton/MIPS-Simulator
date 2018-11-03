@@ -1,11 +1,13 @@
 #!/bin/bash
 
+#REMEMBER WHITESPACE#
+
 ###INITIALISATION OF TEST DIRECTORY AND FILES###
 echo "--#Initialising test directory"
-#mkdir -p bin/test
-touch test/output.csv
-touch test/temp.csv
-printf "TestId , Instruction , Status , Author , Message" >> test/output.csv
+mkdir -p output
+touch test/output/output.csv
+#touch test/temp.csv
+printf "TestId , Instruction , Status , Author , Message\n" >> test/output/output.csv
 
 ###TAKES FILE INPUT###                                           
 my_function() {
@@ -22,6 +24,26 @@ my_function
 ###CREATES BINARY FILES AND CALLS THEM WITH SIMULATOR EXECUTABLE?, OUTPUTTING FORMAT BELOW TO CSV###
 
 #TestId , Instruction , Status , Author [, Message]
+
+
+#ADDU
+
+$commandline_args test/test_src/addu1.bin
+
+addu1bool=false
+
+if [ "$?" = 254 ]; then
+    "$addu1bool"=true
+fi
+
+printf "addu1 , addu , $addu1bool , $USER , Testing overflow behaviour\n" >> test/output/output.csv
+
+
+
+
+
+make clean
+
 
 
 

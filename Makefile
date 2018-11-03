@@ -33,4 +33,6 @@ clean:
 
 #clean function to remove testbench outputs
 clean_t:
-	rm test/output.csv test/temp.csv
+	rm -r test/output
+	#rm test/output/output.csv 
+	
