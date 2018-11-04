@@ -10,6 +10,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 }
 
 bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
+    //condition 1: pc has jumped to zero
+    if(programCounter == 0) return true;
+    
     return false;
 }
 

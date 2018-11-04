@@ -31,9 +31,6 @@ int main(int argc, char* argv[]){
         std::exit(-11);
     }
 
-    std::cerr<<"Starting diagnostics..."<<std::endl;
-    mips_sim.diagnostics();
-
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
     int instr, index, exitCode;
     while(!mips_sim.finished_sim()){
