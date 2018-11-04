@@ -1,9 +1,9 @@
-LUI $3, 0x8000
-ADDIU $3, $5, 0x00FF
-LUI $4, 0x8000
-ADDIU $4, $5, 0x00FF
-ADDU $2, $3, $4
-JR $0
+lui $3, 0x8000
+addiu $3, $5, 0x00FF
+lui $4, 0x8000
+addiu $4, $5, 0x00FF
+addu $2, $3, $4
+jr $0
 
 
 #expectedOutcome = 254

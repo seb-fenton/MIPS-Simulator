@@ -1,5 +1,5 @@
-ADDU $2, $0, $1
-JR $0
+addu $2, $0, $1
+jr $0
 
 #expectedOutcome = 0
 #expectedExitCode = 0
