@@ -12,7 +12,7 @@ std::string get_filename(int argc, char* argv[]);
 char* write_binary_in(std::string FileName, int& LengthOfBinary);
 
 int main(int argc, char* argv[]){
-    //enables hexadecimal input in cin/out?
+    //enables hexadecimal input in cin/out? WIP
     std::cin.unsetf(std::ios::dec);
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
@@ -31,15 +31,12 @@ int main(int argc, char* argv[]){
         std::exit(-11);
     }
 
-    //std::cerr<<"Starting diagnostics..."<<std::endl;
-    //mips_sim.diagnostics();
-
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
     int instr, index, exitCode;
     while(!mips_sim.finished_sim()){
         instr = mips_sim.fetch();
         index = mips_sim.decode(instr);
-        mips_sim.execute(index);
+        mips_sim.execute(index, instr);
         mips_sim.updatePC();
         mips_sim.update_exit_code(exitCode);
     }
@@ -81,7 +78,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         InputBinary.read(Memblock, LengthOfBinary);
         InputBinary.close();
 
-        //return whether or not memory write was succesful
+        //return whether or not memory write was successful
         return(Memblock);
     }
 
@@ -89,7 +86,6 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         std::cerr<<"\nUnable to read file.\n";
         std::exit(-11); //-ISSUE - IS THIS CORRECT???
     }
-
 }
 
 //MEMORY WRITEIN TESTING

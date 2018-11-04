@@ -1,10 +1,7 @@
 #include "simulator.hpp"
 
-//UNSURE HOW TO CREATE OBJECTS IN THIS CONSTRUCTOR
-//regFile needs no initialisation since it has a explicitly defined default constructor. memory thus needs one.
 simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
     programCounter = 0x10000000;
-
     pcOffSet = 0;
     jump = false;
     branch = false;
@@ -13,37 +10,32 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 }
 
 bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
+    //condition 1: pc has jumped to zero
+    if(programCounter == 0) return true;
+    
     return false;
 }
 
-void simulator::updatePC(){    //NOT ELEGANT WIP
-//if branch in delayed slot, just follows latest branch.
-    if(branch){                                     //if it was a branch, set up a delayed branch
-        programCounter = programCounter + 4;        //stage for delayed branch
-        delayedBranch = true;                       //forewarning for next cycle
-        branch = false;                             //reset branch
-        return;
-    }
-    else if(delayedBranch){
-        programCounter = programCounter + pcOffSet;
-        pcOffSet = 0;
-        delayedBranch = false;
+void simulator::updatePC(){    //WIP if branch in delayed slot, just follows latest branch.
+    programCounter = programCounter + 4;
+
+    if(branch || jump){                             
+        if(branch)      delayedBranch = true;       //stage delayed branch/jump for next cycle
+        else if(jump)   delayedJump = true;         //redundant elif in case something is BOTH a branch and jump(impossible)
+
+        branch = false;
+        jump = false;    
         return;
     }
 
-    if(jump){
-        programCounter = programCounter + 4;        //stage for delayed jump
-        delayedJump = true;                         //forewarning for next cycle
-        jump = false;                               //reset jump
-        return;
-    }
-    else if(delayedJump){
-        programCounter = pcOffSet;
-        pcOffSet = 0;
+    else if(delayedBranch || delayedJump){
+        if(delayedBranch)   programCounter = programCounter + pcOffSet - 4;
+        else if(delayedJump)    programCounter = pcOffSet;
+
         delayedBranch = false;
-        return;
+        delayedJump = false;
+        pcOffSet = 0;
     }
-    programCounter = programCounter + 4;            //if not a branch or jump, proceed as per normal;
 }
 
 void simulator::update_exit_code(int& exitCode){
@@ -51,14 +43,21 @@ void simulator::update_exit_code(int& exitCode){
 }
 
 int simulator::fetch(){
-    int instruction = 0;
-    for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
-        int temp = memory.get_byte((programCounter + i));
-        temp = temp & 0xFF;
-        temp = temp << (8*(3-i));
-        instruction = instruction | temp;
+    int instruction = programCounter;               //CHECK that PC is in an executable area
+    instruction = memory.addressmap(instruction);
+
+    if(instruction > 1)
+        std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
+
+    else{
+        for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
+            int temp = memory.get_byte((programCounter + i));
+            temp = temp << (8*(3-i));
+            instruction = instruction | temp;
+        }
+        return instruction;
     }
-    return instruction;
+    
 }
 
 int simulator::decode(int instruction){
@@ -164,7 +163,6 @@ int simulator::r_classification(int instruction){
              
         case 0b100110: return 52;   //XOR
             
-
         default:    std::cerr<<"R_instruction decoding failed - invalid instruction. Exiting program...";
                     std::exit(-12);
     }
@@ -190,137 +188,118 @@ int simulator::branch_classification(int instruction){
     }
 }
 
-void simulator::execute(int instruction){
-    switch(instruction){
-
+void simulator::execute(int index, int instruction){
+    switch(index){
         //--------R Instructions--------//
-
-        case 1: simulator::r_add(instruction);   //ADD
+        case 1: simulator::r_add(instruction);
             break;
-        case 4: simulator::r_addu(instruction);  //ADDU
+        case 4: simulator::r_addu(instruction);
             break;             
-        case 5: simulator::r_and(instruction);   //AND
+        case 5: simulator::r_and(instruction);
             break;             
-
-        case 15: simulator::r_div(instruction);   //DIV
+        case 15: simulator::r_div(instruction);
              break;            
-        case 16: simulator::r_divu(instruction);   //DIVU
+        case 16: simulator::r_divu(instruction);
             break;             
-        case 18:    //JALR
+        case 18: simulator::r_jalr(instruction);
             break;            
-        case 20:    //JR
+        case 20: simulator::r_jr(instruction);
             break;
-
-        case 29: simulator::r_mfhi(instruction);   //MFHI
+        case 29: simulator::r_mfhi(instruction);
             break; 
-        case 30: simulator::r_mflo(instruction);   //MFLO
+        case 30: simulator::r_mflo(instruction);
             break; 
-        case 31: simulator::r_mthi(instruction);   //MTHI
+        case 31: simulator::r_mthi(instruction);
             break;
-        case 32: simulator::r_mtlo(instruction);   //MTLO
+        case 32: simulator::r_mtlo(instruction);
             break;
-
-        case 33:    //MULT
+        case 33: simulator::r_mult(instruction);
             break;
-        case 34:    //MULTU
+        case 34: simulator::r_multu(instruction);
             break;
-
-        case 35: simulator::r_or(instruction);   //OR
+        case 35: simulator::r_or(instruction);
             break;
-
-        case 39: simulator::r_sll(instruction);   //SLL
+        case 39: simulator::r_sll(instruction);
             break;
-        case 40: simulator::r_sllv(instruction);   //SLLV
+        case 40: simulator::r_sllv(instruction);
             break;
-        case 41: //simulator::r_slt(instruction);   //SLT
+        case 41: simulator::r_slt(instruction);
             break;
-        case 44: //simulator::r_sltu(instruction);   //SLTU
+        case 44: simulator::r_sltu(instruction);
             break;
-
-        case 45: simulator::r_sra(instruction);   //SRA
+        case 45: simulator::r_sra(instruction);
             break;
-        case 46: simulator::r_srav(instruction);   //SRAV
+        case 46: simulator::r_srav(instruction);
             break;
-        case 47: simulator::r_srl(instruction);   //SRL
+        case 47: simulator::r_srl(instruction);
             break;
-        case 48: simulator::r_srlv(instruction);   //SRLV
+        case 48: simulator::r_srlv(instruction);
             break;
-
-        case 49: simulator::r_sub(instruction);   //SUB
+        case 49: simulator::r_sub(instruction);
             break;
-        case 50: simulator::r_subu(instruction);  //SUBU
+        case 50: simulator::r_subu(instruction);
             break;
-        case 52: simulator::r_xor(instruction);   //XOR
+        case 52: simulator::r_xor(instruction);
             break;
 
         //--------I Instructions--------//
-
-        case 2: simulator::i_addi(instruction);    //addi
+        case 2: simulator::i_addi(instruction);
             break;
-        case 3: simulator::i_addiu(instruction);    //addiu
+        case 3: simulator::i_addiu(instruction);
             break;
-        case 6: simulator::i_andi(instruction);    //andi
+        case 6: simulator::i_andi(instruction);
             break;
-        case 7: ;    //beq
+        case 7: simulator::i_beq(instruction);
             break;
-
-        case 8:              //bgez
+        case 8: simulator::i_bgez(instruction);
             break;
-        case 9:              //bgezal
+        case 9: simulator::i_bgezal(instruction);
             break;
-        case 10:  ;   //bgtz
+        case 10: simulator::i_bgtz(instruction);
             break;
-        case 11: return ;   //blez
+        case 11: simulator::i_blez(instruction);
             break;
-        case 12:             //bltz
+        case 12: simulator::i_bltz(instruction);
             break;
-        case 13:             //bltzal
+        case 13: simulator::i_bltzal(instruction);
             break;
-
-        
-        
-        case 14: return ;   //bne
+        case 14: simulator::i_bne(instruction);
             break;
-
-        case 21: simulator::i_lb(instruction);   //lb
+        case 21: simulator::i_lb(instruction);
             break;
-        case 22: simulator::i_lbu(instruction);   //lbu
+        case 22: simulator::i_lbu(instruction);
             break;
-        case 23: simulator::i_lh(instruction);;   //lh
+        case 23: simulator::i_lh(instruction);
             break;
-        case 24: simulator::i_lhu(instruction);;   //lhu
+        case 24: simulator::i_lhu(instruction);
             break;
-        case 25: simulator::i_lui(instruction);;   //lui
+        case 25: simulator::i_lui(instruction);
             break;
-        case 26: return ;   //lw
+        case 26: simulator::i_lw(instruction);
             break;
-        case 27: return ;   //lwl
+        case 27: simulator::i_lwl(instruction);
             break;
-        case 28: return ;   //lwr
+        case 28: simulator::i_lwr(instruction);
             break;
-
-        case 36: simulator::i_ori(instruction);  //ori
+        case 36: simulator::i_ori(instruction);
             break;
-
-        case 37: return ;   //sb
+        case 37: simulator::i_sb(instruction);
             break;
-        case 38: return ;   //sh
+        case 38: simulator::i_sh(instruction);
             break;
-
-        case 42: return ;   //slti
+        case 42: simulator::i_slti(instruction);
             break;
-        case 43: return ;   //sltiu
+        case 43: simulator::i_sltiu(instruction);
             break;
-        case 51: return ;   //sw
+        case 51: simulator::i_sw(instruction);
             break;
-
-        case 53: return simulator::i_xori(instruction);;  //xori
+        case 53: simulator::i_xori(instruction);
             break;
 
         //--------J Instructions--------//
-        case 17: return;   //j
+        case 17: simulator::j_j(instruction);
             break;
-        case 19: return;   //jal
+        case 19: simulator::j_jal(instruction);
             break;
     }
 }
@@ -329,8 +308,7 @@ void simulator::execute(int instruction){
 //--------R Instructions--------//
 void simulator::r_add(int instruction){
     bool overflow = false;
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
+    int rs = (instruction & 0x3E00000) >> 21;
     rs = regFile.get_reg(rs);               //src1
 
     int rt = instruction & 0x1F0000;
@@ -354,7 +332,6 @@ void simulator::r_add(int instruction){
         regFile.set_reg(result, rd);
     }
 }
-
 void simulator::r_addu(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -369,7 +346,6 @@ void simulator::r_addu(int instruction){
 
     regFile.set_reg(rt+rs, rd);             //no overflow
 }
-
 void simulator::r_and(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -384,7 +360,6 @@ void simulator::r_and(int instruction){
 
     regFile.set_reg(rt & rs, rd);
 }
-
 void simulator::r_div(int instruction){     //WIP
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -399,7 +374,6 @@ void simulator::r_div(int instruction){     //WIP
     regFile.set_lo(rs/rt);                //quotient into LO
     regFile.set_hi(rs%rt);                  //remainder into HI
 }
-
 void simulator::r_divu(int instruction){     //WIP
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -412,27 +386,41 @@ void simulator::r_divu(int instruction){     //WIP
     regFile.set_lo(rs/rt);               //quotient into LO
     regFile.set_hi(rs%rt);               //remainder into HI
 }
+void simulator::r_jalr(int instruction){    //WIP
+    simulator::r_jr(instruction);
+    int rd = (instruction & 0x0000F800) >> 11;
 
+    regFile.set_reg(programCounter+8, rd);
+}
+void simulator::r_jr(int instruction){      //WIP
+    int rs = (instruction & 0x03E00000) >> 21;  //fetch register number
+    rs = regFile.get_reg(rs);                   //fetch register value
+
+    jump = true;                                //set jump (for delayed branching)
+    pcOffSet = rs;                              //set regval into pcOffSet
+}
 void simulator::r_mfhi(int instruction){
     int rt = instruction>>11;                     //src
     regFile.set_reg(regFile.get_hi(), rt);        //destination 
 }
-
 void simulator::r_mflo(int instruction){
     int rt = instruction>>11;                     //src
     regFile.set_reg(regFile.get_lo(), rt);        //destination 
 }  
-
 void simulator::r_mthi(int instruction){
     int rt = instruction>>21;                   //src
     regFile.set_hi(regFile.get_reg(rt));        //destination 
 }                   
-
 void simulator::r_mtlo(int instruction){
     int rt = instruction>>21;                   //src
     regFile.set_lo(regFile.get_reg(rt));        //destination 
 }
+void simulator::r_mult(int instruction){
 
+}
+void simulator::r_multu(int instruction){
+    
+}
 void simulator::r_or(int instruction){
 
     int rs = instruction>>21;
@@ -445,7 +433,6 @@ void simulator::r_or(int instruction){
 
     regFile.set_reg((rs|rt), (rd & 0x1F));
 }
-
 void simulator::r_sll(int instruction){
 
     int rt = instruction>>16;          
@@ -459,7 +446,6 @@ void simulator::r_sll(int instruction){
     regFile.set_reg((rt<<sa), (rd & 0x1F));
 
 }
-
 void simulator::r_sllv(int instruction){
 
     int rs = instruction>>21;           
@@ -473,7 +459,6 @@ void simulator::r_sllv(int instruction){
     regFile.set_reg((rt<<rs), (rd & 0x1F));
 
 }
-
 void simulator::r_slt(int instruction){
 
     int rs = ((instruction>>21) & 0x1F);
@@ -490,7 +475,6 @@ void simulator::r_slt(int instruction){
     int rd = ((instruction>>11) & 0x1F);
     regFile.set_reg(comparison, rd);
 }
-
 void simulator::r_sltu(int instruction){
 
     int rs = ((instruction>>21) & 0x1F);
@@ -507,7 +491,6 @@ void simulator::r_sltu(int instruction){
     int rd = ((instruction>>11) & 0x1F);
     regFile.set_reg(comparison, rd);
 }
-
 void simulator::r_sra(int instruction){
 
     int rt = instruction>>16;          
@@ -537,7 +520,6 @@ void simulator::r_sra(int instruction){
 
     regFile.set_reg((rt), (rd & 0x1F));
 }
-
 void simulator::r_srav(int instruction){
 
     int rt = instruction>>16; 
@@ -568,7 +550,6 @@ void simulator::r_srav(int instruction){
 
     regFile.set_reg((rt), (rd & 0x1F));
 }
-
 void simulator::r_srl(int instruction){
 
     int rt = instruction>>16;          
@@ -582,7 +563,6 @@ void simulator::r_srl(int instruction){
     regFile.set_reg((rt>>sa), (rd & 0x1F));
 
 }
-
 void simulator::r_srlv(int instruction){
 
     int rs = instruction>>21;           
@@ -596,7 +576,6 @@ void simulator::r_srlv(int instruction){
     regFile.set_reg((rt>>rs), (rd & 0x1F));
 
 }
-
 void simulator::r_sub(int instruction){
     bool overflow = false;
     int rs = instruction & 0x3E00000;
@@ -623,7 +602,6 @@ void simulator::r_sub(int instruction){
         regFile.set_reg(result, rd);
     }
 }
-
 void simulator::r_subu(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -638,7 +616,6 @@ void simulator::r_subu(int instruction){
 
     regFile.set_reg(rs-rt, rd);             //no overflow
 }
-
 void simulator::r_xor(int instruction){
 
     int rs = instruction>>21;
@@ -651,6 +628,7 @@ void simulator::r_xor(int instruction){
 
     regFile.set_reg((rs^rt), (rd & 0x1F));
 }
+
 
 
 //--------I Instructions--------//
@@ -678,7 +656,6 @@ void simulator::i_addi(int instruction){
     else
         regFile.set_reg(result, rt);
 }
-
 void simulator::i_addiu(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -692,7 +669,6 @@ void simulator::i_addiu(int instruction){
 
     regFile.set_reg(rs + imm, rt);
 }
-
 void simulator::i_andi(int instruction){    //WIP
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -706,7 +682,6 @@ void simulator::i_andi(int instruction){    //WIP
 
     regFile.set_reg(rs & imm, rt);
 }
-
 void simulator::i_beq(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -725,7 +700,6 @@ void simulator::i_beq(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bgez(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -740,7 +714,6 @@ void simulator::i_bgez(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bgezal(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -756,7 +729,6 @@ void simulator::i_bgezal(int instruction){
         regFile.set_reg(programCounter+8, 31);  //link I THINK
     }
 }
-
 void simulator::i_bgtz(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -771,7 +743,6 @@ void simulator::i_bgtz(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_blez(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -786,7 +757,6 @@ void simulator::i_blez(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bltz(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -801,7 +771,6 @@ void simulator::i_bltz(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_bltzal(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -817,7 +786,6 @@ void simulator::i_bltzal(int instruction){
         regFile.set_reg(programCounter+8, 31);
     }
 }
-
 void simulator::i_bne(int instruction){
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
@@ -836,7 +804,6 @@ void simulator::i_bne(int instruction){
         pcOffSet = imm;
     }
 }
-
 void simulator::i_lb(int instruction){
 
     signed short int offset = instruction & 0xFFFF;     //address src1
@@ -863,7 +830,6 @@ void simulator::i_lb(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(output, (registerAddress & 0x1F));
 }
-
 void simulator::i_lbu(int instruction){
 
     signed short int offset = instruction & 0xFFFF;          //address src1
@@ -879,7 +845,6 @@ void simulator::i_lbu(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(castedByte, (registerAddress & 0x1F));
 }
-
 void simulator::i_lh(int instruction){
 
     signed short int offset = instruction & 0xFFFF;     //address src1
@@ -917,7 +882,6 @@ void simulator::i_lh(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(output, (registerAddress & 0x1F));
 }
-
 void simulator::i_lhu(int instruction){
 
     signed short int offset = instruction & 0xFFFF;     //address src1
@@ -939,7 +903,6 @@ void simulator::i_lhu(int instruction){
     int registerAddress = instruction>>16;
     regFile.set_reg(output, (registerAddress & 0x1F));
 }
-
 void simulator::i_lui(int instruction){
 
     int offset = instruction & 0xFFFF; 
@@ -950,7 +913,6 @@ void simulator::i_lui(int instruction){
     regFile.set_reg(offset, (rt & 0x1F));
 
 }
-
 void simulator::i_lw(int instruction){
     signed short int offset = instruction & 0xFFFF;
 
@@ -984,7 +946,12 @@ void simulator::i_lw(int instruction){
     regFile.set_reg(input, rt&0x1F);
     
 }
+void simulator::i_lwl(int instruction){ //NOT DONE WIP
 
+}
+void simulator::i_lwr(int instruction){ //NOT DONE WIP
+
+}
 void simulator::i_ori(int instruction){
     int rs = instruction>>21;
     rs = rs & 0x1F;
@@ -996,7 +963,6 @@ void simulator::i_ori(int instruction){
 
     regFile.set_reg((rs|immediate), (rt & 0x1F));
 }
-
 void simulator::i_sb(int instruction){
     signed short int offset = instruction & 0xFFFF;     //address src1
 
@@ -1009,7 +975,6 @@ void simulator::i_sb(int instruction){
 
     memory.set_byte((base + offset), input);
 }
-
 void simulator::i_sh(int instruction){
     signed short int offset = instruction & 0xFFFF;     //address src1
 
@@ -1035,7 +1000,6 @@ void simulator::i_sh(int instruction){
     char lsb = hword & 0xFF;                                    //lsb then loaded into memory
     memory.set_byte((memoryAddress + 1), msb);        
 }
-
 void simulator::i_slti(int instruction){
     int rs = (instruction>>21) & 0x1F;
     rs = regFile.get_reg(rs);
@@ -1055,7 +1019,6 @@ void simulator::i_slti(int instruction){
     regFile.set_reg(comparison, rt);
 
 }
-
 void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
     int rs = (instruction>>21) & 0x1F;
     rs = regFile.get_reg(rs);
@@ -1087,7 +1050,6 @@ void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
     int rt = ((instruction>>16) & 0x1F);
     regFile.set_reg(comparison, rt);
 }
-
 void simulator::i_sw(int instruction){
     signed short int offset = instruction & 0xFFFF;
 
@@ -1118,7 +1080,6 @@ void simulator::i_sw(int instruction){
     char b4 = ((word&0xFF));                                        //lsb
     memory.set_byte((memoryAddress + 3), b4);    
 }
-
 void simulator::i_xori(int instruction){
 
     int rs = instruction>>21;
@@ -1132,21 +1093,21 @@ void simulator::i_xori(int instruction){
     regFile.set_reg((rs^immediate), (rt & 0x1F));
 }
 
-//--------J Instructions--------//
-void simulator::j_j(int instruction){ //WIP - IS THIS CORRECT?
-    int rs = instruction >> 21;
-    rs = regFile.get_reg(rs);
-    programCounter = rs;
 
-    //ERROR HANDLING?
+
+//--------J Instructions--------//
+void simulator::j_j(int instruction){ //WIP
+    int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
+    jump = true;
+    pcOffSet = instr;
 }
 
 void simulator::j_jal(int instruction){
-
+    simulator::j_j(instruction);            //jump
+    regFile.set_reg(programCounter+8, 31);  //and link
 }
 
-
-
+//BEFORE RUNNING DIAGNOSTICS, change std::exit in get_byte to return check.
 void simulator::diagnostics(){
     bool successfultest = true;
     std::cout << "Starting Memory Test.\n";
@@ -1156,19 +1117,16 @@ void simulator::diagnostics(){
             successfultest = false;
         }
     }
-    
-    simulator::SetAccessCheck(successfultest);
+    simulator::CheckMemZeroes(successfultest);
     simulator::GetAccessCheck(successfultest);
     simulator::CheckBlankRegions(successfultest);
-
     if(successfultest)
-        std::cout << "\nMemory works as intended\n";
+        std::cout << "\nMemory reads as intended\n";
     else
         std::cout << "\nMemory function failure\n";
 }
 
-void simulator::CheckMemZeroes(bool &success){
-    bool read = false;
+void simulator::CheckMemZeroes(bool &success){  //checks readable regions for zeroes
     for(int i=0x10000000; i<0x11000000; i++){ //instr
         if(memory.get_byte(i) != 0)
             success = false;
@@ -1185,83 +1143,44 @@ void simulator::CheckMemZeroes(bool &success){
     }
 }
 
-void simulator::SetAccessCheck(bool &success){
-    bool written = true;
-    for(int i=0x0; i<0x4; i++){ //null
-        memory.set_byte(i, -1);
-        if(written)
-            success = false;
-    }
-    for(int i=0x10000000; i<0x11000000; i++){ //instr
-        memory.set_byte(i, -1);
-        if(written)
-            success = false;
-    }
-    for(int i=0x20000000; i<0x24000000; i++){ //data
-        memory.set_byte(i, -1);
-        if(!written)
-            success = false;
-    }
-    for(int i=0x30000004; i<0x30000008; i++){ //putc
-        memory.set_byte(i, -1);
-        if(!written)
-            success = false;
-    }
-}
-
-void simulator::GetAccessCheck(bool &success){
-    bool read = true;
+void simulator::GetAccessCheck(bool &success){ //check that unreadable regions are unreadable
     char readbyte;
     for(int i=0x0; i<0x4; i++){ //null
         readbyte = memory.get_byte(i);
-        if(read)
-            success = false;
-    }
-
-    for(int i=0x10000000; i<0x11000000; i++){ //instr
-        readbyte = memory.get_byte(i);
-        if(!read && readbyte != 0)
-            success = false;
-    }
-
-    for(int i=0x20000000; i<0x24000000; i++){ //data
-        readbyte = memory.get_byte(i);
-        if(!read && readbyte != -1)
+        if(readbyte != 0)
             success = false;
     }
 
     for(int i=0x30000004; i<0x30000008; i++){ //putc
         readbyte = memory.get_byte(i);
-        if(read)
+        if(readbyte != 4)
             success = false;
     }
 }
 
 void simulator::CheckBlankRegions(bool &success){
-    bool read = true;
     char readbyte;
-    
     for(int i=0x4; i<0x10000000; i++){ //null
         readbyte = memory.get_byte(i);
-        if(read && readbyte != -1)
+        if(readbyte != -1)
             success = false;
     }
     
     for(int i=0x11000000; i<0x20000000; i++){ //null
         readbyte = memory.get_byte(i);
-        if(read && readbyte != -1)
+        if(readbyte != -1)
             success = false;
     }
     
     for(int i=0x24000000; i<0x30000000; i++){ //null
         readbyte = memory.get_byte(i);
-        if(read && readbyte != -1)
+        if(readbyte != -1)
             success = false;
     }
     
     for(int i=0x30000008; i<=0xFFFFFFFF; i++){ //null
         readbyte = memory.get_byte(i);
-        if(read && readbyte != -1)
+        if(readbyte != -1)
             success = false;
     }
 }

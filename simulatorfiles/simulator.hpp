@@ -19,11 +19,10 @@ class simulator{
         int decode(int instruction);
         int r_classification(int instruction);
         int branch_classification(int instruction);
-        void execute(int instruction);
+        void execute(int index, int instruction);
 
         //memory checking functions
         void diagnostics();
-        void SetAccessCheck(bool &success);
         void GetAccessCheck(bool &success);
         void CheckMemZeroes(bool &success);
         void CheckBlankRegions(bool &success);
@@ -34,10 +33,14 @@ class simulator{
         void r_and(int instruction);
         void r_div(int instruction);    //not done
         void r_divu(int instruction);   //not done
+        void r_jalr(int instruction);
+        void r_jr(int instruction);
         void r_mfhi(int instruction);
         void r_mflo(int instruction);
         void r_mthi(int instruction);
         void r_mtlo(int instruction);
+        void r_mult(int instruction);
+        void r_multu(int instruction);
 
         void r_or(int instruction);
         void r_sll(int instruction);
@@ -75,6 +78,8 @@ class simulator{
         void i_lhu(int instruction);
         void i_lui(int instruction);
         void i_lw(int instruction);
+        void i_lwl(int instruction);
+        void i_lwr(int instruction);
 
         void i_ori(int instruction);
 
@@ -90,5 +95,4 @@ class simulator{
         //J INSTRUCTIONS//  
         void j_j(int instruction);
         void j_jal(int instruction);
-
 };
