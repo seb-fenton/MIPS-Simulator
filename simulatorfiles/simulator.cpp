@@ -52,6 +52,7 @@ int simulator::fetch(){
     else{
         for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
             int temp = memory.get_byte((programCounter + i));
+            temp = temp & 0xFF;
             temp = temp << (8*(3-i));
             instruction = instruction | temp;
         }
@@ -111,7 +112,6 @@ int simulator::decode(int instruction){
 
 int simulator::r_classification(int instruction){
     instruction = instruction & 0b111111;
-
     switch(instruction){
         case 0b100000: return 1;    //ADD
              

@@ -22,11 +22,11 @@ void sim_reg::set_reg(int input, int regNum){
         std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
         std::exit(-11); 
     }*/
-    if(input == 0){
-        std::cerr<<"Write to $0. No action taken";
+    if(regNum == 0){
+        std::cerr<<"Write to $0. No action taken\n";
     }
-    else if(input<32 && input>0){
-        reg[regNum] = input;
+    else if(regNum<32 && regNum>0){
+        input = reg[regNum];
     }
     else{
         std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
