@@ -54,6 +54,7 @@ int simulator::fetch(){
     int instruction = 0;
     for(int i=0; i<4; i++){                             //fetch and append 4 bytes to create a full 32 byte instruction
         int temp = memory.get_byte((programCounter + i));
+        temp = temp & 0xFF;
         temp = temp << (8*(3-i));
         instruction = instruction | temp;
     }

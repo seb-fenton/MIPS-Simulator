@@ -117,7 +117,7 @@ char sim_mem::get_byte(int address) const{
         
     }
     else{
-        if(check == 1)  return addr_instr[address];
+        if(check == 1)  return addr_instr[address]; 
         if(check == 2)  return addr_data[address];
         if(check == 3){
             if(address == 3){
