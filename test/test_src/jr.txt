@@ -1,7 +1,7 @@
+#0
+#jr
+#jr
+#Testing basic functionality
+
 jr $0
 nop
-
-
-
-#expectedOutcome = 0
-#expectedExitCode = 0

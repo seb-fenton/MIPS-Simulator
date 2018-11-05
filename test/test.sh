@@ -1,84 +1,44 @@
 #!/bin/bash
 
-#REMEMBER WHITESPACE#
-
 ###INITIALISATION OF TEST DIRECTORY AND FILES###
-echo "--#Initialising test directory"
+echo "\nInitialising test directory..."
 mkdir -p test/output
 touch test/output/output.csv
 #touch test/temp.csv
 printf "TestId , Instruction , Status , Author , Message\n" >> test/output/output.csv
 
 ###TAKES FILE INPUT###                                           
-my_function() {
-    echo "--#Stored filename argument:"
-    for arg in "${commandline_args[@]}"; do
-        echo "$arg"
-    done
-}
-
 commandline_args=("$@")
 
-my_function
-
-###CREATES BINARY FILES AND CALLS THEM WITH SIMULATOR EXECUTABLE?, OUTPUTTING FORMAT BELOW TO CSV###
+###CREATES BINARY FILES AND CALLS THEM WITH SIMULATOR EXECUTABLE, OUTPUTTING TO CSV###
 
 #TestId , Instruction , Status , Author [, Message]
+FILES="test/test_src/*.txt"
+for f in $FILES; do
+    bool="false"
 
+    exec 5< $f                                                  #reads first 4 lines of our txt files to retrieve metadata
 
-#ADDU
+    read -r line <&5
+    expectedOutcome="${line:1:${#line}-1}"
+    read -r line <&5
+    testIndex="${line:1:${#line}-1}"
+    read -r line <&5
+    test="${line:1:${#line}-1}"
+    read -r line <&5
+    message="${line:1:${#line}-1}"
 
-#1
+    $commandline_args test/test_src/$testIndex.bin              #executes next executable
 
-addu1bool="false"
+    if [ $? -eq $expectedOutcome ]; then
+        bool="true"
+    fi
+    printf "$testIndex , $test , $bool , $USER , $message\n" >> test/output/output.csv          
 
-$commandline_args test/test_src/addu1.bin
-
-output=$?
-
-if [ "$output" -eq 254 ]; then
-    addu1bool="true"
-fi
-
-printf "addu1 , addu , $addu1bool , $USER , Testing overflow behaviour\n" >> test/output/output.csv
-
-#2
-
-addu2bool="false"
-
-$commandline_args test/test_src/addu2.bin
-
-output=$?
-
-if [ "$output" -eq 0 ]; then
-    addu2bool="true"
-fi
-
-printf "addu2 , addu , $addu2bool , $USER , Testing basic functionality\n" >> test/output/output.csv
-
-#JR
-
-jrbool="false"
-
-$commandline_args test/test_src/addu1.bin
-
-output=$?
-
-if [ "$output" -eq 0 ]; then
-    jrbool="true"
-  
-fi
-
-printf "jr , addu , $jrbool , $USER , Testing basic functionality\n" >> test/output/output.csv
-
-
-
-
-
-
-#This command gives the return exit code of the main function, by default 0
-#N.B. this is a uint therefore -10 will be represented as 246
-
+    if [ $bool = "false" ]; then                                #prints in console whether or not particular test has faile
+        echo "Test failed: $testIndex"                          
+    fi
+done
 
 
 
