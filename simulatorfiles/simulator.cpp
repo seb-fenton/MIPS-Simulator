@@ -662,8 +662,7 @@ void simulator::i_addiu(int instruction){
     rs = regFile.get_reg(rs);               //src1
 
     int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //dest
+    rt = rt >> 16;                          //dest
 
     int imm = instruction & 0xFFFF;
 
