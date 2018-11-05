@@ -23,7 +23,7 @@ void sim_reg::set_reg(int input, int regNum){
         std::exit(-11); 
     }*/
     if(regNum == 0){
-        std::cerr<<"Write to $0. No action taken...\n";
+        //std::cerr<<"Write to $0. No action taken...\n";
     }
     else if(regNum<32 && regNum>0){
         reg[regNum] = input;

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ###INITIALISATION OF TEST DIRECTORY AND FILES###
-echo "\nInitialising test directory..."
+echo ""
+echo "Initialising test directory..."
 mkdir -p test/output
 touch test/output/output.csv
 #touch test/temp.csv
@@ -11,7 +12,8 @@ printf "TestId , Instruction , Status , Author , Message\n" >> test/output/outpu
 commandline_args=("$@")
 
 ###CREATES BINARY FILES AND CALLS THEM WITH SIMULATOR EXECUTABLE, OUTPUTTING TO CSV###
-
+echo ""
+echo "Running tests..."
 #TestId , Instruction , Status , Author [, Message]
 FILES="test/test_src/*.txt"
 for f in $FILES; do
@@ -39,6 +41,10 @@ for f in $FILES; do
         echo "Test failed: $testIndex"                          
     fi
 done
+
+echo ""
+echo "Execution finished."
+echo ""
 
 
 

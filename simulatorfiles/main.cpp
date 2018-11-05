@@ -17,17 +17,17 @@ int main(int argc, char* argv[]){
     std::cin.unsetf(std::ios::hex);
     std::cin.unsetf(std::ios::oct);
 
-    std::cerr<<"\nRetrieving file name..."<<std::endl;              
+    //std::cerr<<"\nRetrieving file name..."<<std::endl;              
     std::string FileName = get_filename(argc, argv);                                    //process binary file to stream into memory
     int LengthOfBinary;                                                                 //initialise integer to tell length of binary file
 
-    std::cerr<<"Writing binary data to character array..."<<std::endl;                  
+    //std::cerr<<"Writing binary data to character array..."<<std::endl;                  
     char* Memblock = write_binary_in(FileName, LengthOfBinary);                         //initialise array of pointers and write into it from the binary file
     bool WriteInSuccess = false;                                                        //create boolean to measure
     simulator mips_sim(LengthOfBinary, Memblock, WriteInSuccess);                       //move into instruction memory
 
     if(WriteInSuccess == false){
-        std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
+        //std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11);
     }
 
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
         mips_sim.update_exit_code(exitCode);
     }
     
-    std::cerr << "\nSimulation Completed.";
+    //std::cerr << "\nSimulation Completed.\n";
     std::exit(exitCode);
     //return 0;
 }
@@ -95,7 +95,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         MemModule.get_byte(Address, read);
         std::stringstream ss;
         ss << std::hex;
-        ss << /*std::setw(2) << std::setfill('0') << (unsigned int)Memblock[i];
+        ss << std::setw(2) << std::setfill('0') << (unsigned int)Memblock[i];
         std::cout<<"\nAddress "<<Address<<": "<<ss.str();
         std::cout<<"\n"<<read;
         Address = Address+0x1;
