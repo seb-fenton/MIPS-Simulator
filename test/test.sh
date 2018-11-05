@@ -31,14 +31,14 @@ for f in $FILES; do
     message="${line:1:${#line}-1}"
 
     $commandline_args test/test_src/$testIndex.bin              #executes next executable
-
-    if [ $? -eq $expectedOutcome ]; then
+    output=$?
+    if [ $output -eq $expectedOutcome ]; then
         bool="true"
     fi
     printf "$testIndex , $test , $bool , $USER , $message\n" >> test/output/output.csv          
 
     if [ $bool = "false" ]; then                                #prints in console whether or not particular test has faile
-        echo "Test failed: $testIndex"                          
+        echo "Test failed: $testIndex, output: $output"                          
     fi
 done
 

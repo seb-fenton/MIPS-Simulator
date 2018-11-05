@@ -1,0 +1,11 @@
+#0
+#add2
+#add
+#Testing basic functionality
+
+add $2, $3, $4
+jr $0
+nop
+
+
+

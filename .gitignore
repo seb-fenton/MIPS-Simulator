@@ -12,3 +12,4 @@ simulatorfiles/memtest
 simulatorfiles/Makefile
 bin/mips.bin
 simulatorfiles/simulator.o
+.DS_Store

@@ -1,0 +1,11 @@
+#245
+#add1
+#add
+#Testing overflow handling
+
+addiu $3, $4, 0xFFFF
+lui $3, 0xFFFF
+addiu $4, $5, 0xFFFF
+add $2, $3, $4
+jr $0
+nop 
