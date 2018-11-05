@@ -12,8 +12,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
     //condition 1: pc has jumped to zero
     if(programCounter == 0) return true;
-    
-    return false;
+    else    return false;
 }
 
 void simulator::updatePC(){    //WIP if branch in delayed slot, just follows latest branch.
@@ -393,7 +392,7 @@ void simulator::r_jalr(int instruction){    //WIP
     regFile.set_reg(programCounter+8, rd);
 }
 void simulator::r_jr(int instruction){      //WIP
-    int rs = (instruction & 0x03E00000) >> 21;  //fetch register number
+    int rs = (instruction >> 21) & 0x1F;  //fetch register number
     rs = regFile.get_reg(rs);                   //fetch register value
 
     jump = true;                                //set jump (for delayed branching)
@@ -666,7 +665,7 @@ void simulator::i_addiu(int instruction){
 
     int imm = instruction & 0xFFFF;
 
-    regFile.set_reg(rs + imm, rt);
+    regFile.set_reg(rs+imm, rt);
 }
 void simulator::i_andi(int instruction){    //WIP
     int rs = instruction & 0x3E00000;
