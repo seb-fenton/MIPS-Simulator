@@ -309,7 +309,7 @@ void simulator::execute(int index, int instruction){
 void simulator::r_add(int instruction){
     bool overflow = false;
     int rs = (instruction & 0x3E00000) >> 21;
-    rs = regFile.get_reg(rs);               //src1
+    rs = regFile.get_reg(rs);               //src1    
 
     int rt = instruction & 0x1F0000;
     rt = rt >> 16;
@@ -325,7 +325,7 @@ void simulator::r_add(int instruction){
         overflow = true;
     }
     if(overflow){
-        std::cerr<<"Exiting with error -10";
+        //std::cerr<<"Exiting with error -10";
         std::exit(-10);
     }
     else{
@@ -650,7 +650,7 @@ void simulator::i_addi(int instruction){
         overflow = true;
     }
     if(overflow){
-        std::cerr<<"Exiting with error -10";
+        //std::cerr<<"Exiting with error -10";
         std::exit(-10);
     }
     else
@@ -665,6 +665,15 @@ void simulator::i_addiu(int instruction){
     rt = rt >> 16;                          //dest
 
     int imm = instruction & 0xFFFF;
+    if(imm>>15 == 1){
+        int temp;
+        for(int i = 0; i<16; i++){
+            temp = temp << 1;
+            temp = temp + 1;
+        }
+        temp = temp << 16;
+        imm = imm | temp;
+    }
 
     regFile.set_reg(rs+imm, rt);
 }
@@ -1034,7 +1043,7 @@ void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
             temp = temp + 1;
         }
         temp = temp << 16;
-        immediate = temp + immediate;
+        immediate = temp | immediate;
     }
 
     int comparison;

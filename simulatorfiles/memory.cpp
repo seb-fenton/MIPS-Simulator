@@ -29,7 +29,7 @@ void sim_reg::set_reg(int input, int regNum){
         reg[regNum] = input;
     }
     else{
-        std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
+        //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
         std::exit(-11);
     }
 }
