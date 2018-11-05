@@ -1,5 +1,6 @@
 addu $2, $0, $1
 jr $0
+nop
 
 #expectedOutcome = 0
 #expectedExitCode = 0

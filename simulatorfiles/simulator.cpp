@@ -42,10 +42,10 @@ void simulator::update_exit_code(int& exitCode){
 }
 
 int simulator::fetch(){
-    int instruction = programCounter;               //CHECK that PC is in an executable area
-    instruction = memory.addressmap(instruction);
-
-    if(instruction > 1)
+    int check = programCounter;               //CHECK that PC is in an executable area
+    check = memory.addressmap(check);
+    int instruction = 0;
+    if(check > 1)
         std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
 
     else{
@@ -164,6 +164,7 @@ int simulator::r_classification(int instruction){
             
         default:    std::cerr<<"R_instruction decoding failed - invalid instruction. Exiting program...";
                     std::exit(-12);
+                    break;
     }
 }
 

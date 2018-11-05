@@ -29,35 +29,42 @@ my_function
 #ADDU
 
 #1
-$commandline_args test/test_src/addu1.bin
 
 addu1bool="false"
 
-echo $?
+$commandline_args test/test_src/addu1.bin
 
-if [ "$?" -eq 254 ]; then
+output=$?
+
+if [ "$output" -eq 254 ]; then
     addu1bool="true"
 fi
 
 printf "addu1 , addu , $addu1bool , $USER , Testing overflow behaviour\n" >> test/output/output.csv
 
 #2
-$commandline_args test/test_src/addu2.bin
 
 addu2bool="false"
 
-if [ "$?" -eq 0 ]; then
+$commandline_args test/test_src/addu2.bin
+
+output=$?
+
+if [ "$output" -eq 0 ]; then
     addu2bool="true"
 fi
 
 printf "addu2 , addu , $addu2bool , $USER , Testing basic functionality\n" >> test/output/output.csv
 
 #JR
-$commandline_args test/test_src/addu1.bin
 
 jrbool="false"
 
-if [ "$?" -eq 0 ]; then
+$commandline_args test/test_src/addu1.bin
+
+output=$?
+
+if [ "$output" -eq 0 ]; then
     jrbool="true"
   
 fi
