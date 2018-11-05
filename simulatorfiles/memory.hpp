@@ -12,7 +12,7 @@ class sim_reg{
         void set_lo(int input);
 
     private:
-        int reg[31];
+        int reg[32];
         int hi;
         int lo;
 };
