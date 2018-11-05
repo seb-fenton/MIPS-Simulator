@@ -908,9 +908,9 @@ void simulator::i_lui(int instruction){
     int offset = instruction & 0xFFFF; 
     offset = offset << 16;
 
-    int rt = instruction >> 16;
+    int rt = (instruction >> 16) & 0x1F;
 
-    regFile.set_reg(offset, (rt & 0x1F));
+    regFile.set_reg(offset, rt);
 
 }
 void simulator::i_lw(int instruction){
