@@ -18,15 +18,37 @@ int sim_reg::get_reg(int regNum) const{
 }
 
 void sim_reg::set_reg(int input, int regNum){
-    /*if(input == 1 || 26 || 27){
-        std::cerr<<"/n"<<"Fatal error encountered: exit code -11"<<"/n";
-        std::exit(-11); 
-    }*/
     if(regNum == 0){
         //std::cerr<<"Write to $0. No action taken...\n";
     }
     else if(regNum<32 && regNum>0){
         reg[regNum] = input;
+    }
+    else{
+        //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
+        std::exit(-11);
+    }
+}
+
+void sim_reg::lwl_set_reg(int input, int regNum){
+    if(regNum == 0){
+        //std::cerr<<"Write to $0. No action taken...\n";
+    }
+    else if(regNum<32 && regNum>0){
+        reg[regNum] = reg[regNum] | input;
+    }
+    else{
+        //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
+        std::exit(-11);
+    }
+}
+
+void sim_reg::lwr_set_reg(int input, int regNum){
+    if(regNum == 0){
+        //std::cerr<<"Write to $0. No action taken...\n";
+    }
+    else if(regNum<32 && regNum>0){
+        reg[regNum] = reg[regNum] | input;
     }
     else{
         //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";

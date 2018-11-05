@@ -6,10 +6,13 @@ class sim_reg{
         sim_reg();
         int get_reg(int regNum) const;
         void set_reg(int input, int regNum);
+        void lwl_set_reg(int input, int regNum);
+        void lwr_set_reg(int input, int regNum);
         int get_hi() const;
         void set_hi(int input);
         int get_lo() const;
         void set_lo(int input);
+        
 
     private:
         int reg[32];

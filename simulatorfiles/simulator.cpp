@@ -955,10 +955,41 @@ void simulator::i_lw(int instruction){
     
 }
 void simulator::i_lwl(int instruction){ //NOT DONE WIP
+    signed short int offset = instruction & 0xFFFF;
 
+    int base = (instruction >> 21) & 0x1F;
+    base = regFile.get_reg(base);
+
+    int address = base + offset;
+
+    int rt = (instruction >> 16) & 0x1F;
+
+    int b1 = memory.get_byte(address);
+    b1 = b1 << 24;
+    int b2 = memory.get_byte(address + 1);
+    b2 = b2 << 16;
+
+    int input = b1 | b2;
+
+    regFile.lwl_set_reg(rt, input);
 }
 void simulator::i_lwr(int instruction){ //NOT DONE WIP
+    signed short int offset = instruction & 0xFFFF;
 
+    int base = (instruction >> 21) & 0x1F;
+    base = regFile.get_reg(base);
+
+    int address = base + offset;
+
+    int rt = (instruction >> 16) & 0x1F;
+
+    int b1 = memory.get_byte(address);
+    int b2 = memory.get_byte(address - 1);
+    b2 = b2 << 8;
+
+    int input = b2 | b1;
+
+    regFile.lwl_set_reg(rt, input);
 }
 void simulator::i_ori(int instruction){
     int rs = instruction>>21;
