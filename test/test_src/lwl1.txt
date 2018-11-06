@@ -1,0 +1,9 @@
+#255
+#lwl1
+#lwl
+#Testing basic function, leftmost byte
+
+addiu $3, $5, 0xFFFF
+
+jr $0
+nop

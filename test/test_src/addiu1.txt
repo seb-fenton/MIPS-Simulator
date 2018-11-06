@@ -1,0 +1,12 @@
+#254
+#addiu1
+#addiu
+#Testing overflow behaviour
+
+lui $3, 0xFFFF
+addiu $3, $5, 0xFFFF
+addiu $2, $3, 0xFFFF
+jr $0
+nop
+
+
