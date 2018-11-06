@@ -35,6 +35,7 @@ void sim_reg::lwl_set_reg(int input, int regNum){
         //std::cerr<<"Write to $0. No action taken...\n";
     }
     else if(regNum<32 && regNum>0){
+        reg[regNum] = reg[regNum] & 0x0000FFFF;
         reg[regNum] = reg[regNum] | input;
     }
     else{
@@ -48,6 +49,7 @@ void sim_reg::lwr_set_reg(int input, int regNum){
         //std::cerr<<"Write to $0. No action taken...\n";
     }
     else if(regNum<32 && regNum>0){
+        reg[regNum] = reg[regNum] & 0xFFFF0000;
         reg[regNum] = reg[regNum] | input;
     }
     else{
