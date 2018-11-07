@@ -2,6 +2,8 @@
 #define SIMULATOR_HPP
 #include "memory.hpp"
 #include <iostream>
+#include <cstdlib>
+
 
 class simulator{
     private:

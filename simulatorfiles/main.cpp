@@ -65,7 +65,7 @@ std::string get_filename(int argc, char* argv[]){
 //function to write binary data into memory; returns a boolean to check for memory exception -11
 char* write_binary_in(std::string FileName, int& LengthOfBinary){
 
-    std::ifstream InputBinary(FileName, std::ifstream::binary);     //open the file using fstream library
+    std::ifstream InputBinary(FileName.c_str(), std::ifstream::binary);     //open the file using fstream library
     char* Memblock;
 
     //if a file has managed to be initialised using std::ifstream

@@ -1,6 +1,12 @@
 #ifndef MEMORY_HPP
 #define MEMORY_HPP
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <stdio.h>
+#include <cstdlib>
+
 
 class sim_reg{
     public:

@@ -1,0 +1,15 @@
+simulatorfiles/instructions.o
+simulatorfiles/main.o
+simulatorfiles/memory.o
+bin/ex1.bin
+bin/test
+testbenchfiles/testbenchinitialiser.o
+.vscode
+simulatorfiles/.vscode
+/.metadata/
+simulatorfiles/MemoryTest
+simulatorfiles/memtest
+simulatorfiles/Makefile
+bin/mips.bin
+simulatorfiles/simulator.o
+.DS_Store
