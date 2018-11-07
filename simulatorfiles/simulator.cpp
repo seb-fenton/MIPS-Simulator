@@ -1,4 +1,6 @@
 #include "simulator.hpp"
+#include <cstdlib>
+
 
 simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
     programCounter = 0x10000000;
@@ -9,7 +11,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     delayedJump = false;
 }
 
-bool simulator::finished_sim(){
+bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
     //condition 1: pc has jumped to zero
     if(programCounter == 0) return true;
     else    return false;
@@ -415,53 +417,11 @@ void simulator::r_mtlo(int instruction){
     int rt = instruction>>21;                   //src
     regFile.set_lo(regFile.get_reg(rt));        //destination 
 }
-void simulator::r_mult(int instruction){    //MULT WIP
-
-    bool overflow = false;
-    int rs = (instruction & 0x3E00000) >> 21;
-    int64_t multplc = regFile.get_reg(rs);               //src1    
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    int64_t multplr = regFile.get_reg(rt);               //src2
-
-    int64_t result = rt*rs;
-    int tophalf = result >> 32;
-    int btmhalf = result & 0xffffffff;
-    //compare both operand signs
-    if((multplr >> 31) == (multplc >> 31))
-        if(tophalf >> 31 != multplr >> 31)
-            overflow = true;
-
-    //if different, expect inverted 
-    if((multplr >> 31) != (multplc >> 31))
-        if(tophalf > 0)
-            overflow = true;
-
-    if(overflow){
-        //std::cerr<<"Exiting with error -10";
-        std::exit(-10);
-    }
-    else{
-        regFile.set_hi(tophalf);
-        regFile.set_lo(btmhalf);
-    }
+void simulator::r_mult(int instruction){
 
 }
-void simulator::r_multu(int instruction){   //MULT WIP
-    int rs = (instruction & 0x3E00000) >> 21;
-    int64_t multplc = regFile.get_reg(rs);               //src1    
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    int64_t multplr = regFile.get_reg(rt);               //src2
-
-    int64_t result = rt*rs;
-    int tophalf = result >> 32;
-    int btmhalf = result & 0xffffffff;
-
-    regFile.set_hi(tophalf);
-    regFile.set_lo(btmhalf);
+void simulator::r_multu(int instruction){
+    
 }
 void simulator::r_or(int instruction){
 
