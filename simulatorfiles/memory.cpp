@@ -1,10 +1,4 @@
 #include "memory.hpp"
-#include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <stdio.h>
-#include <cstdlib>
-
 
 //SIMULATOR_REGISTERS FUNCTION DEFINITIONS
 //Constructor to initialise all register values to 0
