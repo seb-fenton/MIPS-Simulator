@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MEMORY_HPP
+#define MEMORY_HPP
 #include <vector>
 
 class sim_reg{
@@ -46,3 +47,4 @@ class sim_mem{
         void set_byte(int address, char value);
 
 };
+#endif

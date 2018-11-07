@@ -5,8 +5,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <map>
 #include <vector>
+#include <cstdlib>
 
 std::string get_filename(int argc, char* argv[]);
 char* write_binary_in(std::string FileName, int& LengthOfBinary);

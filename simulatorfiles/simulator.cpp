@@ -1,4 +1,6 @@
 #include "simulator.hpp"
+#include <cstdlib>
+
 
 simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
     programCounter = 0x10000000;

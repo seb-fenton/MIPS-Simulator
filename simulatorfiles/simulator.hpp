@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SIMULATOR_HPP
+#define SIMULATOR_HPP
 #include "memory.hpp"
 #include <iostream>
 
@@ -96,3 +97,4 @@ class simulator{
         void j_j(int instruction);
         void j_jal(int instruction);
 };
+#endif
