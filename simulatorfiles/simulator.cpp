@@ -360,7 +360,7 @@ void simulator::r_and(int instruction){
 
     regFile.set_reg(rt & rs, rd);
 }
-void simulator::r_div(int instruction){     //WIP
+void simulator::r_div(int instruction){     //WIP THIS CAN'T BE IT
     int rs = instruction & 0x3E00000;
     rs = rs >> 21;
     rs = regFile.get_reg(rs);               //src1
@@ -368,23 +368,27 @@ void simulator::r_div(int instruction){     //WIP
     int rt = instruction & 0x1F0000;
     rt = rt >> 16;
     rt = regFile.get_reg(rt);               //src2
+    if(rt == 0)
+        std::exit(-10);                     //arithmetic overflow if divide by 0
 
-    //OVERFLOW CHECKING
-
-    regFile.set_lo(rs/rt);                //quotient into LO
+    regFile.set_lo(rs/rt);                  //quotient into LO
     regFile.set_hi(rs%rt);                  //remainder into HI
 }
 void simulator::r_divu(int instruction){     //WIP
-    int rs = instruction & 0x3E00000;
+    uint rs = instruction & 0x3E00000;
     rs = rs >> 21;
     rs = regFile.get_reg(rs);               //src1
 
-    int rt = instruction & 0x1F0000;
+    uint rt = instruction & 0x1F0000;
     rt = rt >> 16;
     rt = regFile.get_reg(rt);               //src2
+    if(rt == 0)
+        std::exit(-10);                     //arithmetic overflow if divide by 0
 
-    regFile.set_lo(rs/rt);               //quotient into LO
-    regFile.set_hi(rs%rt);               //remainder into HI
+    uint quotient = rs/rt;
+    uint remainder = rs%rt;
+    regFile.set_lo(quotient);               //quotient into LO
+    regFile.set_hi(remainder);              //remainder into HI
 }
 void simulator::r_jalr(int instruction){    //WIP
     simulator::r_jr(instruction);
@@ -446,7 +450,6 @@ void simulator::r_mult(int instruction){    //MULT WIP
         regFile.set_hi(tophalf);
         regFile.set_lo(btmhalf);
     }
-
 }
 void simulator::r_multu(int instruction){   //MULT WIP
     int rs = (instruction & 0x3E00000) >> 21;
