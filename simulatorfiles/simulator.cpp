@@ -306,892 +306,904 @@ void simulator::execute(int index, int instruction){
 
 
 //--------R Instructions--------//
-void simulator::r_add(int instruction){
-    bool overflow = false;
-    int rs = (instruction & 0x3E00000) >> 21;
-    rs = regFile.get_reg(rs);               //src1    
+    void simulator::r_add(int instruction){
+        bool overflow = false;
+        int rs = (instruction & 0x3E00000) >> 21;
+        rs = regFile.get_reg(rs);               //src1    
 
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
 
-    int rd = instruction & 0xF800;          //dest
-    rd = rd >> 11;
+        int rd = instruction & 0xF800;          //dest
+        rd = rd >> 11;
 
-    int result = rt+rs;
+        int result = rt+rs;
 
-    //if both operands are same sign, set overflow if result sign is different
-    if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
-        overflow = true;
-    }
-    if(overflow){
-        //std::cerr<<"Exiting with error -10";
-        std::exit(-10);
-    }
-    else{
-        regFile.set_reg(result, rd);
-    }
-}
-void simulator::r_addu(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
-
-    int rd = instruction & 0xF800;          //dest
-    rd = rd >> 11;
-
-    regFile.set_reg(rt+rs, rd);             //no overflow
-}
-void simulator::r_and(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
-
-    int rd = instruction & 0xF800;          //dest
-    rd = rd >> 11;
-
-    regFile.set_reg(rt & rs, rd);
-}
-void simulator::r_div(int instruction){     //WIP THIS CAN'T BE IT
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
-    if(rt == 0)
-        std::exit(-10);                     //arithmetic overflow if divide by 0
-
-    regFile.set_lo(rs/rt);                  //quotient into LO
-    regFile.set_hi(rs%rt);                  //remainder into HI
-}
-void simulator::r_divu(int instruction){     //WIP
-    uint rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    uint rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
-    if(rt == 0)
-        std::exit(-10);                     //arithmetic overflow if divide by 0
-
-    uint quotient = rs/rt;
-    uint remainder = rs%rt;
-    regFile.set_lo(quotient);               //quotient into LO
-    regFile.set_hi(remainder);              //remainder into HI
-}
-void simulator::r_jalr(int instruction){    //WIP
-    simulator::r_jr(instruction);
-    int rd = (instruction & 0x0000F800) >> 11;
-
-    regFile.set_reg(programCounter+8, rd);
-}
-void simulator::r_jr(int instruction){      //WIP
-    int rs = (instruction >> 21) & 0x1F;  //fetch register number
-    rs = regFile.get_reg(rs);                   //fetch register value
-
-    jump = true;                                //set jump (for delayed branching)
-    pcOffSet = rs;                              //set regval into pcOffSet
-}
-void simulator::r_mfhi(int instruction){
-    int rt = instruction>>11;                     //src
-    regFile.set_reg(regFile.get_hi(), rt);        //destination 
-}
-void simulator::r_mflo(int instruction){
-    int rt = instruction>>11;                     //src
-    regFile.set_reg(regFile.get_lo(), rt);        //destination 
-}  
-void simulator::r_mthi(int instruction){
-    int rt = instruction>>21;                   //src
-    regFile.set_hi(regFile.get_reg(rt));        //destination 
-}                   
-void simulator::r_mtlo(int instruction){
-    int rt = instruction>>21;                   //src
-    regFile.set_lo(regFile.get_reg(rt));        //destination 
-}
-void simulator::r_mult(int instruction){    //MULT WIP
-
-    bool overflow = false;
-    int rs = (instruction & 0x3E00000) >> 21;
-    int64_t multplc = regFile.get_reg(rs);               //src1    
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    int64_t multplr = regFile.get_reg(rt);               //src2
-
-    int64_t result = rt*rs;
-    int tophalf = result >> 32;
-    int btmhalf = result & 0xffffffff;
-    //compare both operand signs
-    if((multplr >> 31) == (multplc >> 31))
-        if(tophalf >> 31 != multplr >> 31)
+        //if both operands are same sign, set overflow if result sign is different
+        if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
             overflow = true;
-
-    //if different, expect inverted 
-    if((multplr >> 31) != (multplc >> 31))
-        if(tophalf > 0)
-            overflow = true;
-
-    if(overflow){
-        //std::cerr<<"Exiting with error -10";
-        std::exit(-10);
+        }
+        if(overflow){
+            //std::cerr<<"Exiting with error -10";
+            std::exit(-10);
+        }
+        else{
+            regFile.set_reg(result, rd);
+        }
     }
-    else{
+    void simulator::r_addu(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
+
+        int rd = instruction & 0xF800;          //dest
+        rd = rd >> 11;
+
+        regFile.set_reg(rt+rs, rd);             //no overflow
+    }
+    void simulator::r_and(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
+
+        int rd = instruction & 0xF800;          //dest
+        rd = rd >> 11;
+
+        regFile.set_reg(rt & rs, rd);
+    }
+    void simulator::r_div(int instruction){     //WIP THIS CAN'T BE IT
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
+        if(rt == 0)
+            std::exit(-10);                     //arithmetic overflow if divide by 0
+
+        regFile.set_lo(rs/rt);                  //quotient into LO
+        regFile.set_hi(rs%rt);                  //remainder into HI
+    }
+    void simulator::r_divu(int instruction){     //WIP
+        uint rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        uint rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
+        if(rt == 0)
+            std::exit(-10);                     //arithmetic overflow if divide by 0
+
+        uint quotient = rs/rt;
+        uint remainder = rs%rt;
+        regFile.set_lo(quotient);               //quotient into LO
+        regFile.set_hi(remainder);              //remainder into HI
+    }
+    void simulator::r_jalr(int instruction){    //WIP
+        simulator::r_jr(instruction);
+        int rd = (instruction & 0x0000F800) >> 11;
+
+        regFile.set_reg(programCounter+8, rd);
+    }
+    void simulator::r_jr(int instruction){      //WIP
+        int rs = (instruction >> 21) & 0x1F;  //fetch register number
+        rs = regFile.get_reg(rs);                   //fetch register value
+
+        jump = true;                                //set jump (for delayed branching)
+        pcOffSet = rs;                              //set regval into pcOffSet
+    }
+    void simulator::r_mfhi(int instruction){
+        int rt = instruction>>11;                     //src
+        regFile.set_reg(regFile.get_hi(), rt);        //destination 
+    }
+    void simulator::r_mflo(int instruction){
+        int rt = instruction>>11;                     //src
+        regFile.set_reg(regFile.get_lo(), rt);        //destination 
+    }  
+    void simulator::r_mthi(int instruction){
+        int rt = instruction>>21;                   //src
+        regFile.set_hi(regFile.get_reg(rt));        //destination 
+    }                   
+    void simulator::r_mtlo(int instruction){
+        int rt = instruction>>21;                   //src
+        regFile.set_lo(regFile.get_reg(rt));        //destination 
+    }
+    void simulator::r_mult(int instruction){    //MULT WIP
+
+        bool overflow = false;
+        int rs = (instruction & 0x3E00000) >> 21;
+        int64_t multplc = regFile.get_reg(rs);               //src1    
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        int64_t multplr = regFile.get_reg(rt);               //src2
+
+        int64_t result = rt*rs;
+        int tophalf = result >> 32;
+        int btmhalf = result & 0xffffffff;
+        //compare both operand signs
+        if((multplr >> 31) == (multplc >> 31))
+            if(tophalf >> 31 != multplr >> 31)
+                overflow = true;
+
+        //if different, expect inverted 
+        if((multplr >> 31) != (multplc >> 31))
+            if(tophalf > 0)
+                overflow = true;
+
+        if(overflow){
+            //std::cerr<<"Exiting with error -10";
+            std::exit(-10);
+        }
+        else{
+            regFile.set_hi(tophalf);
+            regFile.set_lo(btmhalf);
+        }
+    }
+    void simulator::r_multu(int instruction){   //MULT WIP
+        int rs = (instruction & 0x3E00000) >> 21;
+        int64_t multplc = regFile.get_reg(rs);               //src1    
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        int64_t multplr = regFile.get_reg(rt);               //src2
+
+        int64_t result = rt*rs;
+        int tophalf = result >> 32;
+        int btmhalf = result & 0xffffffff;
+
         regFile.set_hi(tophalf);
         regFile.set_lo(btmhalf);
+    } 
+    void simulator::r_or(int instruction){
+
+        int rs = instruction>>21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction>>16;
+        rt = regFile.get_reg(rt & 0x1F);         //src2
+
+        int rd = instruction>>11;               //destination
+
+        regFile.set_reg((rs|rt), (rd & 0x1F));
     }
-}
-void simulator::r_multu(int instruction){   //MULT WIP
-    int rs = (instruction & 0x3E00000) >> 21;
-    int64_t multplc = regFile.get_reg(rs);               //src1    
+    void simulator::r_sll(int instruction){
 
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    int64_t multplr = regFile.get_reg(rt);               //src2
+        int rt = instruction>>16;          
+        rt = regFile.get_reg(rt);            //src1
 
-    int64_t result = rt*rs;
-    int tophalf = result >> 32;
-    int btmhalf = result & 0xffffffff;
+        int sa = instruction>>6;            //shifting amount
+        sa = sa & 0x1F;
 
-    regFile.set_hi(tophalf);
-    regFile.set_lo(btmhalf);
-} 
-void simulator::r_or(int instruction){
+        int rd = instruction>>11;           //destination
 
-    int rs = instruction>>21;
-    rs = regFile.get_reg(rs);               //src1
+        regFile.set_reg((rt<<sa), (rd & 0x1F));
 
-    int rt = instruction>>16;
-    rt = regFile.get_reg(rt & 0x1F);         //src2
-
-    int rd = instruction>>11;               //destination
-
-    regFile.set_reg((rs|rt), (rd & 0x1F));
-}
-void simulator::r_sll(int instruction){
-
-    int rt = instruction>>16;          
-    rt = regFile.get_reg(rt);            //src1
-
-    int sa = instruction>>6;            //shifting amount
-    sa = sa & 0x1F;
-
-    int rd = instruction>>11;           //destination
-
-    regFile.set_reg((rt<<sa), (rd & 0x1F));
-
-}
-void simulator::r_sllv(int instruction){
-
-    int rs = instruction>>21;           
-    rs = regFile.get_reg(rs & 0x1F);     //src1
-
-    int rt = instruction>>16;           // src2
-    rt = regFile.get_reg(rt & 0x1F);
-
-    int rd = instruction>>11;           //destination
-
-    regFile.set_reg((rt<<rs), (rd & 0x1F));
-
-}
-void simulator::r_slt(int instruction){
-
-    int rs = ((instruction>>21) & 0x1F);
-    rs = regFile.get_reg(rs);
-
-    int rt = ((instruction>>16) & 0x1F);
-    rt = regFile.get_reg(rs);
-
-    int comparison;
-
-    if(rs<rt){comparison = 1;}
-    else{comparison = 0;}
-
-    int rd = ((instruction>>11) & 0x1F);
-    regFile.set_reg(comparison, rd);
-}
-void simulator::r_sltu(int instruction){
-
-    int rs = ((instruction>>21) & 0x1F);
-    unsigned int rsu = regFile.get_reg(rs);
-
-    int rt = ((instruction>>16) & 0x1F);
-    unsigned int rtu = regFile.get_reg(rs);
-
-    int comparison;
-
-    if(rsu<rtu){comparison = 1;}
-    else{comparison = 0;}
-
-    int rd = ((instruction>>11) & 0x1F);
-    regFile.set_reg(comparison, rd);
-}
-void simulator::r_sra(int instruction){
-
-    int rt = instruction>>16;          
-    rt = regFile.get_reg(rt);            //src1
-
-    bool signExtend = false;
-
-    if(rt>>31 == 1){
-        signExtend = true;
     }
+    void simulator::r_sllv(int instruction){
 
-    int sa = instruction>>6;            //shifting amount
-    sa = sa & 0x1F;
+        int rs = instruction>>21;           
+        rs = regFile.get_reg(rs & 0x1F);     //src1
 
-    rt = rt>>sa;
-    if(signExtend){
-        int temp;
-        for(int i = 0; i<sa; i++){
-            temp = temp+1;
-            temp = temp << 1;
+        int rt = instruction>>16;           // src2
+        rt = regFile.get_reg(rt & 0x1F);
+
+        int rd = instruction>>11;           //destination
+
+        regFile.set_reg((rt<<rs), (rd & 0x1F));
+
+    }
+    void simulator::r_slt(int instruction){
+
+        int rs = ((instruction>>21) & 0x1F);
+        rs = regFile.get_reg(rs);
+
+        int rt = ((instruction>>16) & 0x1F);
+        rt = regFile.get_reg(rs);
+
+        int comparison;
+
+        if(rs<rt){comparison = 1;}
+        else{comparison = 0;}
+
+        int rd = ((instruction>>11) & 0x1F);
+        regFile.set_reg(comparison, rd);
+    }
+    void simulator::r_sltu(int instruction){
+
+        int rs = ((instruction>>21) & 0x1F);
+        unsigned int rsu = regFile.get_reg(rs);
+
+        int rt = ((instruction>>16) & 0x1F);
+        unsigned int rtu = regFile.get_reg(rs);
+
+        int comparison;
+
+        if(rsu<rtu){comparison = 1;}
+        else{comparison = 0;}
+
+        int rd = ((instruction>>11) & 0x1F);
+        regFile.set_reg(comparison, rd);
+    }
+    void simulator::r_sra(int instruction){
+
+        int rt = instruction>>16;          
+        rt = regFile.get_reg(rt);            //src1
+
+        bool signExtend = false;
+
+        if(rt>>31 == 1){
+            signExtend = true;
         }
-        temp = temp << (32-sa);
-        rt = rt + temp;
-    }
 
-    int rd = instruction>>11;           //destination
+        int sa = instruction>>6;            //shifting amount
+        sa = sa & 0x1F;
 
-    regFile.set_reg((rt), (rd & 0x1F));
-}
-void simulator::r_srav(int instruction){
-
-    int rt = instruction>>16; 
-    rt = rt & 0x1F;         
-    rt = regFile.get_reg(rt);            //src1
-
-    bool signExtend = false;
-
-    if(rt>>31 == 1){
-        signExtend = true;
-    }
-
-    int rs = instruction>>21;            //shifting amount
-    rs = regFile.get_reg(rs);
-
-    rt = rt>>rs;
-    if(signExtend){
-        int temp;
-        for(int i = 0; i<rs; i++){
-            temp = temp+1;
-            temp = temp << 1;
+        rt = rt>>sa;
+        if(signExtend){
+            int temp;
+            for(int i = 0; i<sa; i++){
+                temp = temp+1;
+                temp = temp << 1;
+            }
+            temp = temp << (32-sa);
+            rt = rt + temp;
         }
-        temp = temp << (32-rs);
-        rt = rt + temp;
+
+        int rd = instruction>>11;           //destination
+
+        regFile.set_reg((rt), (rd & 0x1F));
     }
+    void simulator::r_srav(int instruction){
 
-    int rd = instruction>>11;           //destination
+        int rt = instruction>>16; 
+        rt = rt & 0x1F;         
+        rt = regFile.get_reg(rt);            //src1
 
-    regFile.set_reg((rt), (rd & 0x1F));
-}
-void simulator::r_srl(int instruction){
+        bool signExtend = false;
 
-    int rt = instruction>>16;          
-    rt = regFile.get_reg(rt);            //src1
+        if(rt>>31 == 1){
+            signExtend = true;
+        }
 
-    int sa = instruction>>6;            //shifting amount
-    sa = sa & 0x1F;
+        int rs = instruction>>21;            //shifting amount
+        rs = regFile.get_reg(rs);
 
-    int rd = instruction>>11;           //destination
+        rt = rt>>rs;
+        if(signExtend){
+            int temp;
+            for(int i = 0; i<rs; i++){
+                temp = temp+1;
+                temp = temp << 1;
+            }
+            temp = temp << (32-rs);
+            rt = rt + temp;
+        }
 
-    regFile.set_reg((rt>>sa), (rd & 0x1F));
+        int rd = instruction>>11;           //destination
 
-}
-void simulator::r_srlv(int instruction){
-
-    int rs = instruction>>21;           
-    rs = regFile.get_reg(rs & 0x1F);     //src1
-
-    int rt = instruction>>16;           // src2
-    rt = regFile.get_reg(rt & 0x1F);
-
-    int rd = instruction>>11;           //destination
-
-    regFile.set_reg((rt>>rs), (rd & 0x1F));
-
-}
-void simulator::r_sub(int instruction){
-    bool overflow = false;
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
-
-    int rd = instruction & 0xF800;          //dest
-    rd = rd >> 11;
-
-    int result = rs-rt;
-    //if both operands are same sign, set overflow if result sign is different
-    if(((rs >> 31) != (rt >>31)) && (result>>31 != rs>>31)){
-        overflow = true;
+        regFile.set_reg((rt), (rd & 0x1F));
     }
-    if(overflow){
-        std::cerr<<"Exiting with error -10";
-        std::exit(-10);
+    void simulator::r_srl(int instruction){
+
+        int rt = instruction>>16;          
+        rt = regFile.get_reg(rt);            //src1
+
+        int sa = instruction>>6;            //shifting amount
+        sa = sa & 0x1F;
+
+        int rd = instruction>>11;           //destination
+
+        regFile.set_reg((rt>>sa), (rd & 0x1F));
+
     }
-    else{
-        regFile.set_reg(result, rd);
+    void simulator::r_srlv(int instruction){
+
+        int rs = instruction>>21;           
+        rs = regFile.get_reg(rs & 0x1F);     //src1
+
+        int rt = instruction>>16;           // src2
+        rt = regFile.get_reg(rt & 0x1F);
+
+        int rd = instruction>>11;           //destination
+
+        regFile.set_reg((rt>>rs), (rd & 0x1F));
+
     }
-}
-void simulator::r_subu(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
+    void simulator::r_sub(int instruction){
+        bool overflow = false;
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
 
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
 
-    int rd = instruction & 0xF800;          //dest
-    rd = rd >> 11;
+        int rd = instruction & 0xF800;          //dest
+        rd = rd >> 11;
 
-    regFile.set_reg(rs-rt, rd);             //no overflow
-}
-void simulator::r_xor(int instruction){
+        int result = rs-rt;
+        //if both operands are same sign, set overflow if result sign is different
+        if(((rs >> 31) != (rt >>31)) && (result>>31 != rs>>31)){
+            overflow = true;
+        }
+        if(overflow){
+            std::cerr<<"Exiting with error -10";
+            std::exit(-10);
+        }
+        else{
+            regFile.set_reg(result, rd);
+        }
+    }
+    void simulator::r_subu(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
 
-    int rs = instruction>>21;
-    rs = regFile.get_reg(rs);               //src1
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
 
-    int rt = instruction>>16;
-    rt = regFile.get_reg(rt & 0x1F);         //src2
+        int rd = instruction & 0xF800;          //dest
+        rd = rd >> 11;
 
-    int rd = instruction>>11;               //destination
+        regFile.set_reg(rs-rt, rd);             //no overflow
+    }
+    void simulator::r_xor(int instruction){
 
-    regFile.set_reg((rs^rt), (rd & 0x1F));
-}
+        int rs = instruction>>21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction>>16;
+        rt = regFile.get_reg(rt & 0x1F);         //src2
+
+        int rd = instruction>>11;               //destination
+
+        regFile.set_reg((rs^rt), (rd & 0x1F));
+    }
 
 
 
 //--------I Instructions--------//
-void simulator::i_addi(int instruction){
-    bool overflow = false;
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
+    void simulator::i_addi(int instruction){
+        bool overflow = false;
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
 
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //src2
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //src2
 
-    int imm = instruction & 0xFFFF;          //dest
+        int imm = instruction & 0xFFFF;          //dest
 
-    int result = rs + imm;
-    //if both operands are same sign, set overflow if result sign is different
-    if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
-        overflow = true;
-    }
-    if(overflow){
-        //std::cerr<<"Exiting with error -10";
-        std::exit(-10);
-    }
-    else
-        regFile.set_reg(result, rt);
-}
-void simulator::i_addiu(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;                          //dest
-
-    int imm = instruction & 0xFFFF;
-    if(imm>>15 == 1){
-        int temp;
-        for(int i = 0; i<16; i++){
-            temp = temp << 1;
-            temp = temp + 1;
+        int result = rs + imm;
+        //if both operands are same sign, set overflow if result sign is different
+        if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
+            overflow = true;
         }
-        temp = temp << 16;
-        imm = imm | temp;
-    }
-
-    regFile.set_reg(rs+imm, rt);
-}
-void simulator::i_andi(int instruction){    //WIP
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //dest
-
-    int imm = instruction & 0xFFFF;         //0 EXTENSION?
-
-    regFile.set_reg(rs & imm, rt);
-}
-void simulator::i_beq(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //dest
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;             //if signed, signed extension
-
-    if(rs == rt){
-        branch = true;
-        pcOffSet = imm;
-    }
-}
-void simulator::i_bgez(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;             //if signed, signed extension
-
-    if(rs >= 0){
-        branch = true;
-        pcOffSet = imm;
-    }
-}
-void simulator::i_bgezal(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);                   //src1
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;                 //if signed, signed extension
-
-    if(rs >= 0){
-        branch = true;                          //branch
-        pcOffSet = imm;
-        regFile.set_reg(programCounter+8, 31);  //link I THINK
-    }
-}
-void simulator::i_bgtz(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;             //if signed, signed extension
-
-    if(rs > 0){
-        branch = true;
-        pcOffSet = imm;
-    }
-}
-void simulator::i_blez(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;             //if signed, signed extension
-
-    if(rs <= 0){
-        branch = true;
-        pcOffSet = imm;
-    }
-}
-void simulator::i_bltz(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;             //if signed, signed extension
-
-    if(rs < 0){
-        branch = true;
-        pcOffSet = imm;
-    }
-}
-void simulator::i_bltzal(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;             //if signed, signed extension
-
-    if(rs < 0){
-        branch = true;
-        pcOffSet = imm;
-        regFile.set_reg(programCounter+8, 31);
-    }
-}
-void simulator::i_bne(int instruction){
-    int rs = instruction & 0x3E00000;
-    rs = rs >> 21;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction & 0x1F0000;
-    rt = rt >> 16;
-    rt = regFile.get_reg(rt);               //dest
-
-    int imm = (instruction & 0xFFFF) << 2;
-    if(imm >> 17 == 1)
-        imm = imm | 0xFFFC0000;             //if signed, signed extension
-
-    if(rs != rt){
-        branch = true;
-        pcOffSet = imm;
-    }
-}
-void simulator::i_lb(int instruction){
-
-    signed short int offset = instruction & 0xFFFF;     //address src1
-
-    int base = instruction>>21;             //address src2
-    base = base & 0xFF;
-
-    int memoryAddress = base + offset;
-
-    char byte = memory.get_byte(memoryAddress);
-    unsigned char ucbyte = memory.get_byte(memoryAddress);
-
-    int output;
-
-    if(byte < 0){
-        int signextend = 0xFFFFFF;
-        signextend = signextend<<8;
-        output = ucbyte + signextend;               //unsigned is used as ucbyte is cast to integer when added to an integer
-    }
-    else{
-        output = byte;                              //casting works fine if byte>=0
-    }
-
-    int registerAddress = instruction>>16;
-    regFile.set_reg(output, (registerAddress & 0x1F));
-}
-void simulator::i_lbu(int instruction){
-
-    signed short int offset = instruction & 0xFFFF;          //address src1
-
-    int base = instruction>>21;                              //address src2
-    base = base & 0x1F;
-
-
-    int memoryAddress = base + offset;
-    char byte = memory.get_byte(memoryAddress);
-    int castedByte = byte;
-
-    int registerAddress = instruction>>16;
-    regFile.set_reg(castedByte, (registerAddress & 0x1F));
-}
-void simulator::i_lh(int instruction){
-
-    signed short int offset = instruction & 0xFFFF;     //address src1
-
-    int test = offset>>15;
-    if(test==1){                                        //test for memory access restriction on load halfword
-        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
-        std::exit(-11);
-    }
-
-    int base = instruction>>21;             //address src2
-    base = base & 0xFF;
-
-    int memoryAddress = base + offset;
-
-    signed short int hword = memory.get_byte(memoryAddress);
-    hword = hword<<8;
-    hword = hword + memory.get_byte(memoryAddress + 1);
-
-    unsigned short int uhword = memory.get_byte(memoryAddress);
-    uhword = uhword<<8;
-    uhword = uhword + memory.get_byte(memoryAddress + 1);
-
-    int output;
-
-    if(hword < 0){
-        int signextend = 0xFFFF;
-        signextend = signextend<<16;
-        output = uhword + signextend;               //unsigned is used as ucbyte is cast to integer when added to an integer
-    }
-    else{
-        output = hword;                              //casting works fine if byte>=0
-    }
-
-    int registerAddress = instruction>>16;
-    regFile.set_reg(output, (registerAddress & 0x1F));
-}
-void simulator::i_lhu(int instruction){
-
-    signed short int offset = instruction & 0xFFFF;     //address src1
-
-    int test = offset>>15;
-    if(test==1){                                        //test for memory access restriction on load halfword
-        std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
-        std::exit(-11);
-    }
-
-    int base = instruction>>21;                         //address src2
-    base = base & 0xFF;
-
-    int memoryAddress = base + offset;
-
-    int output = memory.get_byte(memoryAddress);
-    output = output + memory.get_byte(memoryAddress + 1);
-
-    int registerAddress = instruction>>16;
-    regFile.set_reg(output, (registerAddress & 0x1F));
-}
-void simulator::i_lui(int instruction){
-
-    int offset = instruction & 0xFFFF; 
-    offset = offset << 16;
-
-    int rt = (instruction >> 16) & 0x1F;
-
-    regFile.set_reg(offset, rt);
-
-}
-void simulator::i_lw(int instruction){
-    signed short int offset = instruction & 0xFFFF;
-
-    int test1 = offset>>15;
-    int test2 = ((offset>>14)&1);
-    if((test1||test2)==1){                                        //test for memory access restriction on load word
-        std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
-        std::exit(-11);
-    }
-
-    int base = instruction>>21;                                    //address src2
-    base = base & 0x1F;
-
-    int memoryAddress = base + offset;
-
-    int input = memory.get_byte(memoryAddress);
-    input = input<<8;
-
-    int temp = memory.get_byte(memoryAddress + 1);
-    input = input + temp;
-    input = input<<8;
-    
-    temp = memory.get_byte(memoryAddress + 2);
-    input = input + temp;
-    input = input<<8;
-
-    temp = memory.get_byte(memoryAddress + 3);
-    input = input + temp;
-
-    int rt = instruction>>16;
-    regFile.set_reg(input, rt&0x1F);
-    
-}
-void simulator::i_lwl(int instruction){ //NOT DONE WIP
-    signed short int offset = instruction & 0xFFFF;
-
-    int base = (instruction >> 21) & 0x1F;
-    base = regFile.get_reg(base);
-
-    int address = base + offset;
-
-    int rt = (instruction >> 16) & 0x1F;
-
-    int b1 = memory.get_byte(address);
-    b1 = b1 << 24;
-    int b2 = memory.get_byte(address + 1);
-    b2 = b2 << 16;
-
-    int input = b1 | b2;
-
-    regFile.lwl_set_reg(rt, input);
-}
-void simulator::i_lwr(int instruction){ //NOT DONE WIP
-    signed short int offset = instruction & 0xFFFF;
-
-    int base = (instruction >> 21) & 0x1F;
-    base = regFile.get_reg(base);
-
-    int address = base + offset;
-
-    int rt = (instruction >> 16) & 0x1F;
-
-    int b1 = memory.get_byte(address);
-    int b2 = memory.get_byte(address - 1);
-    b2 = b2 << 8;
-
-    int input = b2 | b1;
-
-    regFile.lwl_set_reg(rt, input);
-}
-void simulator::i_ori(int instruction){
-    int rs = instruction>>21;
-    rs = rs & 0x1F;
-    rs = regFile.get_reg(rs);               //src1
-
-    int rt = instruction>>16;               //destination
-
-    int immediate = instruction & 0xF;               
-
-    regFile.set_reg((rs|immediate), (rt & 0x1F));
-}
-void simulator::i_sb(int instruction){
-    signed short int offset = instruction & 0xFFFF;     //address src1
-
-    int base = instruction>>21;                         //address src2
-    base = base & 0xFF;
-
-    int rt = instruction>>16;
-    rt = regFile.get_reg(rt&0x1F);
-    char input = rt&0b11111111;
-
-    memory.set_byte((base + offset), input);
-}
-void simulator::i_sh(int instruction){
-    signed short int offset = instruction & 0xFFFF;     //address src1
-
-    int test = offset>>15;
-    if(test==1){                                        //test for memory access restriction on load halfword
-        std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
-        std::exit(-11);
-    }
-
-    int base = instruction>>21;             //address src2
-    base = base & 0xFF;
-
-    int memoryAddress = base + offset;
-
-    int registerAddress = instruction>>16;
-
-    int hword = regFile.get_reg(registerAddress & 0x1F);        //get hword
-    hword = hword & 0xFFFF;
-
-    char msb = hword>>8;                                        //msb to be loaded into memory first
-    memory.set_byte((memoryAddress), msb);
-
-    char lsb = hword & 0xFF;                                    //lsb then loaded into memory
-    memory.set_byte((memoryAddress + 1), msb);        
-}
-void simulator::i_slti(int instruction){
-    int rs = (instruction>>21) & 0x1F;
-    rs = regFile.get_reg(rs);
-
-    signed short int immediate = instruction & 0xFFFF;
-
-    int comparison;
-
-    if(rs<immediate){
-        comparison = 1;
-    }
-    else{
-        comparison = 0;
-    }
-
-    int rt = (instruction>>16) & 0x1F;
-    regFile.set_reg(comparison, rt);
-
-}
-void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
-    int rs = (instruction>>21) & 0x1F;
-    rs = regFile.get_reg(rs);
-
-    unsigned int immediate = instruction & 0xFFFF; //ISSUE AREA
-
-    unsigned int temp;
-    int immediatetest = immediate >> 15;
-    if(immediatetest==1){
-
-        temp = 0;
-        for (int i = 0; i<16; i++){
-            temp = temp << 1;
-            temp = temp + 1;
+        if(overflow){
+            //std::cerr<<"Exiting with error -10";
+            std::exit(-10);
         }
-        temp = temp << 16;
-        immediate = temp | immediate;
+        else
+            regFile.set_reg(result, rt);
+    }
+    void simulator::i_addiu(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;                          //dest
+
+        int imm = instruction & 0xFFFF;
+        if(imm>>15 == 1){
+            int temp;
+            for(int i = 0; i<16; i++){
+                temp = temp << 1;
+                temp = temp + 1;
+            }
+            temp = temp << 16;
+            imm = imm | temp;
+        }
+
+        regFile.set_reg(rs+imm, rt);
+    }
+    void simulator::i_andi(int instruction){    //WIP
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //dest
+
+        int imm = instruction & 0xFFFF;         //0 EXTENSION?
+
+        regFile.set_reg(rs & imm, rt);
+    }
+    void simulator::i_beq(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //dest
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+        if(rs == rt){
+            branch = true;
+            pcOffSet = imm;
+        }
+    }
+    void simulator::i_bgez(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+        if(rs >= 0){
+            branch = true;
+            pcOffSet = imm;
+        }
+    }
+    void simulator::i_bgezal(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);                   //src1
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;                 //if signed, signed extension
+
+        if(rs >= 0){
+            branch = true;                          //branch
+            pcOffSet = imm;
+            regFile.set_reg(programCounter+8, 31);  //link I THINK
+        }
+    }
+    void simulator::i_bgtz(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+        if(rs > 0){
+            branch = true;
+            pcOffSet = imm;
+        }
+    }
+    void simulator::i_blez(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+        if(rs <= 0){
+            branch = true;
+            pcOffSet = imm;
+        }
+    }
+    void simulator::i_bltz(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+        if(rs < 0){
+            branch = true;
+            pcOffSet = imm;
+        }
+    }
+    void simulator::i_bltzal(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+        if(rs < 0){
+            branch = true;
+            pcOffSet = imm;
+            regFile.set_reg(programCounter+8, 31);
+        }
+    }
+    void simulator::i_bne(int instruction){
+        int rs = instruction & 0x3E00000;
+        rs = rs >> 21;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction & 0x1F0000;
+        rt = rt >> 16;
+        rt = regFile.get_reg(rt);               //dest
+
+        int imm = (instruction & 0xFFFF) << 2;
+        if(imm >> 17 == 1)
+            imm = imm | 0xFFFC0000;             //if signed, signed extension
+
+        if(rs != rt){
+            branch = true;
+            pcOffSet = imm;
+        }
+    }
+    
+    
+    /***GETC WIP***/
+        void simulator::i_lb(int instruction){
+
+            signed short int offset = instruction & 0xFFFF;     //address src1
+
+            int base = instruction>>21;             //address src2
+            base = base & 0xFF;
+
+            int memoryAddress = base + offset;
+
+            char byte = memory.get_byte(memoryAddress);
+            unsigned char ucbyte = memory.get_byte(memoryAddress);
+
+            int output;
+
+            if(byte < 0){
+                int signextend = 0xFFFFFF;
+                signextend = signextend<<8;
+                output = ucbyte + signextend;               //unsigned is used as ucbyte is cast to integer when added to an integer
+            }
+            else{
+                output = byte;                              //casting works fine if byte>=0
+            }
+
+            int registerAddress = instruction>>16;
+            regFile.set_reg(output, (registerAddress & 0x1F));
+        }
+        void simulator::i_lbu(int instruction){
+
+            signed short int offset = instruction & 0xFFFF;          //address src1
+
+            int base = instruction>>21;                              //address src2
+            base = base & 0x1F;
+
+
+            int memoryAddress = base + offset;
+            char byte = memory.get_byte(memoryAddress);
+            int castedByte = byte;
+
+            int registerAddress = instruction>>16;
+            regFile.set_reg(castedByte, (registerAddress & 0x1F));
+        }
+        void simulator::i_lh(int instruction){
+
+            signed short int offset = instruction & 0xFFFF;     //address src1
+
+            int test = offset>>15;
+            if(test==1){                                        //test for memory access restriction on load halfword
+                std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+                std::exit(-11);
+            }
+
+            int base = instruction>>21;             //address src2
+            base = base & 0xFF;
+
+            int memoryAddress = base + offset;
+
+            signed short int hword = memory.get_byte(memoryAddress);
+            hword = hword<<8;
+            hword = hword + memory.get_byte(memoryAddress + 1);
+
+            unsigned short int uhword = memory.get_byte(memoryAddress);
+            uhword = uhword<<8;
+            uhword = uhword + memory.get_byte(memoryAddress + 1);
+
+            int output;
+
+            if(hword < 0){
+                int signextend = 0xFFFF;
+                signextend = signextend<<16;
+                output = uhword + signextend;               //unsigned is used as ucbyte is cast to integer when added to an integer
+            }
+            else{
+                output = hword;                              //casting works fine if byte>=0
+            }
+
+            int registerAddress = instruction>>16;
+            regFile.set_reg(output, (registerAddress & 0x1F));
+        }
+        void simulator::i_lhu(int instruction){
+
+            signed short int offset = instruction & 0xFFFF;     //address src1
+
+            int test = offset>>15;
+            if(test==1){                                        //test for memory access restriction on load halfword
+                std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+                std::exit(-11);
+            }
+
+            int base = instruction>>21;                         //address src2
+            base = base & 0xFF;
+
+            int memoryAddress = base + offset;
+
+            int output = memory.get_byte(memoryAddress);
+            output = output + memory.get_byte(memoryAddress + 1);
+
+            int registerAddress = instruction>>16;
+            regFile.set_reg(output, (registerAddress & 0x1F));
+        }
+        void simulator::i_lui(int instruction){
+
+            int offset = instruction & 0xFFFF; 
+            offset = offset << 16;
+
+            int rt = (instruction >> 16) & 0x1F;
+
+            regFile.set_reg(offset, rt);
+
+        }
+        void simulator::i_lw(int instruction){
+            signed short int offset = instruction & 0xFFFF;
+
+            int test1 = offset>>15;
+            int test2 = ((offset>>14)&1);
+            if((test1||test2)==1){                                        //test for memory access restriction on load word
+                std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
+                std::exit(-11);
+            }
+
+            int base = instruction>>21;                                    //address src2
+            base = base & 0x1F;
+
+            int memoryAddress = base + offset;
+
+            int input = memory.get_byte(memoryAddress);
+            input = input<<8;
+
+            int temp = memory.get_byte(memoryAddress + 1);
+            input = input + temp;
+            input = input<<8;
+            
+            temp = memory.get_byte(memoryAddress + 2);
+            input = input + temp;
+            input = input<<8;
+
+            temp = memory.get_byte(memoryAddress + 3);
+            input = input + temp;
+
+            int rt = instruction>>16;
+            regFile.set_reg(input, rt&0x1F);
+            
+        }
+        void simulator::i_lwl(int instruction){ //NOT DONE WIP
+            signed short int offset = instruction & 0xFFFF;
+
+            int base = (instruction >> 21) & 0x1F;
+            base = regFile.get_reg(base);
+
+            int address = base + offset;
+
+            int rt = (instruction >> 16) & 0x1F;
+
+            int b1 = memory.get_byte(address);
+            b1 = b1 << 24;
+            int b2 = memory.get_byte(address + 1);
+            b2 = b2 << 16;
+
+            int input = b1 | b2;
+
+            regFile.lwl_set_reg(rt, input);
+        }
+        void simulator::i_lwr(int instruction){ //NOT DONE WIP
+            signed short int offset = instruction & 0xFFFF;
+
+            int base = (instruction >> 21) & 0x1F;
+            base = regFile.get_reg(base);
+
+            int address = base + offset;
+
+            int rt = (instruction >> 16) & 0x1F;
+
+            int b1 = memory.get_byte(address);
+            int b2 = memory.get_byte(address - 1);
+            b2 = b2 << 8;
+
+            int input = b2 | b1;
+
+            regFile.lwl_set_reg(rt, input);
+        }
+
+    /***END GETC WIP***/
+
+    void simulator::i_ori(int instruction){
+        int rs = instruction>>21;
+        rs = rs & 0x1F;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction>>16;               //destination
+
+        int immediate = instruction & 0xF;               
+
+        regFile.set_reg((rs|immediate), (rt & 0x1F));
     }
 
-    int comparison;
+    /***PUTC WIP***/
+    void simulator::i_sb(int instruction){  //PUTC WIP
+        signed short int offset = instruction & 0xFFFF;     //address src1
 
-    if(rs<immediate){
-        comparison = 1;
+        int base = instruction>>21;                         //address src2
+        base = base & 0xFF;
+
+        int rt = (instruction >> 16) & 0x1F;
+        rt = regFile.get_reg(rt);
+        char input = rt & 0xFF;
+
+        memory.set_byte((base + offset), input);
     }
-    else{
-        comparison = 0;
+    void simulator::i_sh(int instruction){  //PUTC WIP
+        int offset = instruction & 0xFFFF;     //address src1
+
+        int test = offset>>15;
+        if(test==1){                                        //test for memory access restriction on load halfword
+            std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
+            std::exit(-11);
+        }
+
+        int base = (instruction>>21) & 0xFF;                //address src2
+        base = regFile.get_reg(base);
+
+        int memoryAddress = base + offset;
+
+        int registerAddress = instruction>>16;
+
+        int hword = regFile.get_reg(registerAddress & 0x1F); //get hword
+        hword = hword & 0xFFFF;
+
+        char msb = hword>>8;                                 //msb to be loaded into memory first
+        memory.set_byte((memoryAddress), msb);
+
+        char lsb = hword & 0xFF;                             //lsb then loaded into memory
+        memory.set_byte((memoryAddress + 1), msb);        
     }
+    void simulator::i_sw(int instruction){  //WIP, alignment check
+        signed short int offset = instruction & 0xFFFF;
 
-    int rt = ((instruction>>16) & 0x1F);
-    regFile.set_reg(comparison, rt);
-}
-void simulator::i_sw(int instruction){
-    signed short int offset = instruction & 0xFFFF;
+        int test1 = offset>>15;
+        int test2 = ((offset>>14)&1);
+        if((test1||test2)==1){                                //test for memory access restriction on load word
+            std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
+            std::exit(-11);
+        }
 
-    int test1 = offset>>15;
-    int test2 = ((offset>>14)&1);
-    if((test1||test2)==1){                                        //test for memory access restriction on load word
-        std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
-        std::exit(-11);
+        int base = instruction>>21;                                    //address src2
+        base = base & 0x1F;
+
+        int memoryAddress = base + offset;
+
+        int registerAddress = instruction>>16;
+        int word = regFile.get_reg((registerAddress&0x1F));             //retrieve word
+
+        
+        char b1 = word>>24;                                             //msb
+        memory.set_byte((memoryAddress), b1);
+
+        char b2 = ((word>>16)&0xFF);
+        memory.set_byte((memoryAddress + 1), b2);
+
+        char b3 = ((word>>8)&0xFF);
+        memory.set_byte((memoryAddress + 2), b3);
+
+        char b4 = ((word&0xFF));                                        //lsb
+        memory.set_byte((memoryAddress + 3), b4);     
     }
+    /***END PUTC WIP***/
 
-    int base = instruction>>21;                                    //address src2
-    base = base & 0x1F;
+    void simulator::i_slti(int instruction){
+        int rs = (instruction>>21) & 0x1F;
+        rs = regFile.get_reg(rs);
 
-    int memoryAddress = base + offset;
+        signed short int immediate = instruction & 0xFFFF;
 
-    int registerAddress = instruction>>16;
-    int word = regFile.get_reg((registerAddress&0x1F));             //retrieve word
+        int comparison;
 
-    char b1 = word>>24;                                             //msb
-    memory.set_byte((memoryAddress), b1);
+        if(rs<immediate){
+            comparison = 1;
+        }
+        else{
+            comparison = 0;
+        }
 
-    char b2 = ((word>>16)&0xFF);
-    memory.set_byte((memoryAddress + 1), b2);
+        int rt = (instruction>>16) & 0x1F;
+        regFile.set_reg(comparison, rt);
 
-    char b3 = ((word>>8)&0xFF);
-    memory.set_byte((memoryAddress + 2), b3);
+    }
+    void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
+        int rs = (instruction>>21) & 0x1F;
+        rs = regFile.get_reg(rs);
 
-    char b4 = ((word&0xFF));                                        //lsb
-    memory.set_byte((memoryAddress + 3), b4);    
-}
-void simulator::i_xori(int instruction){
+        unsigned int immediate = instruction & 0xFFFF; //ISSUE AREA
 
-    int rs = instruction>>21;
-    rs = rs & 0x1F;
-    rs = regFile.get_reg(rs);               //src1
+        unsigned int temp;
+        int immediatetest = immediate >> 15;
+        if(immediatetest==1){
 
-    int rt = instruction>>16;               //destination
+            temp = 0;
+            for (int i = 0; i<16; i++){
+                temp = temp << 1;
+                temp = temp + 1;
+            }
+            temp = temp << 16;
+            immediate = temp | immediate;
+        }
 
-    int immediate = instruction & 0xF;               
+        int comparison;
 
-    regFile.set_reg((rs^immediate), (rt & 0x1F));
-}
+        if(rs<immediate){
+            comparison = 1;
+        }
+        else{
+            comparison = 0;
+        }
+
+        int rt = ((instruction>>16) & 0x1F);
+        regFile.set_reg(comparison, rt);
+    }
+    void simulator::i_xori(int instruction){
+
+        int rs = instruction>>21;
+        rs = rs & 0x1F;
+        rs = regFile.get_reg(rs);               //src1
+
+        int rt = instruction>>16;               //destination
+
+        int immediate = instruction & 0xF;               
+
+        regFile.set_reg((rs^immediate), (rt & 0x1F));
+    }
 
 
 
 //--------J Instructions--------//
-void simulator::j_j(int instruction){ //WIP
-    int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
-    jump = true;
-    pcOffSet = instr;
-}
+    void simulator::j_j(int instruction){ //WIP
+        int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
+        jump = true;
+        pcOffSet = instr;
+    }
 
-void simulator::j_jal(int instruction){
-    simulator::j_j(instruction);            //jump
-    regFile.set_reg(programCounter+8, 31);  //and link
-}
+    void simulator::j_jal(int instruction){
+        simulator::j_j(instruction);            //jump
+        regFile.set_reg(programCounter+8, 31);  //and link
+    }
 
 //BEFORE RUNNING DIAGNOSTICS, change std::exit in get_byte to return check.
+
 void simulator::diagnostics(){
     bool successfultest = true;
     std::cout << "Starting Memory Test.\n";

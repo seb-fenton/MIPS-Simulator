@@ -78,8 +78,6 @@ sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
     addr_null.resize(0x4);          
     addr_instr.resize(0x1000000);
     addr_data.resize(0x4000000);
-    addr_getc.resize(0x4);
-    addr_putc.resize(0x4);
 
    
     int Address = 0x10000000;                    //load binary into executable memory
@@ -129,8 +127,6 @@ char sim_mem::get_byte(int address) const{
         if(check == 3){
             if(address == 3)
                 return getchar();//only request an 8-bit value on the lsb (WIP is this syntax ok?)
-            else
-                return addr_getc[address];
         }
     }
 }
@@ -147,7 +143,9 @@ void sim_mem::set_byte(int address, char value){
     }
     else{
         if(check == 2)  addr_data[address] = value;
-        if(check == 4 && address == 3)  putchar(value);         //WIP
+        if(check == 4 && address == 3){
+            putchar(value);         //(if aligned)
+        }  
     }
 }
 
