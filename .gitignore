@@ -1,6 +1,7 @@
 .vscode
 /.metadata/
 .DS_Store
+Reflection.md
 
 bin/mips_testbench
 bin/mips_simulator
@@ -13,3 +14,4 @@ simulatorfiles/simulator.o
 
 test/testbenchinitialiser.o
 test/output/output.csv
+

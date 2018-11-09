@@ -34,6 +34,9 @@ class sim_mem{
         std::vector<char> addr_null;    //4          
         std::vector<char> addr_instr;   //0x1000000
         std::vector<char> addr_data;    //0x4000000
+        std::vector<char> addr_getc;
+        std::vector<char> addr_putc;
+        bool ioTriggerFlag;
         //0x4 to 0x0FFF FFFF            : Blank
         //0x1000 0000 to 0x10FF FFFF    : Instruction Space
         //0x1100 0000 to 0x11FF FFFF    : Blank
@@ -46,6 +49,10 @@ class sim_mem{
     public:
         sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess);
         
+        void io_read();
+        void io_write(int address);
+        void io_clear();
+
         int addressmap(int &address) const;
         char get_byte(int address) const;
         void set_byte(int address, char value);

@@ -1056,22 +1056,30 @@ void simulator::execute(int index, int instruction){
 
     /***PUTC WIP***/
     void simulator::i_sb(int instruction){  //PUTC WIP
-        signed short int offset = instruction & 0xFFFF;     //address src1
+        int offset = instruction & 0xFFFF;     //address src1
 
         int base = instruction>>21;                         //address src2
         base = base & 0xFF;
+        base = regFile.get_reg(base);
 
         int rt = (instruction >> 16) & 0x1F;
         rt = regFile.get_reg(rt);
         char input = rt & 0xFF;
 
+        int effectiveAddr = base + offset;
+
         memory.set_byte((base + offset), input);
+
+        if(effectiveAddr >= 0x30000004 && effectiveAddr < 0x30000008){  //if it's an i/o write
+            memory.io_write(effectiveAddr);                             //output the lsb of the store operation
+            memory.io_clear();
+        }
     }
     void simulator::i_sh(int instruction){  //PUTC WIP
-        int offset = instruction & 0xFFFF;     //address src1
+        int offset = instruction & 0xFFFF;                  //immediate offset
 
-        int test = offset>>15;
-        if(test==1){                                        //test for memory access restriction on load halfword
+        int test = offset % 2;
+        if(test != 0){                                        //test for memory access restriction on load halfword
             std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
             std::exit(-11);
         }
@@ -1091,13 +1099,17 @@ void simulator::execute(int index, int instruction){
 
         char lsb = hword & 0xFF;                             //lsb then loaded into memory
         memory.set_byte((memoryAddress + 1), msb);        
+
+        if(memoryAddress == 0x30000004 || memoryAddress == 0x30000006){ //if it's an i/o write
+            memory.io_write(memoryAddress + 1);                         //output the lsb of the store operation
+            memory.io_clear();
+        }
     }
     void simulator::i_sw(int instruction){  //WIP, alignment check
         signed short int offset = instruction & 0xFFFF;
 
-        int test1 = offset>>15;
-        int test2 = ((offset>>14)&1);
-        if((test1||test2)==1){                                //test for memory access restriction on load word
+        int test1 = offset % 4;
+        if(test1 != 0){                                //test for memory access restriction on load word
             std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
             std::exit(-11);
         }
@@ -1122,6 +1134,11 @@ void simulator::execute(int index, int instruction){
 
         char b4 = ((word&0xFF));                                        //lsb
         memory.set_byte((memoryAddress + 3), b4);     
+
+        if(memoryAddress == 0x30000004){        //if its a valid i/o write
+            memory.io_write(memoryAddress + 3); //output the lsb of the store operation
+            memory.io_clear();
+        }
     }
     /***END PUTC WIP***/
 
