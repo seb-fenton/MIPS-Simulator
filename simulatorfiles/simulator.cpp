@@ -677,21 +677,22 @@ void simulator::execute(int index, int instruction){
 
 
 //--------I Instructions--------//
+    void simulator::i_parse(int instruction, int& rs, int& rt){
+        rs = (instruction >> 21) & 0xFF;
+        rt = (instruction >> 16) & 0xFF;
+    }
+
     void simulator::i_addi(int instruction){
         bool overflow = false;
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
+        int rs, rt;
+        short signed int imm = instruction & 0xFFFF;
+        i_parse(instruction, rs, rt);
 
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;
-        rt = regFile.get_reg(rt);               //src2
-
-        int imm = instruction & 0xFFFF;          //dest
+        rs = regFile.get_reg(rs);               //value of rs
 
         int result = rs + imm;
         //if both operands are same sign, set overflow if result sign is different
-        if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
+        if(((rs >> 31) == (imm >> 15)) && (result>>31 != rs>>31)){
             overflow = true;
         }
         if(overflow){
@@ -702,36 +703,21 @@ void simulator::execute(int index, int instruction){
             regFile.set_reg(result, rt);
     }
     void simulator::i_addiu(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
+        int rs, rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt);
+        rs = regFile.get_reg(rs);               //value
 
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;                          //dest
+        int result = rs + imm;
 
-        int imm = instruction & 0xFFFF;
-        if(imm>>15 == 1){
-            int temp;
-            for(int i = 0; i<16; i++){
-                temp = temp << 1;
-                temp = temp + 1;
-            }
-            temp = temp << 16;
-            imm = imm | temp;
-        }
-
-        regFile.set_reg(rs+imm, rt);
+        regFile.set_reg(result, rt);
     }
-    void simulator::i_andi(int instruction){    //WIP
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
+    void simulator::i_andi(int instruction){
+        int rs, rt;
+        int imm = instruction & 0xFFFF;         //0 extended
+        i_parse(instruction, rs, rt);
+        
         rs = regFile.get_reg(rs);               //src1
-
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;
-        rt = regFile.get_reg(rt);               //dest
-
-        int imm = instruction & 0xFFFF;         //0 EXTENSION?
 
         regFile.set_reg(rs & imm, rt);
     }
@@ -861,60 +847,58 @@ void simulator::execute(int index, int instruction){
     
     /***GETC WIP***/
         void simulator::i_lb(int instruction){
+            signed short int offset = instruction & 0xFFFF;     //offset
 
-            signed short int offset = instruction & 0xFFFF;     //address src1
-
-            int base = instruction>>21;             //address src2
+            int base = instruction>>21;                         //base
             base = base & 0xFF;
+            base = regFile.get_reg(base);
 
-            int memoryAddress = base + offset;
+            int memoryAddress = base + offset;                  //effectiveaddr
+
+            int rt = (instruction>>16) & 0x1F;
 
             char byte = memory.get_byte(memoryAddress);
             unsigned char ucbyte = memory.get_byte(memoryAddress);
 
             int output;
-
-            if(byte < 0){
-                int signextend = 0xFFFFFF;
-                signextend = signextend<<8;
-                output = ucbyte + signextend;               //unsigned is used as ucbyte is cast to integer when added to an integer
-            }
-            else{
-                output = byte;                              //casting works fine if byte>=0
-            }
-
-            int registerAddress = instruction>>16;
-            regFile.set_reg(output, (registerAddress & 0x1F));
+            if(byte < 0)    output = ucbyte | 0xFFFFFF00;               //unsigned is used as ucbyte is cast to integer when added to an integer
+            else            output = byte;                              //casting works fine if byte>=0
+                         
+            regFile.set_reg(output, rt);
         }
+
         void simulator::i_lbu(int instruction){
-
-            signed short int offset = instruction & 0xFFFF;          //address src1
-
-            int base = instruction>>21;                              //address src2
+            signed short int offset = instruction & 0xFFFF;          //immediate
+            int base = instruction>>21;                              //base
             base = base & 0x1F;
+            base = regFile.get_reg(base);
 
+            int memoryAddress = base + offset;                      //effectiveaddr
 
-            int memoryAddress = base + offset;
+            int rt = (instruction>>16) & 0x1F;                      //destination rt
+
+            
             char byte = memory.get_byte(memoryAddress);
             int castedByte = byte;
 
-            int registerAddress = instruction>>16;
-            regFile.set_reg(castedByte, (registerAddress & 0x1F));
+            regFile.set_reg(castedByte, rt);
         }
+
         void simulator::i_lh(int instruction){
+            signed short int offset = instruction & 0xFFFF;     //immediate
 
-            signed short int offset = instruction & 0xFFFF;     //address src1
-
-            int test = offset>>15;
-            if(test==1){                                        //test for memory access restriction on load halfword
-                std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+            int test = offset % 2;
+            if(test != 0){                                      //test for memory access restriction on load halfword
+                std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error" << std::endl;
                 std::exit(-11);
             }
 
-            int base = instruction>>21;             //address src2
-            base = base & 0xFF;
+            int base = (instruction>>21) & 0xFF;                //base address
+            base = regFile.get_reg(base);
 
             int memoryAddress = base + offset;
+
+            int rt = (instruction>>16) & 0x1F;                      //destination rt
 
             signed short int hword = memory.get_byte(memoryAddress);
             hword = hword<<8;
@@ -926,20 +910,12 @@ void simulator::execute(int index, int instruction){
 
             int output;
 
-            if(hword < 0){
-                int signextend = 0xFFFF;
-                signextend = signextend<<16;
-                output = uhword + signextend;               //unsigned is used as ucbyte is cast to integer when added to an integer
-            }
-            else{
-                output = hword;                              //casting works fine if byte>=0
-            }
-
-            int registerAddress = instruction>>16;
-            regFile.set_reg(output, (registerAddress & 0x1F));
+            if(hword < 0)   output = uhword | 0xFFFF0000;               //unsigned is used as ucbyte is cast to integer when added to an integer
+            else            output = hword;                              //casting works fine if byte>=0
+            
+            regFile.set_reg(output, rt);
         }
         void simulator::i_lhu(int instruction){
-
             signed short int offset = instruction & 0xFFFF;     //address src1
 
             int test = offset>>15;
@@ -948,8 +924,8 @@ void simulator::execute(int index, int instruction){
                 std::exit(-11);
             }
 
-            int base = instruction>>21;                         //address src2
-            base = base & 0xFF;
+            int base = (instruction>>21) & 0xFF;                //base address
+            base = regFile.get_reg(base);
 
             int memoryAddress = base + offset;
 
@@ -971,16 +947,16 @@ void simulator::execute(int index, int instruction){
         }
         void simulator::i_lw(int instruction){
             signed short int offset = instruction & 0xFFFF;
+            int base = (instruction>>21) & 0x1F;                                    //address src2
+            base = base ;
 
-            int test1 = offset>>15;
-            int test2 = ((offset>>14)&1);
-            if((test1||test2)==1){                                        //test for memory access restriction on load word
+            int test = offset % 4;
+            if(test != 0){                                        //test for memory access restriction on load word
                 std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 
-            int base = instruction>>21;                                    //address src2
-            base = base & 0x1F;
+            
 
             int memoryAddress = base + offset;
 
@@ -1054,93 +1030,90 @@ void simulator::execute(int index, int instruction){
         regFile.set_reg((rs|immediate), (rt & 0x1F));
     }
 
-    /***PUTC WIP***/
-    void simulator::i_sb(int instruction){  //PUTC WIP
-        int offset = instruction & 0xFFFF;     //address src1
+    /***PUTC***/
+        void simulator::i_sb(int instruction){
+            signed short int offset = instruction & 0xFFFF;     //address src1
 
-        int base = instruction>>21;                         //address src2
-        base = base & 0xFF;
-        base = regFile.get_reg(base);
+            int base = (instruction>>21) & 0xFF;                         //address src2
+            base = regFile.get_reg(base);
 
-        int rt = (instruction >> 16) & 0x1F;
-        rt = regFile.get_reg(rt);
-        char input = rt & 0xFF;
+            int rt = (instruction >> 16) & 0x1F;
+            rt = regFile.get_reg(rt);
+            char input = rt & 0xFF;
 
-        int effectiveAddr = base + offset;
+            int effectiveAddr = base + offset;
 
-        memory.set_byte((base + offset), input);
+            memory.set_byte(effectiveAddr, input);
 
-        if(effectiveAddr >= 0x30000004 && effectiveAddr < 0x30000008){  //if it's an i/o write
-            memory.io_write(effectiveAddr);                             //output the lsb of the store operation
-            memory.io_clear();
+            if(effectiveAddr >= 0x30000004 && effectiveAddr < 0x30000008){  //if it's an i/o write
+                memory.io_write(effectiveAddr);                             //output the lsb of the store operation
+                memory.io_clear();
+            }
         }
-    }
-    void simulator::i_sh(int instruction){  //PUTC WIP
-        int offset = instruction & 0xFFFF;                  //immediate offset
+        void simulator::i_sh(int instruction){
+            signed short int offset = instruction & 0xFFFF;     //immediate offset
+            int base = (instruction>>21) & 0xFF;                //base
+            base = regFile.get_reg(base);
 
-        int test = offset % 2;
-        if(test != 0){                                        //test for memory access restriction on load halfword
-            std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
-            std::exit(-11);
+            int memoryAddress = base + offset;                  //effectiveaddr
+
+            int test = offset % 2;
+            if(test != 0){                                        //test for memory access restriction on load halfword
+                std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
+                std::exit(-11);
+            }
+
+            int rt = (instruction>>16) & 0x1F;
+
+            int hword = regFile.get_reg(rt); //get hword
+            hword = hword & 0xFFFF;
+
+            char msb = (hword>>8) & 0xFF;                                 //msb to be loaded into memory first
+            memory.set_byte((memoryAddress), msb);
+
+            char lsb = hword & 0xFF;                             //lsb then loaded into memory
+            memory.set_byte((memoryAddress + 1), msb);        
+
+            if(memoryAddress == 0x30000004 || memoryAddress == 0x30000006){ //if it's an i/o write
+                memory.io_write(memoryAddress + 1);                         //output the lsb of the store operation
+                memory.io_clear();
+            }
         }
+        void simulator::i_sw(int instruction){
+            signed short int offset = instruction & 0xFFFF;                 //offset
+            int base = instruction>>21;                                     //base
+            base = base & 0x1F;
 
-        int base = (instruction>>21) & 0xFF;                //address src2
-        base = regFile.get_reg(base);
+            int memoryAddress = base + offset;
 
-        int memoryAddress = base + offset;
+            int test1 = offset % 4;
+            if(test1 != 0){                                //test for memory access restriction on load word
+                std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
+                std::exit(-11);
+            }
 
-        int registerAddress = instruction>>16;
+            int rt = (instruction>>16) & 0x1F;
+            int word = regFile.get_reg((rt));             //retrieve word
 
-        int hword = regFile.get_reg(registerAddress & 0x1F); //get hword
-        hword = hword & 0xFFFF;
+            
+            char b1 = word>>24;                                             //msb
+            memory.set_byte((memoryAddress), b1);
 
-        char msb = hword>>8;                                 //msb to be loaded into memory first
-        memory.set_byte((memoryAddress), msb);
+            char b2 = ((word>>16)&0xFF);
+            memory.set_byte((memoryAddress + 1), b2);
 
-        char lsb = hword & 0xFF;                             //lsb then loaded into memory
-        memory.set_byte((memoryAddress + 1), msb);        
+            char b3 = ((word>>8)&0xFF);
+            memory.set_byte((memoryAddress + 2), b3);
 
-        if(memoryAddress == 0x30000004 || memoryAddress == 0x30000006){ //if it's an i/o write
-            memory.io_write(memoryAddress + 1);                         //output the lsb of the store operation
-            memory.io_clear();
+            char b4 = ((word&0xFF));                                        //lsb
+            memory.set_byte((memoryAddress + 3), b4);     
+
+            if(memoryAddress == 0x30000004){        //if its a valid i/o write
+                memory.io_write(memoryAddress + 3); //output the lsb of the store operation
+                memory.io_clear();
+            }
         }
-    }
-    void simulator::i_sw(int instruction){  //WIP, alignment check
-        signed short int offset = instruction & 0xFFFF;
-
-        int test1 = offset % 4;
-        if(test1 != 0){                                //test for memory access restriction on load word
-            std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
-            std::exit(-11);
-        }
-
-        int base = instruction>>21;                                    //address src2
-        base = base & 0x1F;
-
-        int memoryAddress = base + offset;
-
-        int registerAddress = instruction>>16;
-        int word = regFile.get_reg((registerAddress&0x1F));             //retrieve word
-
-        
-        char b1 = word>>24;                                             //msb
-        memory.set_byte((memoryAddress), b1);
-
-        char b2 = ((word>>16)&0xFF);
-        memory.set_byte((memoryAddress + 1), b2);
-
-        char b3 = ((word>>8)&0xFF);
-        memory.set_byte((memoryAddress + 2), b3);
-
-        char b4 = ((word&0xFF));                                        //lsb
-        memory.set_byte((memoryAddress + 3), b4);     
-
-        if(memoryAddress == 0x30000004){        //if its a valid i/o write
-            memory.io_write(memoryAddress + 3); //output the lsb of the store operation
-            memory.io_clear();
-        }
-    }
-    /***END PUTC WIP***/
+    /***PUTC***/
 
     void simulator::i_slti(int instruction){
         int rs = (instruction>>21) & 0x1F;

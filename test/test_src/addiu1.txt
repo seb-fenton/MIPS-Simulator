@@ -4,9 +4,7 @@
 #Testing overflow behaviour
 
 lui $3, 0xFFFF
-addiu $3, $5, 0xFFFF
-addiu $2, $3, 0xFFFF
+addiu $0, $3, 0xFFFF
+addiu $3, $2, 0xFFFF
 jr $0
 nop
-
-
