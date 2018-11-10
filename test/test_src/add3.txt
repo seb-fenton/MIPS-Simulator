@@ -1,0 +1,13 @@
+#94
+#add3
+#add
+#Testing basic functionality
+
+addiu $3, $4, 0x02F
+addiu $4, $5, 0x02F
+add $2, $3, $4
+jr $0
+nop
+
+
+

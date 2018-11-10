@@ -1,0 +1,10 @@
+#245
+#beq3
+#beq
+#Testing pc out of range functionality
+
+beq $4, $5, 0xFFFF
+
+
+jr $0
+nop 

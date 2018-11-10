@@ -1,0 +1,9 @@
+#255
+#andi3
+#andi
+#Testing edge case
+
+addiu $3, $5, 0xFFFF
+andi $2, $3, 0xFFFF
+jr $0
+nop 

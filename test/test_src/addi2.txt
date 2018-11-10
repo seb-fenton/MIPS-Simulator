@@ -1,9 +1,9 @@
 #0
-#add2
-#add
+#addi2
+#addi
 #Testing zero case functionality
 
-add $2, $3, $4
+addi $2, $3, 0x0000
 jr $0
 nop
 

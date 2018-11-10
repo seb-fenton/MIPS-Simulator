@@ -640,7 +640,7 @@ void simulator::execute(int index, int instruction){
             overflow = true;
         }
         if(overflow){
-            std::cerr<<"Exiting with error -10";
+            //std::cerr<<"Exiting with error -10";
             std::exit(-10);
         }
         else{

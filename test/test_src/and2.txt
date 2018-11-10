@@ -1,11 +1,8 @@
 #0
-#add2
-#add
+#and2
+#and
 #Testing zero case functionality
 
-add $2, $3, $4
+and $2, $3, $4
 jr $0
-nop
-
-
-
+nop 

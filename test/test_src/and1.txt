@@ -1,0 +1,10 @@
+#240
+#and1
+#and
+#Testing basic functionality
+
+addiu $4, $5, 0xF0F0
+addiu $3, $5, 0xF0F0
+and $2, $3, $4
+jr $0
+nop 
