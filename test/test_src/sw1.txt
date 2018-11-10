@@ -1,0 +1,11 @@
+#240
+#sw1
+#sw
+#Testing alignment check
+
+lui $3, 0x2000
+addiu $4, $0, 0xFADC
+sw $4, 0x1($3)
+
+jr $0
+nop

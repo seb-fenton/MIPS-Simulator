@@ -1,0 +1,11 @@
+#255
+#xori2
+#xori
+#Testing zero extension of immediate
+
+addiu $3, $0, 0xFFFF
+xori $2, $3, 0xFFFF
+srl $2, $2, 16
+
+jr $0
+nop
