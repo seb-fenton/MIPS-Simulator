@@ -1,7 +1,7 @@
 #0
 #addiu2
 #addiu
-#Testing overflow behaviour
+#Testing basic functionality
 
 addiu $2, $3, 0x0000
 jr $0

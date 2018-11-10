@@ -677,16 +677,28 @@ void simulator::execute(int index, int instruction){
 
 
 //--------I Instructions--------//
-    void simulator::i_parse(int instruction, int& rs, int& rt){
-        rs = (instruction >> 21) & 0xFF;
-        rt = (instruction >> 16) & 0xFF;
+    void simulator::i_parse(int instruction, int& rs, int& rt, short signed int& imm){
+        rs = (instruction >> 21) & 0x1F;
+        rt = (instruction >> 16) & 0x1F;
+        imm = instruction & 0xFFFF;
+    }
+
+    int simulator::sign_extend(short signed int imm){
+        int output;
+        if(imm<0){
+            output = 0xFFFF0000 | imm;
+        }
+        else{
+            output = imm;
+        }
+        return output;
     }
 
     void simulator::i_addi(int instruction){
         bool overflow = false;
         int rs, rt;
-        short signed int imm = instruction & 0xFFFF;
-        i_parse(instruction, rs, rt);
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
 
         rs = regFile.get_reg(rs);               //value of rs
 
@@ -705,17 +717,19 @@ void simulator::execute(int index, int instruction){
     void simulator::i_addiu(int instruction){
         int rs, rt;
         short signed int imm;
-        i_parse(instruction, rs, rt);
+        i_parse(instruction, rs, rt, imm);
         rs = regFile.get_reg(rs);               //value
 
-        int result = rs + imm;
+        int signExtImm = sign_extend(imm);
+        int result = rs + signExtImm;
 
         regFile.set_reg(result, rt);
     }
     void simulator::i_andi(int instruction){
         int rs, rt;
+        short signed int dummy;
         int imm = instruction & 0xFFFF;         //0 extended
-        i_parse(instruction, rs, rt);
+        i_parse(instruction, rs, rt, dummy);
         
         rs = regFile.get_reg(rs);               //src1
 
