@@ -4,7 +4,7 @@
 #Testing basic delay functionality
 
 ori $2, $3, 0x000F
-beq $4, $5, 0x0002
+beq $4, $5, 0x0001
 ori $2, $3, 0x00FF
 
 jr $0

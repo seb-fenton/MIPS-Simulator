@@ -61,7 +61,7 @@ int simulator::fetch(){
 }
 
 int simulator::decode(int instruction){
-    int opcode = instruction >> 26;
+    int opcode = (instruction >> 26) & 0x3F;
     switch(opcode){
         //--------R Instructions--------//
         case 0b000000: return simulator::r_classification(instruction);
@@ -1039,7 +1039,7 @@ void simulator::execute(int index, int instruction){
 
         int rt = instruction>>16;               //destination
 
-        int immediate = instruction & 0xF;               
+        int immediate = instruction & 0xFF;               
 
         regFile.set_reg((rs|immediate), (rt & 0x1F));
     }
@@ -1094,14 +1094,13 @@ void simulator::execute(int index, int instruction){
             }
         }
         void simulator::i_sw(int instruction){
-            signed short int offset = instruction & 0xFFFF;                 //offset
+            signed short int offset = instruction & 0xFFFF;                
             int base = instruction>>21;                                     //base
             base = base & 0x1F;
 
             int memoryAddress = base + offset;
 
-            int test1 = offset % 4;
-            if(test1 != 0){                                //test for memory access restriction on load word
+            if((offset % 4) != 0){                                //test for memory access restriction on load word
                 std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
@@ -1187,7 +1186,7 @@ void simulator::execute(int index, int instruction){
 
         int rt = instruction>>16;               //destination
 
-        int immediate = instruction & 0xF;               
+        int immediate = instruction & 0xFF;               
 
         regFile.set_reg((rs^immediate), (rt & 0x1F));
     }
