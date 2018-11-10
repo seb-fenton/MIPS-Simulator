@@ -1,0 +1,10 @@
+#0
+#and4
+#and
+#Testing edge case
+
+addiu $4, $5, 0xFFFF
+addiu $3, $5, 0x0000
+and $2, $3, $4
+jr $0
+nop 

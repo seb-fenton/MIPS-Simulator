@@ -1,0 +1,11 @@
+#0
+#addi2
+#addi
+#Testing zero case functionality
+
+addi $2, $3, 0x0000
+jr $0
+nop
+
+
+

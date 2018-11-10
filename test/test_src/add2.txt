@@ -1,7 +1,7 @@
 #0
 #add2
 #add
-#Testing basic functionality
+#Testing zero case functionality
 
 add $2, $3, $4
 jr $0

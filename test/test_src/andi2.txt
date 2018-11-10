@@ -1,0 +1,8 @@
+#0
+#andi2
+#andi
+#Testing zero case functionality
+
+andi $2, $3, 0x0000
+jr $0
+nop 

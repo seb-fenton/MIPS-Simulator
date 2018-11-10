@@ -62,6 +62,9 @@ class simulator{
         void r_xor(int instruction);
 
         //I INSTRUCTIONS//
+        void i_parse(int instruction, int& rs, int& rt, short signed int& imm);
+        int sign_extend(short signed int imm);
+
         void i_addi(int instruction);
         void i_addiu(int instruction);
         void i_andi(int instruction);

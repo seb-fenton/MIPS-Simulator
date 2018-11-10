@@ -1,0 +1,9 @@
+#240
+#andi1
+#andi
+#Testing basic functionality
+
+addiu $3, $4, 0xF0F0
+andi $2, $3, 0xF0F0
+jr $0
+nop 

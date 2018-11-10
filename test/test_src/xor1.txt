@@ -1,0 +1,11 @@
+#240
+#xori1
+#xori
+#Testing basic function using last 8 bits
+
+addiu $3, $0, 0xA0
+addiu $4, $0, 0x50
+xor $2, $3, $4
+
+jr $0
+nop

@@ -1,0 +1,12 @@
+#255
+#beq1
+#beq
+#Testing conditional and delay functionality
+
+ori $2, $3, 0x000F
+ori $4, $5, 0xFFFF
+beq $4, $5, 0x0002
+ori $2, $3, 0x00FF
+
+jr $0
+nop 
