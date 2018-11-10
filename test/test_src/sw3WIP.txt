@@ -1,0 +1,12 @@
+#
+#sw3
+#sw
+#SW and LW
+
+lui $3, 0x3000
+addiu $3, $3, 0x0004
+addiu $4, $0, 0x00DD
+sw $4, 0x1($3)
+
+jr $0
+nop
