@@ -483,32 +483,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         regFile.set_reg((rs|rt), (rd & 0x1F));
     }
-    void simulator::r_sll(int instruction){
 
-        int rt = instruction>>16;          
-        rt = regFile.get_reg(rt);            //src1
-
-        int sa = instruction>>6;            //shifting amount
-        sa = sa & 0x1F;
-
-        int rd = instruction>>11;           //destination
-
-        regFile.set_reg((rt<<sa), (rd & 0x1F));
-
-    }
-    void simulator::r_sllv(int instruction){
-
-        int rs = instruction>>21;           
-        rs = regFile.get_reg(rs & 0x1F);     //src1
-
-        int rt = instruction>>16;           // src2
-        rt = regFile.get_reg(rt & 0x1F);
-
-        int rd = instruction>>11;           //destination
-
-        regFile.set_reg((rt<<rs), (rd & 0x1F));
-
-    }
     void simulator::r_slt(int instruction){
 
         int rs = ((instruction>>21) & 0x1F);
@@ -542,57 +517,60 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.set_reg(comparison, rd);
     }
     //IMPLEMENTED WITH RPARSE, CONFIRM & DEBUG
-        void simulator::r_sra(int instruction){
-            bool signExtend = false;
-            int rs, rt, rd, sa;
-            r_parse(instruction, rs, rt, rd, sa);  
-            rt = regFile.get_reg(rt);   //val of rt
-
-            if(rt>>31 == 1) signExtend = true;
-
-            rt = rt>>sa;
-            int extension = 0x80000000;
-            for(int i=0; signExtend && (i<sa); i++){    //perform this loop (sa) times
-                rt = rt | extension;
-                extension = extension >> 1;
-            }
-            regFile.set_reg(rt, rd);
-        }
-        void simulator::r_srav(int instruction){
-            bool signExtend = false;
-            int rs, rt, rd;
-            r_parse(instruction, rs, rt, rd);  
-            rs = regFile.get_reg(rs);   //last 5 bits of rs
-            rs = rs & 0x1F;
-            rt = regFile.get_reg(rt);   //val of rt
-
-            if(rt>>31 == 1) signExtend = true;
-
-            rt = rt>>rs;
-            int extension = 0x80000000;
-            for(int i=0; signExtend && (i<rs); i++){    //perform this loop (rs) times
-                rt = rt | extension;
-                extension = extension >> 1;
-            }
-            regFile.set_reg(rt, rd);
-        }
-        void simulator::r_srl(int instruction){
+        void simulator::r_sll(int instruction){
             int rs, rt, rd, sa;
             r_parse(instruction, rs,rt,rd,sa);           
             rt = regFile.get_reg(rt);
 
-            int result = rt >> sa;
+            int result = rt << sa;
             regFile.set_reg(result, rd);
-
         }
-        void simulator::r_srlv(int instruction){
+        void simulator::r_sllv(int instruction){
             int rs, rt, rd;
             r_parse(instruction, rs,rt,rd);           
             rs = regFile.get_reg(rs);
+            rs = rs & 0x1F;
             rt = regFile.get_reg(rt);
 
+            int result = rt << rs;
+            regFile.set_reg(result, rd);
+        }
+        void simulator::r_sra(int instruction){
+            int rs, rt, rd, sa;
+            r_parse(instruction, rs, rt, rd, sa);
+            rt = regFile.get_reg(rt);   //val of rt
+
+            rt = rt>>sa;                
+            regFile.set_reg(rt, rd);    //shifted val of rt into rd
+        }
+        void simulator::r_srav(int instruction){    //g++ compiler does arithmetic shift for signed data types
+            int rs, rt, rd;
+            r_parse(instruction, rs, rt, rd);  
+            rs = regFile.get_reg(rs);   
+            rs = rs & 0x1F; 	        //last 5 bits of rs
+
+            rt = regFile.get_reg(rt);   //val of rt
+
+            rt = rt>>rs;                //shifted val of rt
+            regFile.set_reg(rt, rd);    //into rd
+        }
+        void simulator::r_srl(int instruction){
+            int rs, rt, rd, sa;
+            r_parse(instruction, rs,rt,rd,sa);         
+            rt = regFile.get_reg(rt);
+        
+            unsigned int result = (unsigned)rt >> (unsigned)sa; //try removing unsigned casting for sa!
+
+            regFile.set_reg(result, rd);
+        }
+        void simulator::r_srlv(int instruction){
+            int rs, rt, rd;
+            r_parse(instruction, rs,rt,rd);
             rs = rs & 0x1F;
-            int result = rt >> rs;
+            rt = regFile.get_reg(rt);
+        
+            unsigned int result = (unsigned)rt >> (unsigned)rs; //try removing unsigned casting for rs!
+
             regFile.set_reg(result, rd);
         }
     void simulator::r_sub(int instruction){
