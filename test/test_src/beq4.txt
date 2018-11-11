@@ -1,0 +1,12 @@
+#255
+#beq4
+#beq
+#Testing branching functionality
+
+
+beq $4, $5, 0x0004
+ori $2, $3, 0x00FF
+ori $2, $3, 0x000F
+
+jr $0
+nop 
