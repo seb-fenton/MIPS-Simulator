@@ -541,89 +541,60 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rd = ((instruction>>11) & 0x1F);
         regFile.set_reg(comparison, rd);
     }
-    void simulator::r_sra(int instruction){
+    //IMPLEMENTED WITH RPARSE, CONFIRM & DEBUG
+        void simulator::r_sra(int instruction){
+            bool signExtend = false;
+            int rs, rt, rd, sa;
+            r_parse(instruction, rs, rt, rd, sa);  
+            rt = regFile.get_reg(rt);   //val of rt
 
-        int rt = instruction>>16;          
-        rt = regFile.get_reg(rt);            //src1
+            if(rt>>31 == 1) signExtend = true;
 
-        bool signExtend = false;
-
-        if(rt>>31 == 1){
-            signExtend = true;
-        }
-
-        int sa = instruction>>6;            //shifting amount
-        sa = sa & 0x1F;
-
-        rt = rt>>sa;
-        if(signExtend){
-            int temp;
-            for(int i = 0; i<sa; i++){
-                temp = temp+1;
-                temp = temp << 1;
+            rt = rt>>sa;
+            int extension = 0x80000000;
+            for(int i=0; signExtend && (i<sa); i++){    //perform this loop (sa) times
+                rt = rt | extension;
+                extension = extension >> 1;
             }
-            temp = temp << (32-sa);
-            rt = rt + temp;
+            regFile.set_reg(rt, rd);
         }
+        void simulator::r_srav(int instruction){
+            bool signExtend = false;
+            int rs, rt, rd;
+            r_parse(instruction, rs, rt, rd);  
+            rs = regFile.get_reg(rs);   //last 5 bits of rs
+            rs = rs & 0x1F;
+            rt = regFile.get_reg(rt);   //val of rt
 
-        int rd = instruction>>11;           //destination
+            if(rt>>31 == 1) signExtend = true;
 
-        regFile.set_reg((rt), (rd & 0x1F));
-    }
-    void simulator::r_srav(int instruction){
-
-        int rs, rt, rd, shamt = instruction>>16; 
-        rt = rt & 0x1F;         
-        rt = regFile.get_reg(rt);            //src1
-
-        bool signExtend = false;
-
-        if(rt>>31 == 1){
-            signExtend = true;
-        }
-
-        int rs = instruction>>21;            //shifting amount
-        rs = regFile.get_reg(rs);
-
-        rt = rt>>rs;
-        if(signExtend){
-            int temp;
-            for(int i = 0; i<rs; i++){
-                temp = temp+1;
-                temp = temp << 1;
+            rt = rt>>rs;
+            int extension = 0x80000000;
+            for(int i=0; signExtend && (i<rs); i++){    //perform this loop (rs) times
+                rt = rt | extension;
+                extension = extension >> 1;
             }
-            temp = temp << (32-rs);
-            rt = rt + temp;
+            regFile.set_reg(rt, rd);
         }
+        void simulator::r_srl(int instruction){
+            int rs, rt, rd, sa;
+            r_parse(instruction, rs,rt,rd,sa);           
+            rt = regFile.get_reg(rt);
 
-        int rd = instruction>>11;           //destination
+            int result = rt >> sa;
+            regFile.set_reg(result, rd);
 
-        regFile.set_reg((rt), (rd & 0x1F));
-    }
-    void simulator::r_srl(int instruction){
+        }
+        void simulator::r_srlv(int instruction){
+            int rs, rt, rd;
+            r_parse(instruction, rs,rt,rd);           
+            rs = regFile.get_reg(rs);
+            rt = regFile.get_reg(rt);
 
-        int rt = instruction>>16;          
-        rt = regFile.get_reg(rt);            //src1
-
-        int sa = instruction>>6;            //shifting amount
-        sa = sa & 0x1F;
-
-        int rd = instruction>>11;           //destination
-
-        regFile.set_reg((rt>>sa), (rd & 0x1F));
-
-    }
-    void simulator::r_srlv(int instruction){
-        int rs, rt, rd;
-        r_parse(instruction, rs,rt,rd);           
-        rs = regFile.get_reg(rs);
-        rt = regFile.get_reg(rt);
-
-        rs = rs & 0x1F;
-        int result = rt >> rs;
-        regFile.set_reg(result, rd);
-
-    }
+            rs = rs & 0x1F;
+            int result = rt >> rs;
+            regFile.set_reg(result, rd);
+        }
     void simulator::r_sub(int instruction){
         bool overflow = false;
         int rs = instruction & 0x3E00000;
