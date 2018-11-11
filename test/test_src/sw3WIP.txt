@@ -1,7 +1,7 @@
 #
 #sw3
 #sw
-#SW and LW
+#SW and LW check
 
 lui $3, 0x3000
 addiu $3, $3, 0x0004

@@ -1,7 +1,11 @@
-#0
+#1
 #subu1
 #subu
-#Testing zero case
+#Testing overflowed result
+
+lui $3, 0x8000
+lui $4, 0x7FFF
+ori $4, $4, 0xFFFF
 
 subu $2, $3, $4
 

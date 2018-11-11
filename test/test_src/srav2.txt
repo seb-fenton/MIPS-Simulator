@@ -1,0 +1,20 @@
+#237
+#srav2
+#srav
+#Testing unsigned arithmetic shift
+
+# $3 = 0x7fffff60
+lui $3, 0x7FFF
+ori $3, $0, 0xFF60
+ori $4, $0, 0x0003
+
+srav $2, $3, $4
+
+#set $5 as 1 if $2 is < 0xF0000000
+lui $6, 0xF000
+sltu $5, $2, $6
+
+or $2, $2, $5
+
+jr $0
+nop
