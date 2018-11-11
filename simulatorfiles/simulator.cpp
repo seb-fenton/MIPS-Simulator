@@ -506,7 +506,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         unsigned int rsu = regFile.get_reg(rs);
 
         int rt = ((instruction>>16) & 0x1F);
-        unsigned int rtu = regFile.get_reg(rs);
+        unsigned int rtu = regFile.get_reg(rt);
 
         int comparison;
 
@@ -538,8 +538,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         void simulator::r_sra(int instruction){
             int rs, rt, rd, sa;
             r_parse(instruction, rs, rt, rd, sa);
+            
             rt = regFile.get_reg(rt);   //val of rt
-
+            
             rt = rt>>sa;                
             regFile.set_reg(rt, rd);    //shifted val of rt into rd
         }
@@ -566,8 +567,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         void simulator::r_srlv(int instruction){
             int rs, rt, rd;
             r_parse(instruction, rs,rt,rd);
-            rs = rs & 0x1F;
             rt = regFile.get_reg(rt);
+            rs = regFile.get_reg(rs);
         
             unsigned int result = (unsigned)rt >> (unsigned)rs; //try removing unsigned casting for rs!
 
@@ -984,15 +985,14 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     /***END GETC WIP***/
 
     void simulator::i_ori(int instruction){
-        int rs = instruction>>21;
-        rs = rs & 0x1F;
+        int rs = (instruction>>21) & 0x1F;
         rs = regFile.get_reg(rs);               //src1
 
-        int rt = instruction>>16;               //destination
+        int rt = (instruction>>16) & 0x1F;               //destination
 
-        int immediate = instruction & 0xFF;               
+        int immediate = instruction & 0xFFFF;     
 
-        regFile.set_reg((rs|immediate), (rt & 0x1F));
+        regFile.set_reg((rs|immediate), rt);
     }
 
     /***PUTC***/

@@ -32,8 +32,8 @@ class simulator{
         
         //R INSTRUCTIONS//
             //overloaded parsing functions
-            void simulator::r_parse(int instruction, int& rs, int& rt, int& rd);
-            void simulator::r_parse(int instruction, int& rs, int& rt, int& rd, int& shamt);
+            void r_parse(int instruction, int& rs, int& rt, int& rd);
+            void r_parse(int instruction, int& rs, int& rt, int& rd, int& shamt);
             
             void r_add(int instruction);
             void r_addu(int instruction);

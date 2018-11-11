@@ -5,7 +5,7 @@
 
 #$3 = 0xffffff60
 lui $3, 0xFFFF
-ori $3, $0, 0xFF60
+ori $3, $3, 0xFF60
 
 
 srl $2, $3, 3
