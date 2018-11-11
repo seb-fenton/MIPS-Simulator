@@ -1,0 +1,9 @@
+#0
+#sub1
+#subu
+#Testing zero case
+
+sub $2, $3, $4
+
+jr $0
+nop

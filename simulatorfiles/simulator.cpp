@@ -190,7 +190,7 @@ int simulator::branch_classification(int instruction){
 
 void simulator::execute(int index, int instruction){
     switch(index){
-        //--------R Instructions--------//
+    //--------R Instructions--------//
         case 1: simulator::r_add(instruction);
             break;
         case 4: simulator::r_addu(instruction);
@@ -242,7 +242,7 @@ void simulator::execute(int index, int instruction){
         case 52: simulator::r_xor(instruction);
             break;
 
-        //--------I Instructions--------//
+    //--------I Instructions--------//
         case 2: simulator::i_addi(instruction);
             break;
         case 3: simulator::i_addiu(instruction);
@@ -1205,81 +1205,81 @@ void simulator::execute(int index, int instruction){
         regFile.set_reg(programCounter+8, 31);  //and link
     }
 
-//BEFORE RUNNING DIAGNOSTICS, change std::exit in get_byte to return check.
 
-void simulator::diagnostics(){
-    bool successfultest = true;
-    std::cout << "Starting Memory Test.\n";
-    for (int i = 0 ; i<32 ; i++){
-        if(regFile.get_reg(i) != 0){
-            std::cout << "\nRegister[" << i << "] is non-zero: "<< regFile.get_reg(i);
-            successfultest = false;
+//BEFORE RUNNING DIAGNOSTICS, change std::exit in get_byte to return check.
+    void simulator::diagnostics(){
+        bool successfultest = true;
+        std::cout << "Starting Memory Test.\n";
+        for (int i = 0 ; i<32 ; i++){
+            if(regFile.get_reg(i) != 0){
+                std::cout << "\nRegister[" << i << "] is non-zero: "<< regFile.get_reg(i);
+                successfultest = false;
+            }
+        }
+        simulator::CheckMemZeroes(successfultest);
+        simulator::GetAccessCheck(successfultest);
+        simulator::CheckBlankRegions(successfultest);
+        if(successfultest)
+            std::cout << "\nMemory reads as intended\n";
+        else
+            std::cout << "\nMemory function failure\n";
+    }
+
+    void simulator::CheckMemZeroes(bool &success){  //checks readable regions for zeroes
+        for(int i=0x10000000; i<0x11000000; i++){ //instr
+            if(memory.get_byte(i) != 0)
+                success = false;
+        }
+
+        for(int i=0x20000000; i<0x24000000; i++){ //data
+            if(memory.get_byte(i) != 0)
+                success = false;
+        }
+
+        for(int i=0x30000000; i<0x30000004; i++){ //getc
+            if(memory.get_byte(i) != 0)
+                success = false;
         }
     }
-    simulator::CheckMemZeroes(successfultest);
-    simulator::GetAccessCheck(successfultest);
-    simulator::CheckBlankRegions(successfultest);
-    if(successfultest)
-        std::cout << "\nMemory reads as intended\n";
-    else
-        std::cout << "\nMemory function failure\n";
-}
 
-void simulator::CheckMemZeroes(bool &success){  //checks readable regions for zeroes
-    for(int i=0x10000000; i<0x11000000; i++){ //instr
-        if(memory.get_byte(i) != 0)
-            success = false;
-    }
+    void simulator::GetAccessCheck(bool &success){ //check that unreadable regions are unreadable
+        char readbyte;
+        for(int i=0x0; i<0x4; i++){ //null
+            readbyte = memory.get_byte(i);
+            if(readbyte != 0)
+                success = false;
+        }
 
-    for(int i=0x20000000; i<0x24000000; i++){ //data
-        if(memory.get_byte(i) != 0)
-            success = false;
+        for(int i=0x30000004; i<0x30000008; i++){ //putc
+            readbyte = memory.get_byte(i);
+            if(readbyte != 4)
+                success = false;
+        }
     }
 
-    for(int i=0x30000000; i<0x30000004; i++){ //getc
-        if(memory.get_byte(i) != 0)
-            success = false;
+    void simulator::CheckBlankRegions(bool &success){
+        char readbyte;
+        for(int i=0x4; i<0x10000000; i++){ //null
+            readbyte = memory.get_byte(i);
+            if(readbyte != -1)
+                success = false;
+        }
+        
+        for(int i=0x11000000; i<0x20000000; i++){ //null
+            readbyte = memory.get_byte(i);
+            if(readbyte != -1)
+                success = false;
+        }
+        
+        for(int i=0x24000000; i<0x30000000; i++){ //null
+            readbyte = memory.get_byte(i);
+            if(readbyte != -1)
+                success = false;
+        }
+        
+        for(int i=0x30000008; i<=0xFFFFFFFF; i++){ //null
+            readbyte = memory.get_byte(i);
+            if(readbyte != -1)
+                success = false;
+        }
     }
-}
-
-void simulator::GetAccessCheck(bool &success){ //check that unreadable regions are unreadable
-    char readbyte;
-    for(int i=0x0; i<0x4; i++){ //null
-        readbyte = memory.get_byte(i);
-        if(readbyte != 0)
-            success = false;
-    }
-
-    for(int i=0x30000004; i<0x30000008; i++){ //putc
-        readbyte = memory.get_byte(i);
-        if(readbyte != 4)
-            success = false;
-    }
-}
-
-void simulator::CheckBlankRegions(bool &success){
-    char readbyte;
-    for(int i=0x4; i<0x10000000; i++){ //null
-        readbyte = memory.get_byte(i);
-        if(readbyte != -1)
-            success = false;
-    }
-    
-    for(int i=0x11000000; i<0x20000000; i++){ //null
-        readbyte = memory.get_byte(i);
-        if(readbyte != -1)
-            success = false;
-    }
-    
-    for(int i=0x24000000; i<0x30000000; i++){ //null
-        readbyte = memory.get_byte(i);
-        if(readbyte != -1)
-            success = false;
-    }
-    
-    for(int i=0x30000008; i<=0xFFFFFFFF; i++){ //null
-        readbyte = memory.get_byte(i);
-        if(readbyte != -1)
-            success = false;
-    }
-}

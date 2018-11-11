@@ -1,0 +1,11 @@
+#95
+#sub2
+#sub
+#Testing basic function using last 8 bits (+ve result)
+
+addiu $3, $0, 0x7FFF
+addiu $4, $0, 0x7FA0
+sub $2, $3, $4
+
+jr $0
+nop
