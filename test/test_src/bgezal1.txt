@@ -17,7 +17,7 @@ addiu $2, $2, 0x2
 bgezal $0, 0x4
 addiu $2, $2, 0x4
 
-bgezal $3, 0xC
+bgezal $0, 0xC
 nop
 jr $0
 nop
@@ -31,6 +31,7 @@ andi $31, $0, 0x0
 nop
 jr $31
 nop
+
 
 jr $0
 nop 
