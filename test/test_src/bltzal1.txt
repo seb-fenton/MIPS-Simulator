@@ -1,6 +1,6 @@
 #31
-#bgezal1
-#bgezal
+#bltzal1
+#bltzal
 #Testing conditional, delay slot and branch execution
 
 lui $3, 0xF000

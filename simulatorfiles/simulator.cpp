@@ -42,7 +42,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int check = programCounter;               //CHECK that PC is in an executable area
         check = memory.addressmap(check);
         int instruction = 0;
-        if(check > 1)   std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
+        if((check > 1) && (programCounter%4 != 0))   std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
 
         else{
             for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
@@ -55,7 +55,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     int simulator::decode(int instruction){
-        int opcode = (instruction >> 26) & 0x3F;
+        unsigned int opcode = ((unsigned int)instruction >> 26) & 0x3F;
         switch(opcode){
             //--------R Instructions--------//
             case 0b000000: return simulator::r_classification(instruction);
@@ -97,8 +97,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             case 0b001110: return 53;   //xori
 
-            default:    std::cerr<<"Instruction decoding failed - invalid instruction. Exiting program...";
+            default:    std::cerr<<"Instruction decoding failed - invalid instruction. Exiting program...\n";
                         std::exit(-12);
+                        break;
                     
         }
     }
@@ -704,7 +705,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         if(rs >= 0){
             branch = true;                          //branch
-            pcOffSet = imm;
+            pcOffSet = sigImm;
             regFile.set_reg(programCounter+8, 31);  //link I THINK
         }
     }
