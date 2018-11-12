@@ -637,12 +637,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
     int simulator::sign_extend(short signed int imm){
         int output;
-        if(imm<0){
-            output = 0xFFFF0000 | imm;
-        }
-        else{
-            output = imm;
-        }
+        if(imm<0)   output = 0xFFFF0000 | imm;
+        else        output = imm;
         return output;
     }
 
@@ -688,21 +684,16 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.set_reg(rs & imm, rt);
     }
     void simulator::i_beq(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
         rs = regFile.get_reg(rs);               //src1
-
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;
-        rt = regFile.get_reg(rt);               //dest
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;             //if signed, signed extension
-
+        rt = regFile.get_reg(rt);               //src2
+        
         if(rs == rt){
             branch = true;
-            pcOffSet = imm;
+            pcOffSet = sigImm;
         }
     }
     void simulator::i_bgez(int instruction){

@@ -31,7 +31,7 @@ for f in $FILES; do
     test="${line:1:${#line}-1}"
     read -r line <&5
     message="${line:1:${#line}-1}"
-
+    
     $commandline_args test/test_src/$testIndex.bin              #executes next executable
     output=$?
     if [ $output -eq $expectedOutcome ]; then
