@@ -946,14 +946,16 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int rt = (instruction >> 16) & 0x1F;
 
-            int b1 = memory.get_byte(address);
-            b1 = b1 << 24;
-            int b2 = memory.get_byte(address + 1);
-            b2 = b2 << 16;
+            int moduAmount = address % 4;
+            int input = 0;
 
-            int input = b1 | b2;
+            for(int i = 3 - moduAmount; i >= 0; i--){
+                unsigned int temp = memory.get_byte(address + i);
+                temp = temp << 8*(3-i);
+                input = input | temp;
+            }
 
-            regFile.lwl_set_reg(rt, input);
+            regFile.lwl_set_reg(rt, input, moduAmount);
         }
         void simulator::i_lwr(int instruction){ //NOT DONE WIP
             signed short int offset = instruction & 0xFFFF;
@@ -965,13 +967,16 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int rt = (instruction >> 16) & 0x1F;
 
-            int b1 = memory.get_byte(address);
-            int b2 = memory.get_byte(address - 1);
-            b2 = b2 << 8;
+            int moduAmount = address % 4;
+            int input = 0;
 
-            int input = b2 | b1;
+            for(int i = moduAmount; i >= 0; i--){
+                unsigned int temp = memory.get_byte(address + i);
+                temp = temp << 8*(i);
+                input = input | temp;
+            }
 
-            regFile.lwl_set_reg(rt, input);
+            regFile.lwr_set_reg(rt, input, moduAmount);
         }
 
     /***END GETC WIP***/

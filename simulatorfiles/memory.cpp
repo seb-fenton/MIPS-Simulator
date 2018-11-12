@@ -26,12 +26,18 @@
         }
     }
 
-    void sim_reg::lwl_set_reg(int input, int regNum){
+    void sim_reg::lwl_set_reg(int input, int regNum, int moduAmount){
         if(regNum == 0){
             //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
-            reg[regNum] = reg[regNum] & 0x0000FFFF;
+            switch(moduAmount){     //see a similar table in the spec explanation of lwl
+                case 0: reg[regNum] = reg[regNum] & 0x00000000;
+                case 1: reg[regNum] = reg[regNum] & 0x000000FF;
+                case 2: reg[regNum] = reg[regNum] & 0x0000FFFF;
+                case 3: reg[regNum] = reg[regNum] & 0x00FFFFFF;
+            }
+
             reg[regNum] = reg[regNum] | input;
         }
         else{
@@ -40,12 +46,19 @@
         }
     }
 
-    void sim_reg::lwr_set_reg(int input, int regNum){
+    void sim_reg::lwr_set_reg(int input, int regNum, int moduAmount){
         if(regNum == 0){
             //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
-            reg[regNum] = reg[regNum] & 0xFFFF0000;
+            switch(moduAmount){         //see a similar table in the spec explanation of lwr
+                case 0: reg[regNum] = reg[regNum] & 0xFFFFFF00;
+                case 1: reg[regNum] = reg[regNum] & 0xFFFF0000;
+                case 2: reg[regNum] = reg[regNum] & 0xFF000000;
+                case 3: reg[regNum] = reg[regNum] & 0x00000000;
+                
+            }
+
             reg[regNum] = reg[regNum] | input;
         }
         else{
