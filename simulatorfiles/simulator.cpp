@@ -27,7 +27,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
 
         else if(delayedBranch || delayedJump){
-            if(delayedBranch)   programCounter = programCounter + pcOffSet - 4;
+            if(delayedBranch) programCounter = programCounter + pcOffSet - 4;
             else if(delayedJump)    programCounter = pcOffSet;
 
             delayedBranch = false;
@@ -686,6 +686,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         short signed int imm;
         i_parse(instruction, rs, rt, imm);
         int sigImm = sign_extend(imm) << 2;
+        
         rs = regFile.get_reg(rs);               //src1
         rt = regFile.get_reg(rt);               //src2
         
