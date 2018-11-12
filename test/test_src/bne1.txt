@@ -1,0 +1,28 @@
+#15
+#bne1
+#bne
+#Testing conditional, delay slot and branch execution
+
+ori $3, $0, 0x1
+ori $2, $0, 0x1
+
+bne $3, $0, 0x8
+nop
+andi $2, $0, 0x0
+
+bne $0, $0, 0x8
+nop
+addiu $2, $2, 0x2
+
+bne $3, $0, 0x4
+addiu $2, $2, 0x4
+
+bne $3, $0, 0xC
+nop
+jr $0
+nop
+addiu $2, $2, 0x8
+
+
+jr $0
+nop 

@@ -1,0 +1,28 @@
+#15
+#bltz1
+#bltz
+#Testing conditional, delay slot and branch execution
+
+lui $3, 0xF000
+ori $2, $0, 0x1
+
+bltz $3, 0x8
+nop
+andi $2, $0, 0x0
+
+bltz $0, 0x8
+nop
+addiu $2, $2, 0x2
+
+bltz $3, 0x4
+addiu $2, $2, 0x4
+
+bltz $3, 0xC
+nop
+jr $0
+nop
+addiu $2, $2, 0x8
+
+
+jr $0
+nop 
