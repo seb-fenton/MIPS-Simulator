@@ -42,8 +42,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int check = programCounter;               //CHECK that PC is in an executable area
         check = memory.addressmap(check);
         int instruction = 0;
-        if(check > 1)
-            std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
+        if(check > 1)   std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
 
         else{
             for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
@@ -54,7 +53,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             }
             return instruction;
         }
-        
     }
     int simulator::decode(int instruction){
         int opcode = (instruction >> 26) & 0x3F;
@@ -697,13 +695,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::i_bgez(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
         rs = regFile.get_reg(rs);               //src1
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;             //if signed, signed extension
 
         if(rs >= 0){
             branch = true;
@@ -711,13 +707,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::i_bgezal(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
         rs = regFile.get_reg(rs);                   //src1
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;                 //if signed, signed extension
 
         if(rs >= 0){
             branch = true;                          //branch
@@ -726,13 +720,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::i_bgtz(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;             //if signed, signed extension
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
+        rs = regFile.get_reg(rs);                   //src1
 
         if(rs > 0){
             branch = true;
@@ -740,13 +732,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::i_blez(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;             //if signed, signed extension
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
+        rs = regFile.get_reg(rs);                   //src1
 
         if(rs <= 0){
             branch = true;
@@ -754,13 +744,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::i_bltz(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;             //if signed, signed extension
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
+        rs = regFile.get_reg(rs);                   //src1
 
         if(rs < 0){
             branch = true;
@@ -768,13 +756,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::i_bltzal(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;             //if signed, signed extension
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
+        rs = regFile.get_reg(rs);                   //src1
 
         if(rs < 0){
             branch = true;
@@ -783,17 +769,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::i_bne(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
-
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;
-        rt = regFile.get_reg(rt);               //dest
-
-        int imm = (instruction & 0xFFFF) << 2;
-        if(imm >> 17 == 1)
-            imm = imm | 0xFFFC0000;             //if signed, signed extension
+        int rs,rt;
+        short signed int imm;
+        i_parse(instruction, rs, rt, imm);
+        int sigImm = sign_extend(imm) << 2;
+        rs = regFile.get_reg(rs);                   //src1
+        rt = regFile.get_reg(rt);
 
         if(rs != rt){
             branch = true;
