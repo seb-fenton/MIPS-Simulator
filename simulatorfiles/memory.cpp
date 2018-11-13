@@ -84,13 +84,10 @@
 
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
     sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
-        //initialise data memory to zero
-        addr_null.resize(0x4);          
+        //initialise data memory to zero       
         addr_instr.resize(0x1000000);
         addr_data.resize(0x4000000);
-        addr_getc.resize(0x4);
-        addr_putc.resize(0x4);
-        ioTriggerFlag = false;
+        io_clear();
     
         int Address = 0x10000000;                    //load binary into executable memory
         for(int i = 0; i<LengthOfBinary; i++){

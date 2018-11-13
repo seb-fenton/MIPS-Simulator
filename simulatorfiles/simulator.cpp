@@ -472,7 +472,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         if(rsu<rtu){comparison = 1;}
         else{comparison = 0;}
 
-        int rd = ((instruction>>11) & 0x1F);
         regFile.set_reg(comparison, rd);
     }
     void simulator::r_sll(int instruction){

@@ -1,10 +1,28 @@
-#240
+#3
 #xori1
 #xori
-#Testing basic function using last 8 bits
+#Testing basic function & zero extension of immediate
 
-addiu $3, $0, 0xA0
-xori $2, $3, 0x50
 
+addiu $5, $0, 0xAF
+xori $6, $5, 0x50
+#$6 should be 0xFF
+
+#0xFE($7) should be less than $6
+addiu $7, $0, 0xFE
+slt $3, $7, $6
+sll $3, $3, 1
+
+
+#$10 = 0xffffffff
+addiu $10, $0, 0xFFFF
+
+#$11 = 0xFFFF0000, greater than fffeffff($12)
+xori $11, $10, 0xFFFF
+lui $12, 0xFFFE
+ori $12, $12, 0xFFFF
+sltu $4, $12, $11
+
+or $2, $3, $4
 jr $0
 nop
