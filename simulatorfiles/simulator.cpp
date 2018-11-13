@@ -312,15 +312,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     //R_PARSE NOT IMPLEMENTED IN ANY YET
     void simulator::r_add(int instruction){
         bool overflow = false;
-        int rs = (instruction & 0x3E00000) >> 21;
-        rs = regFile.get_reg(rs);               //src1    
-
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;
-        rt = regFile.get_reg(rt);               //src2
-
-        int rd = instruction & 0xF800;          //dest
-        rd = rd >> 11;
+        int rs,rt,rd;
+        r_parse(instruction,rs,rt,rd);
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
         int result = rt+rs;
 
@@ -328,25 +323,14 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
             overflow = true;
         }
-        if(overflow){
-            //std::cerr<<"Exiting with error -10";
-            std::exit(-10);
-        }
-        else{
-            regFile.set_reg(result, rd);
-        }
+        if(overflow)    std::exit(-10);
+        else            regFile.set_reg(result, rd);
     }
     void simulator::r_addu(int instruction){
-        int rs = instruction & 0x3E00000;
-        rs = rs >> 21;
-        rs = regFile.get_reg(rs);               //src1
-
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;
-        rt = regFile.get_reg(rt);               //src2
-
-        int rd = instruction & 0xF800;          //dest
-        rd = rd >> 11;
+        int rs,rt,rd;
+        r_parse(instruction,rs,rt,rd);
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
         regFile.set_reg(rt+rs, rd);             //no overflow
     }
