@@ -37,7 +37,6 @@
                 case 2: reg[regNum] = reg[regNum] & 0x0000FFFF;
                 case 3: reg[regNum] = reg[regNum] & 0x00FFFFFF;
             }
-
             reg[regNum] = reg[regNum] | input;
         }
         else{
@@ -58,7 +57,6 @@
                 case 3: reg[regNum] = reg[regNum] & 0x00000000;
                 
             }
-
             reg[regNum] = reg[regNum] | input;
         }
         else{

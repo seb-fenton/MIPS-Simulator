@@ -485,18 +485,15 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
     void simulator::r_slt(int instruction){
 
-        int rs = ((instruction>>21) & 0x1F);
+        int rs, rt, rd;
+        r_parse(instruction, rs, rt, rd);
         rs = regFile.get_reg(rs);
-
-        int rt = ((instruction>>16) & 0x1F);
-        rt = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
         int comparison;
-
         if(rs<rt){comparison = 1;}
         else{comparison = 0;}
 
-        int rd = ((instruction>>11) & 0x1F);
         regFile.set_reg(comparison, rd);
     }
     void simulator::r_sltu(int instruction){
@@ -706,7 +703,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         if(rs >= 0){
             branch = true;                          //branch
             pcOffSet = sigImm;
-            regFile.set_reg(programCounter+8, 31);  //link I THINK
+            regFile.set_reg(programCounter+8, 31);  
         }
     }
     void simulator::i_bgtz(int instruction){
@@ -915,7 +912,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int input = 0;
 
             for(int i = 3 - moduAmount; i >= 0; i--){
-                unsigned int temp = memory.get_byte(address + i);
+                int temp = (unsigned char)memory.get_byte(address + i);
                 temp = temp << 8*(3-i);
                 input = input | temp;
             }
@@ -936,7 +933,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int input = 0;
 
             for(int i = moduAmount; i >= 0; i--){
-                unsigned int temp = memory.get_byte(address + i);
+                int temp = (unsigned char)memory.get_byte(address + i);
                 temp = temp << 8*(i);
                 input = input | temp;
             }

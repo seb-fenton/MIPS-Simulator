@@ -17,7 +17,7 @@ ori $24, $0, 0x5555
 #to be used in future calls
 lui $3, 0x2000
 #load word
-lwl $24, 0x0000($3)
+lwl $24, 0x0000($6)
 
 
 #set r2 to 0000 0001 if successful
@@ -31,7 +31,7 @@ lui $24, 0x5555
 ori $24, $0, 0x5555 
 
 #load word
-lwl $24, 0x1($3)
+lwl $24, 0x1($6)
 
 #set r2 to 0000 001X if succesful
 lui $6, 0xAAAA
@@ -45,7 +45,7 @@ lui $24, 0x5555
 ori $24, $0, 0x5555 
 
 #load word
-lwl $24, 0x2($3)
+lwl $24, 0x2($6)
 
 #set r2 to 0000 01XX if succesful
 lui $6, 0xAAAA
@@ -59,7 +59,7 @@ lui $24, 0x5555
 ori $24, $0, 0x5555 
 
 #load word
-lwl $24, 0x3($3)
+lwl $24, 0x3($6)
 
 #set r2 to 0000 1XXX if successful
 lui $6, 0xAA55
