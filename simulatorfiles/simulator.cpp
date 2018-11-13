@@ -633,7 +633,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
     int simulator::sign_extend(int imm){   //use if you want a signed value
         int output;
-        if(imm<0)   output = 0xFFFF0000 | imm;
+        if((imm>>15) == 1)   output = 0xFFFF0000 | imm;
         else        output = imm;
         return output;
     }
