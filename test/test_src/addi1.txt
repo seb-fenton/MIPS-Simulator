@@ -3,8 +3,7 @@
 #addi
 #Testing overflow handling
 
-lui $3, 0xFFFF
-addi $3, $3, 0xFFFF
+lui $3, 0x8000
 addi $2, $3, 0xFFFF
 jr $0
 nop 

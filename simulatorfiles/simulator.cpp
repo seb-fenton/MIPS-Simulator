@@ -643,12 +643,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rs, rt;
         int imm;
         i_parse(instruction, rs, rt, imm);
-        imm = sign_extend(imm);
+        int sigImm = sign_extend(imm);
         rs = regFile.get_reg(rs);               //value of rs
 
-        int result = rs + imm;
+        int result = rs + sigImm;
         //if both operands are same sign, set overflow if result sign is different
-        if(((rs >> 31) == (imm >> 15)) && (result>>31 != rs>>31))   overflow = true;
+        if(((rs >> 31) == (sigImm >> 15)) && (result>>31 != rs>>31))   overflow = true;
 
         if(overflow)    std::exit(-10);
         else            regFile.set_reg(result, rt);
@@ -809,7 +809,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int test = offset % 2;
             if(test != 0){                                      //test for memory access restriction on load halfword
-                std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error" << std::endl;
+                //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error" << std::endl;
                 std::exit(-11);
             }
 
@@ -840,7 +840,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int test = offset>>15;
             if(test==1){                                        //test for memory access restriction on load halfword
-                std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
+                //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 
@@ -872,7 +872,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int test = offset % 4;
             if(test != 0){                                        //test for memory access restriction on load word
-                std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
+                //std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 
@@ -979,7 +979,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int test = effectiveAddr % 2;
             if(test != 0){                                      //test for memory access restriction on load halfword
-                std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
+                //std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 
@@ -1004,7 +1004,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int memoryAddress = base + offset;
 
             if((memoryAddress % 4) != 0){                                //test for memory access restriction on load word
-                std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
+                //std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 

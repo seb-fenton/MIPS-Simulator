@@ -19,7 +19,7 @@ echo "Running tests..."
 #TestId , Instruction , Status , Author [, Message]
 FILES="test/test_src/*.txt"
 for f in $FILES; do
-    bool="false"
+    bool="fail"
 
     exec 5< $f                                                  #reads first 4 lines of our txt files to retrieve metadata
 
@@ -35,11 +35,11 @@ for f in $FILES; do
     $commandline_args test/test_src/$testIndex.bin              #executes next executable
     output=$?
     if [ $output -eq $expectedOutcome ]; then
-        bool="true"
+        bool="pass"
     fi
     printf "$testIndex , $test , $bool , $USER , $message\n" >> test/output/output.csv          
 
-    if [ $bool = "false" ]; then                                #prints in console whether or not particular test has faile
+    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
