@@ -537,7 +537,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             
             rt = regFile.get_reg(rt);   //val of rt
             
-            rt = rt>>sa;                
+            rt = rt>>sa;
             regFile.set_reg(rt, rd);    //shifted val of rt into rd
         }
         void simulator::r_srav(int instruction){    //g++ compiler does arithmetic shift for signed data types
@@ -932,9 +932,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int moduAmount = address % 4;
             int input = 0;
 
-            for(int i = moduAmount; i >= 0; i--){
+            for(int i = 0; i < moduAmount; i++){
                 int temp = (unsigned char)memory.get_byte(address + i);
-                temp = temp << 8*(i);
+                temp = temp << 8*(3-i);
                 input = input | temp;
             }
 
@@ -1030,7 +1030,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rs,rt,imm;
         i_parse(instruction, rs, rt, imm);
         imm = sign_extend(imm);
+        rs = regFile.get_reg(rs);
         int comparison;
+        
 
         if(rs<imm)  comparison = 1;
         else        comparison = 0;
