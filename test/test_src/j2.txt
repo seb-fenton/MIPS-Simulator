@@ -3,7 +3,7 @@
 #j
 #Testing basic functionality
 
-j 0x10000008
+j label1
 ori $2, $0, 0x1
-j 0x0
+label1: j 0x0
 nop

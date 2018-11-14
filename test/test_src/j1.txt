@@ -3,12 +3,12 @@
 #j
 #Testing basic functionality
 
-j 0x10000010
+j label1
 nop
 j 0x0
 nop
 
-j 0x7FFFFFF
+label1: j 0x7FFFFFF
 nop
 j 0x0
 nop
