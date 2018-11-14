@@ -1,11 +1,15 @@
 #245
 #sw1
 #sw
-#Testing alignment check
+#Alignment, I/O & functionality check
 
 lui $3, 0x2000
 addiu $4, $0, 0xFADC
 sw $4, 0x1($3)
+
+lui $10, 0x3000
+addiu $11, $0, 0x0044
+sw $11, 0x4($3)
 
 jr $0
 nop
