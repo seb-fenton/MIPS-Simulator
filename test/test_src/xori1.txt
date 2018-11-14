@@ -6,7 +6,7 @@
 addiu $5, $0, 0xAF
 xori $6, $5, 0x50
 #$6 should be 0xFF
-and $6, $6, 0xFF
+andi $6, $6, 0xFF
 
 #0xFE($7) should be less than $6
 addiu $7, $0, 0xFE
