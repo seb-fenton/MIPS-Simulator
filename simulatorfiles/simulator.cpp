@@ -11,7 +11,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     delayedBranch = false;
     delayedJump = false;
 
-    //determine memory required
 }
 //------CPU Control Methods------//
     bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
@@ -1018,8 +1017,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::j_j(int instruction){ //WIP
         int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
         jump = true;
+<<<<<<< HEAD
         pcOffSet = instr;
         std::cout<<"pcOffSet: "<<pcOffSet<<std::endl;
+=======
+        pcOffSet = instr + ((programCounter+4) & 0xF0000000);
+>>>>>>> df967a17d4e7d4ce899d30c8b2050dc1b38cb91b
     }
 
     void simulator::j_jal(int instruction){
