@@ -1,7 +1,0 @@
-#0
-#jr
-#jr
-#Testing basic functionality
-
-jr $0
-nop

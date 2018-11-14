@@ -3,7 +3,7 @@
 #j
 #Testing basic functionality
 
-j 0x1F
+j 0x10
 nop
 j 0x0
 nop
