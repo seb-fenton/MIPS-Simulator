@@ -1,12 +1,17 @@
 #include "simulator.hpp"
 
 simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : memory(LengthOfBinary, Memblock, InputSuccess){
+    //set program controls
     programCounter = 0x10000000;
     pcOffSet = 0;
+
+    //set branch/jump variables
     jump = false;
     branch = false;
     delayedBranch = false;
     delayedJump = false;
+
+    //determine memory required
 }
 //------CPU Control Methods------//
     bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
@@ -1022,7 +1027,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     }
 
 
-//BEFORE RUNNING DIAGNOSTICS, change std::exit in get_byte to return check.
+//------Memory Diagnostics------//
     void simulator::diagnostics(){
         bool successfultest = true;
         std::cout << "Starting Memory Test.\n";

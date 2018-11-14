@@ -30,9 +30,11 @@ class sim_reg{
 class sim_mem{
     private:
         void set_instruc_byte(int address, char value, bool &success);
-     
         std::vector<char> addr_instr;   //0x1000000
+
         std::vector<char> addr_data;    //0x4000000
+        bool emptyData;
+
         char addr_getc[4];
         char addr_putc[4];
         //0x4 to 0x0FFF FFFF            : Blank
@@ -51,8 +53,8 @@ class sim_mem{
         void io_write(int address);
         void io_clear();
 
-        int addressmap(int &address) const;
-        char get_byte(int address) const;
+        int addressmap(int &address);
+        char get_byte(int address);
         void set_byte(int address, char value);
 
 };
