@@ -47,7 +47,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int check = programCounter;               //CHECK that PC is in an executable area
         check = memory.addressmap(check);
         int instruction = 0;
-        if((check > 1) && (programCounter%4 != 0))   std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
+        if((check > 1) && (programCounter%4 != 0))  std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
 
         else{
             for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
