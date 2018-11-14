@@ -1,6 +1,6 @@
 #240
-#xori1
-#xori
+#xor1
+#xor
 #Testing basic function using last 8 bits
 
 addiu $3, $0, 0xA0
