@@ -3,19 +3,16 @@
 #ISSUE - MAKE SURE TO REMOVE ALL UNNECESSARY ECHOES AND MAKE SURE TO PRINT TO COMMAND LINE!
 
 ###INITIALISATION OF TEST DIRECTORY AND FILES###
-echo ""
-echo "Initialising test directory..."
-mkdir -p test/output
-touch test/output/output.csv
+#mkdir -p test/output
+#touch test/output/output.csv
 #touch test/temp.csv
-printf "TestId , Instruction , Status , Author , Message\n" >> test/output/output.csv
+printf "TestId , Instruction , Status , Author , Message\n" #>> test/output/output.csv
 
 ###TAKES FILE INPUT###                                           
 commandline_args=("$@")
 
 ###CREATES BINARY FILES AND CALLS THEM WITH SIMULATOR EXECUTABLE, OUTPUTTING TO CSV###
-echo ""
-echo "Running tests..."
+
 #TestId , Instruction , Status , Author [, Message]
 FILES="test/test_src/*.txt"
 for f in $FILES; do
@@ -37,16 +34,12 @@ for f in $FILES; do
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    printf "$testIndex , $test , $bool , $USER , $message\n" >> test/output/output.csv          
+    #printf "$testIndex , $test , $bool , $USER , $message\n" #>> test/output/output.csv          
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
-
-echo ""
-echo "Execution finished."
-echo ""
 
 
 
