@@ -3,7 +3,8 @@
 #jr
 #Testing basic functionality
 
-addiu $4, $0, 0x10000008
+lui $4, 0x1000
+addiu $4, $4, 0x0014
 jr $4
 nop
 ori $2, $0, 0xFFFF
