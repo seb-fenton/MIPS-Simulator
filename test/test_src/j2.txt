@@ -1,0 +1,9 @@
+#1
+#j1
+#j
+#Testing basic functionality
+
+j 0x8
+ori $2, $0, 0x1
+j 0x0
+nop
