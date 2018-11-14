@@ -5,5 +5,5 @@
 
 j label1
 ori $2, $0, 0x1
-label1: j 0x0
+label1: jr $0
 nop

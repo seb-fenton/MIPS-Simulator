@@ -5,10 +5,10 @@
 
 j label1
 nop
-j 0x0
+jr $0
 nop
 
 label1: j 0x7FFFFFF
 nop
-j 0x0
+jr $0
 nop

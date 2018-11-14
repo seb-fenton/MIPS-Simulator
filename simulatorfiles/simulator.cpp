@@ -1019,6 +1019,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
         jump = true;
         pcOffSet = instr;
+        std::cout<<"pcOffSet: "<<pcOffSet<<std::endl;
     }
 
     void simulator::j_jal(int instruction){
