@@ -1,0 +1,21 @@
+#237
+#srl1
+#srl
+#Testing basic function
+
+#$3 = 0xffffff60
+lui $3, 0xFFFF
+ori $3, $3, 0xFF60
+
+
+srl $2, $3, 3
+
+#set $5 as 1 if $2 is < 0x80000000
+lui $6, 0xE000
+sltu $5, $2, $6
+
+or $2, $2, $5
+
+
+jr $0
+nop

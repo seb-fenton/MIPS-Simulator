@@ -1,23 +1,23 @@
 #15
-#beq1
-#beq
+#blez1
+#blez
 #Testing conditional, delay slot and branch execution
 
 ori $2, $0, 0x1
 
-beq $0, $0, 0x8
+blez $0, 0x8
 nop
 andi $2, $0, 0x0
 
-ori $3, $0, 0x1
-beq $0, $3, 0x8
+ori $3, $0, 0x0001
+blez $3, 0x8
 nop
 addiu $2, $2, 0x2
 
-beq $0, $0, 0x4
+blez $0, 0x4
 addiu $2, $2, 0x4
 
-beq $0, $0, 0xC
+blez $0, 0xC
 nop
 jr $0
 nop

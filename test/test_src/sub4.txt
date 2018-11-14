@@ -1,13 +1,13 @@
-#1
-#subu1
-#subu
+#246
+#sub4
+#sub
 #Testing overflowed result
 
 lui $3, 0x8000
 lui $4, 0x7FFF
 ori $4, $4, 0xFFFF
 
-subu $2, $3, $4
+sub $2, $3, $4
 
 jr $0
 nop

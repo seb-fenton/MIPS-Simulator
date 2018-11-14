@@ -1,5 +1,5 @@
 Lau Jun Kit Darrick
-Sebastian A.W. Fenton
+Sebastian Alexander William Fenton
 EIE2 Computer Architecture MIPS Simulator
 
 This readme serves to illustrate the design perspectives adopted with respect to ambiguous parts of the program specification. The various assumptions made in implementing them will be explained here.

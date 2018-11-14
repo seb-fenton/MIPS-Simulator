@@ -31,39 +31,43 @@ class simulator{
         void CheckBlankRegions(bool &success);
         
         //R INSTRUCTIONS//
-        void r_add(int instruction);
-        void r_addu(int instruction);
-        void r_and(int instruction);
-        void r_div(int instruction);    //not done
-        void r_divu(int instruction);   //not done
-        void r_jalr(int instruction);
-        void r_jr(int instruction);
-        void r_mfhi(int instruction);
-        void r_mflo(int instruction);
-        void r_mthi(int instruction);
-        void r_mtlo(int instruction);
-        void r_mult(int instruction);
-        void r_multu(int instruction);
+            //overloaded parsing functions
+            void r_parse(int instruction, int& rs, int& rt, int& rd);
+            void r_parse(int instruction, int& rs, int& rt, int& rd, int& shamt);
+            
+            void r_add(int instruction);
+            void r_addu(int instruction);
+            void r_and(int instruction);
+            void r_div(int instruction);    //not done
+            void r_divu(int instruction);   //not done
+            void r_jalr(int instruction);
+            void r_jr(int instruction);
+            void r_mfhi(int instruction);
+            void r_mflo(int instruction);
+            void r_mthi(int instruction);
+            void r_mtlo(int instruction);
+            void r_mult(int instruction);
+            void r_multu(int instruction);
 
-        void r_or(int instruction);
-        void r_sll(int instruction);
-        void r_sllv(int instruction);
+            void r_or(int instruction);
+            void r_sll(int instruction);
+            void r_sllv(int instruction);
 
-        void r_slt(int instruction);
-        void r_sltu(int instruction);
-        
-        void r_sra(int instruction);
-        void r_srav(int instruction);
-        void r_srl(int instruction);
-        void r_srlv(int instruction);
+            void r_slt(int instruction);
+            void r_sltu(int instruction);
+            
+            void r_sra(int instruction);
+            void r_srav(int instruction);
+            void r_srl(int instruction);
+            void r_srlv(int instruction);
 
-        void r_sub(int instruction);
-        void r_subu(int instruction);
-        void r_xor(int instruction);
+            void r_sub(int instruction);
+            void r_subu(int instruction);
+            void r_xor(int instruction);
 
         //I INSTRUCTIONS//
-        void i_parse(int instruction, int& rs, int& rt, short signed int& imm);
-        int sign_extend(short signed int imm);
+        void i_parse(int instruction, int& rs, int& rt, int& imm);
+        int sign_extend(int imm);
 
         void i_addi(int instruction);
         void i_addiu(int instruction);
