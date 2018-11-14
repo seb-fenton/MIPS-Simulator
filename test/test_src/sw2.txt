@@ -4,7 +4,7 @@
 #IO and functionality check
 
 lui $3, 0x3000
-addiu $3, $3, 0x0007
+addiu $3, $3, 0x0004
 addiu $4, $0, 0x0044
 sw $4, 0x0($3)
 
