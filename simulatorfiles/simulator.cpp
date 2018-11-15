@@ -844,7 +844,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             regFile.set_reg(input, rt&0x1F);
             
         }
-        void simulator::i_lwl(int instruction){ //NOT DONE WIP
+        void simulator::i_lwl(int instruction){ 
             signed short int offset = instruction & 0xFFFF;
 
             int base = (instruction >> 21) & 0x1F;
@@ -865,7 +865,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             regFile.lwl_set_reg(input, rt, moduAmount);
         }
-        void simulator::i_lwr(int instruction){ //NOT DONE WIP
+        void simulator::i_lwr(int instruction){ 
             signed short int offset = instruction & 0xFFFF;
 
             int base = (instruction >> 21) & 0x1F;
