@@ -6,9 +6,8 @@
 #slt rd, rs, rt
 
 #UNSIGNED
-lui $5, 0x8000
-addiu $6, $0, 0x0FFF
-lui $7, 0x7000
+lui $5, 0x8000          #largest negative
+addiu $6, $0, 0x0FFF    #positive
 
 #rs < imm
 slti $1, $6, 0x7000
