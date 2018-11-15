@@ -1,10 +1,10 @@
-#240
+#15
 #xor1
 #xor
 #Testing basic function using last 8 bits
 
-addiu $3, $0, 0xA0
-addiu $4, $0, 0x50
+addiu $3, $0, 0xF0
+addiu $4, $0, 0xFF
 xor $2, $3, $4
 
 jr $0
