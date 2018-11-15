@@ -4,7 +4,7 @@
 #Testing basic functionality dependent on: jr, ori, lui
 
 lui $31, 0x1000
-ori $31, $31, 0x0014
+ori $31, $31, 0x001C
 jalr $4, $31
 nop
 ori $2, $2, 0x1

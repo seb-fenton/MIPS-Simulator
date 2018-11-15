@@ -65,7 +65,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             case 0b000000: return simulator::r_classification(instruction);
             //--------J Instructions--------//
             case 0b000010: return 17;   //j
-            case 0b000011: return 18;   //jal
+            case 0b000011: return 19;   //jal
             //--------I Instructions--------//
             case 0b001000: return 2;    //addi
             case 0b001001: return 3;    //addiu
@@ -383,7 +383,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_jr(int instruction){      //WIP
         int rs = (instruction >> 21) & 0x1F;  //fetch register number
         rs = regFile.get_reg(rs);                   //fetch register value
-
+        
         jump = true;                                //set jump (for delayed branching)
         pcOffSet = rs;                              //set regval into pcOffSet
     }
@@ -758,53 +758,52 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         void simulator::i_lh(int instruction){
             signed short int offset = instruction & 0xFFFF;     //immediate
 
-            int test = offset % 2;
-            if(test != 0){                                      //test for memory access restriction on load halfword
-                //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error" << std::endl;
-                std::exit(-11);
-            }
-
-            int base = (instruction>>21) & 0xFF;                //base address
+            int base = (instruction>>21) & 0x1F;                //base address
             base = regFile.get_reg(base);
 
             int memoryAddress = base + offset;
 
+            if((memoryAddress % 2)!= 0){                                      //test for memory access restriction on load halfword
+                //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error" << std::endl;
+                std::exit(-11);
+            }
             int rt = (instruction>>16) & 0x1F;                      //destination rt
 
             signed short int hword = memory.get_byte(memoryAddress);
             hword = hword<<8;
-            hword = hword + memory.get_byte(memoryAddress + 1);
+            hword = hword + memory.get_byte(memoryAddress+1);
 
             unsigned short int uhword = memory.get_byte(memoryAddress);
             uhword = uhword<<8;
-            uhword = uhword + memory.get_byte(memoryAddress + 1);
+            uhword = uhword + memory.get_byte(memoryAddress+1);
 
             int output;
 
             if(hword < 0)   output = uhword | 0xFFFF0000;               //unsigned is used as ucbyte is cast to integer when added to an integer
             else            output = hword;                              //casting works fine if byte>=0
-            
+
             regFile.set_reg(output, rt);
         }
         void simulator::i_lhu(int instruction){
-            signed short int offset = instruction & 0xFFFF;     //address src1
+            int offset = instruction & 0xFFFF;     //address src1
 
-            int test = offset>>15;
-            if(test==1){                                        //test for memory access restriction on load halfword
+            int base = (instruction>>21) & 0x1F;                //base address
+            base = regFile.get_reg(base);
+            
+            int memoryAddress = base + offset;
+            
+            if((memoryAddress % 2)!=0){                                        //test for memory access restriction on load halfword
                 //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 
-            int base = (instruction>>21) & 0xFF;                //base address
-            base = regFile.get_reg(base);
+            short unsigned int output = memory.get_byte(memoryAddress);
+            output = output << 8;
 
-            int memoryAddress = base + offset;
+            output = output | memory.get_byte(memoryAddress+1);
 
-            int output = memory.get_byte(memoryAddress);
-            output = output + memory.get_byte(memoryAddress + 1);
-
-            int registerAddress = instruction>>16;
-            regFile.set_reg(output, (registerAddress & 0x1F));
+            int rt = (instruction>>16)&0x1F;
+            regFile.set_reg(output, rt);
         }
         void simulator::i_lui(int instruction){
 

@@ -1,0 +1,15 @@
+#1
+#lbu1
+#lbu
+#Testing sign extension & basic functionality dependent on: lui, ori, andi, slt, sb, jr
+
+lui $3, 0x2000
+ori $4, $0, 0xFFFF
+sb $4, 0x1($3)
+
+lbu $5, 0x1($3)
+andi $5, $5, 0xFFFF
+ori $6, $0, 0x00FE
+slt $2, $6, $5
+jr $0
+nop
