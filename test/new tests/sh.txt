@@ -1,0 +1,8 @@
+#0
+#sh1
+#sh
+#Testing basic function
+
+
+jr $0
+nop

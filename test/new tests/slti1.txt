@@ -18,7 +18,7 @@ slti $3, $6, $0x0FFE
 sll $3, $3, 2
 
 #rs = imm
-slti $4, $5, $5
+slti $4, $6, 0x0FFF
 sll $4, $4, 1
 
 or $2, $1, $3

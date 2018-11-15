@@ -1,20 +1,20 @@
-#237
+#0
 #sra2
 #sra
 #Testing unsigned arithmetic shift
 
-# $3 = 0x7fffff60
+#$3 = 0x7fffff60
 lui $3, 0x7FFF
 ori $3, $3, 0xFF60
 
 
 sra $2, $3, 3
 
-#set $5 as 1 if $2 is < 0xF0000000
-lui $6, 0xF000
-sltu $5, $2, $6
+#load same value and subtract
+lui $6, 0x0FFF
+ori $6, $6, 0xFFEC
 
-or $2, $2, $5
+subu $2, $5, $6
 
 jr $0
 nop
