@@ -818,17 +818,13 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         void simulator::i_lw(int instruction){
             signed short int offset = instruction & 0xFFFF;
             int base = (instruction>>21) & 0x1F;                                    //address src2
-            base = base ;
-
-            int test = offset % 4;
-            if(test != 0){                                        //test for memory access restriction on load word
+            base = regFile.get_reg(base);
+            
+            int memoryAddress = base + offset;
+            if((memoryAddress % 4) != 0){                                        //test for memory access restriction on load word
                 //std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
-
-            
-
-            int memoryAddress = base + offset;
 
             int input = memory.get_byte(memoryAddress);
             input = input<<8;
