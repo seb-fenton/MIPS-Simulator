@@ -184,7 +184,7 @@
                 else
                     return 0;
 
-            }  
+            }
             if(check == 2)  return addr_data[address];
             if(check == 3)  return addr_getc[address];
         }

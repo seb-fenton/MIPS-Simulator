@@ -771,17 +771,17 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             signed short int hword = memory.get_byte(memoryAddress);
             hword = hword<<8;
-            hword = hword + memory.get_byte(memoryAddress+1);
+            hword = hword | memory.get_byte(memoryAddress+1);
 
             unsigned short int uhword = memory.get_byte(memoryAddress);
             uhword = uhword<<8;
-            uhword = uhword + memory.get_byte(memoryAddress+1);
+            uhword = uhword | memory.get_byte(memoryAddress+1);
 
             int output;
 
             if(hword < 0)   output = uhword | 0xFFFF0000;               //unsigned is used as ucbyte is cast to integer when added to an integer
             else            output = hword;                              //casting works fine if byte>=0
-
+    
             regFile.set_reg(output, rt);
         }
         void simulator::i_lhu(int instruction){
