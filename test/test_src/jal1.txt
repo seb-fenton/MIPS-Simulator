@@ -1,0 +1,16 @@
+#3
+#jal1
+#jal
+#Testing basic functionality
+
+jal label1
+nop
+ori $2, $2, 0x1
+jr $0
+nop
+
+label1: jr $31
+ori $2, $2, 0x2
+nop
+jr $0
+nop

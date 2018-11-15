@@ -376,6 +376,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_jalr(int instruction){    //WIP
         simulator::r_jr(instruction);
         int rd = (instruction >>11) & 0x1F;
+        if(rd==0) rd = 31;                      //for the implicit case specified by the documentation
 
         regFile.set_reg(programCounter+8, rd);
     }
