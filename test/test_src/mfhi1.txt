@@ -1,0 +1,10 @@
+#3
+#mfhi1
+#mfhi
+#Testing basic functionality dependent on: ori, mthi
+
+ori $3, $0, 0x3
+mthi $3
+mfhi $2
+jr $0
+nop

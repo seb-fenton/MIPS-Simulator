@@ -1,0 +1,10 @@
+#15
+#mtlo1
+#mtlo
+#Testing basic functionality dependent on: ori, mflo
+
+ori $3, $0, 0xF
+mtlo $3
+mflo $2
+jr $0
+nop
