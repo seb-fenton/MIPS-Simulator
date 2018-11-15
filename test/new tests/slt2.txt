@@ -1,4 +1,4 @@
-#14
+#8
 #slt2
 #slt
 #Testing comparisons (signed numbers)
