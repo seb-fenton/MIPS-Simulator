@@ -1,0 +1,19 @@
+#0
+#sw2
+#sw
+#IO check
+
+lui $3, 0x3000
+addiu $3, $3, 0x0004
+
+addiu $4, $0, 0x0044
+sw $4, 0x0($3)
+
+addiu $4, $0, 0x0026
+sw $4, 0x0($3)
+
+addiu $4, $0, 0x0053
+sw $4, 0x0($3)
+
+jr $0
+nop
