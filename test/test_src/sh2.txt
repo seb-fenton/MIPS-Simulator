@@ -1,9 +1,9 @@
-#D
+#245
 #sh2
 #sh
 #Testing Alignment / IO
 
-#writes letter D. E F G are failures.
+#alignment failure. D E F G are failures.
 
 lui $6, 0x3000
 lui $5, 0x4746

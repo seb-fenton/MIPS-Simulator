@@ -19,7 +19,7 @@ class sim_reg{
         void set_hi(int input);
         int get_lo() const;
         void set_lo(int input);
-        
+
 
     private:
         int reg[32];
@@ -48,9 +48,9 @@ class sim_mem{
 
     public:
         sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess);
-        
+
         void io_read();
-        void io_write(int address);
+        void io_write();
         void io_clear();
 
         int addressmap(int &address);

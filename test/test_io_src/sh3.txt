@@ -1,9 +1,9 @@
-#0
+#
 #sh3
 #sh
 #Testing Alignment / IO
 
-#writes nothing.W X Y Z are failures.
+#writes nothing. W X Y Z are failures.
 
 lui $6, 0x3000
 lui $5, 0x5758

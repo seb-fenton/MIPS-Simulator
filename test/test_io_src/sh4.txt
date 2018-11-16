@@ -1,9 +1,9 @@
-#0
+#D
 #sh4
 #sh
 #Testing Alignment / IO
 
-#writes nothing.D E F G are failures.
+#writes D. E F G are failures.
 
 lui $6, 0x3000
 lui $5, 0x4746
