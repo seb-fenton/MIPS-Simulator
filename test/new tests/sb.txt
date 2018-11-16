@@ -1,9 +1,0 @@
-#0
-#sb1
-#sb
-#Testing basic function
-
-
-
-jr $0
-nop
