@@ -3,20 +3,22 @@
 #xori
 #Testing basic function & zero extension of immediate
 
-addiu $5, $0, 0xF0
-xori $6, $5, 0xFF
-#$6 should be 0xF
+addiu $5, $0, 0xAF
+xori $6, $5, 0x50
+#$6 should be 0xFF
+andi $6, $6, 0xFF
 
-#$6 should be less than 0x10
-slti $3, $6, 0x10
+#0xFE($7) should be less than $6
+addiu $7, $0, 0xFE
+slt $3, $7, $6
 sll $3, $3, 1
 
 
 #$10 = 0xffffffff
 addiu $10, $0, 0xFFFF
 
-#$11 = 0xFFFF0000, greater than FFFEFFFF($12)
-xori $11, $10, 0xFFFF.
+#$11 = 0xFFFF0000, greater than fffeffff($12)
+xori $11, $10, 0xFFFF
 lui $12, 0xFFFE
 ori $12, $12, 0xFFFF
 sltu $4, $12, $11

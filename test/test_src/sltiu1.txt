@@ -11,7 +11,7 @@ sltiu $1, $6, 0xFFFF
 sll $1, $1, 3
 
 #rs > imm
-sltiu $3, $5, $0x7FFF
+sltiu $3, $5, 0x7FFF
 sll $3, $3, 2
 
 #rs = imm

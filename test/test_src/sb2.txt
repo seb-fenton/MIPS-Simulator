@@ -1,0 +1,15 @@
+#0
+#sb2
+#sb
+#Testing I/O (valid)
+
+#writes letter D. E F G are failures.
+
+lui $6, 0x3000
+lui $5, 0x4746
+ori $5, $5, 0x4544
+
+sb $5, 0x7($6)
+
+jr $0
+nop

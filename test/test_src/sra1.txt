@@ -1,4 +1,4 @@
-#0
+#237
 #sra1
 #sra
 #Testing signed arithmetic shift
@@ -8,11 +8,12 @@ lui $3, 0xFFFF
 ori $3, $3, 0xFF60
 
 
-sra $5, $3, 3
+sra $2, $3, 3
 
-lui $6, 0xFFFF
-ori $6, $6, 0xFFEC
+#set $5 as 1 if $2 is < 0
+slti $5, $2, 0
 
-subu $2, $5, $6
+or $2, $2, $5
+
 jr $0
 nop
