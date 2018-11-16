@@ -1,4 +1,4 @@
-#0
+#D
 #sb2
 #sb
 #Testing I/O (valid)

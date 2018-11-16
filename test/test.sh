@@ -43,6 +43,7 @@ done
 
 FILES="test/test_io_src/*.txt"
 for f in $FILES; do
+    bool="fail"
 
     exec 5< $f                                                  #reads first 4 lines of our txt files to retrieve metadata
 
@@ -55,9 +56,9 @@ for f in $FILES; do
     read -r line <&5
     message="${line:1:${#line}-1}"
 
-    output=$($commandline_args test/test_src/$testIndex.bin)           #executes next executable
+    output=$($commandline_args test/test_io_src/$testIndex.bin)           #executes next executable
 
-    if [ $output -eq $expectedOutcome ]; then
+    if [ "$output" = "$expectedOutcome" ]; then
         bool="pass"
     fi
 
