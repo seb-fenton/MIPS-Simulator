@@ -41,6 +41,33 @@ for f in $FILES; do
     fi
 done
 
+FILES="test/test_io_src/*.txt"
+for f in $FILES; do
+
+    exec 5< $f                                                  #reads first 4 lines of our txt files to retrieve metadata
+
+    read -r line <&5
+    expectedOutcome="${line:1:${#line}-1}"
+    read -r line <&5
+    testIndex="${line:1:${#line}-1}"
+    read -r line <&5
+    test="${line:1:${#line}-1}"
+    read -r line <&5
+    message="${line:1:${#line}-1}"
+
+    output=$($commandline_args test/test_src/$testIndex.bin)           #executes next executable
+
+    if [ $output -eq $expectedOutcome ]; then
+        bool="pass"
+    fi
+
+    printf "$testIndex , $test , $bool , $USER , $message\n" #>> test/output/output.csv
+
+    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
+        echo "Test failed: $testIndex, output: $output"                          
+    fi
+done
+
 
 
 
