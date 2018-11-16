@@ -1,0 +1,10 @@
+#245
+#lhu3
+#lhu
+#Testing memory access errors dependent on: lui, ori, jr
+
+lui $3, 0x2000
+
+lhu $2, 0x1($3)
+jr $0
+nop

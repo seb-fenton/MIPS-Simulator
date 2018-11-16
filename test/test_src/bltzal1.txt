@@ -6,24 +6,24 @@
 lui $3, 0xF000
 ori $2, $0, 0x1
 
-bgezal $3, 0x8
+bltzal $3, 0x8
 nop
 andi $2, $0, 0x0
 
-bgezal $0, 0x8
+bltzal $0, 0x8
 nop
 addiu $2, $2, 0x2
 
-bgezal $3, 0x4
+bltzal $3, 0x4
 addiu $2, $2, 0x4
 
-bgezal $3, 0xC
+bltzal $3, 0xC
 nop
 jr $0
 nop
 addiu $2, $2, 0x8
 
-bgezal $3, 0x10
+bltzal $3, 0x10
 nop
 addiu $2, $2, 0x10
 nop
@@ -34,4 +34,4 @@ nop
 
 
 jr $0
-nop 
+nop

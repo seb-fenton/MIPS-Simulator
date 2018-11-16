@@ -1,0 +1,19 @@
+#0
+#sb1
+#sb
+#Testing basic function
+
+lui $6, 0x2000
+lui $5, 0x00AB
+ori $5, $5, 0xCDEF
+
+#5 should be zero
+
+sb $5, 0x0($6)
+lw $2, 0x0($6)
+
+lui $3, 0xEF00
+subu $2, $2, $3
+
+jr $0
+nop

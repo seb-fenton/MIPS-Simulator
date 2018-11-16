@@ -1,0 +1,15 @@
+#
+#sh3
+#sh
+#Testing Alignment / IO
+
+#writes nothing. W X Y Z are failures.
+
+lui $6, 0x3000
+lui $5, 0x5758
+ori $5, $5, 0x595A
+
+sh $5, 0x4($6)
+
+jr $0
+nop

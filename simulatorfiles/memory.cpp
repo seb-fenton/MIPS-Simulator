@@ -55,7 +55,7 @@
                 case 1: reg[regNum] = reg[regNum] & 0xFFFF0000;
                 case 2: reg[regNum] = reg[regNum] & 0xFF000000;
                 case 3: reg[regNum] = reg[regNum] & 0x00000000;
-                
+
             }
             reg[regNum] = reg[regNum] | input;
         }
@@ -84,17 +84,18 @@
 
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
     sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
-        //initialise data memory to zero       
-        addr_instr.resize(0x1000000);
-        addr_data.resize(0x4000000);
+        emptyData = true;
+
+        //allocate to length of binary chars
+        addr_instr.resize(LengthOfBinary);
         io_clear();
-    
+
         int Address = 0x10000000;                    //load binary into executable memory
         for(int i = 0; i<LengthOfBinary; i++){
             char InputValue = Memblock[i];          //value to be input in set_byte command; reset to 0 each time
             sim_mem::set_instruc_byte(Address, InputValue, InputSuccess);
             if(InputSuccess==false)                 //exit if input failed
-                i=LengthOfBinary;       
+                i=LengthOfBinary;
             Address = Address + 0x1;                //iterate up the memory stack to write in the next instruction byte
         }
     }
@@ -120,13 +121,12 @@
         addr_getc[1] = (io_input >> 16) & 0xff;
         addr_getc[2] = (io_input >> 8) & 0xff;
         addr_getc[3] = io_input & 0xff;
-                
-    }
-    void sim_mem::io_write(int address){
-        address = address - 0x30000004;
-        putchar(addr_putc[address]);
-    }
 
+    }
+    void sim_mem::io_write(){
+        putchar(addr_putc[3]);
+        io_clear();
+    }
     void sim_mem::io_clear(){
         //clear getc
         addr_getc[0] = 0;
@@ -140,7 +140,7 @@
         addr_putc[3] = 0;
     }
 
-    int sim_mem::addressmap(int &address) const{
+    int sim_mem::addressmap(int &address){
         if(0 <= address && address < 4)
             return 0; // 0 for null
         else if ((0x10000000 <= address) && (address < 0x11000000)){
@@ -149,8 +149,14 @@
         }
         else if ((0x20000000 <= address) && (address < 0x24000000)){
             address = address - 0x20000000;
+
+            if(emptyData){
+                addr_data.resize(0x4000000);
+                emptyData = false;
+            }
+
             return 2; //2 for data
-        }  
+        }
         else if ((0x30000000 <= address) && (address < 0x30000004)){
             address = address - 0x30000000;
             return 3; //3 for getc
@@ -162,9 +168,9 @@
         else return -1;
     }
 
-    char sim_mem::get_byte(int address) const{
+    char sim_mem::get_byte(int address){
         int check = sim_mem::addressmap(address);
-        /*Memory exceptions (-11): 
+        /*Memory exceptions (-11):
         0. Reading from addr_null
         4. Reading from write-only memory zone addr_putc
         -1. Address out of range or blank areas*/
@@ -172,7 +178,13 @@
             std::exit(-11);
         }
         else{
-            if(check == 1)  return addr_instr[address];
+            if(check == 1){
+                if(address < addr_instr.size())
+                    return addr_instr[address];
+                else
+                    return 0;
+
+            }
             if(check == 2)  return addr_data[address];
             if(check == 3)  return addr_getc[address];
         }
@@ -180,7 +192,7 @@
 
     void sim_mem::set_byte(int address, char value){
         int check = sim_mem::addressmap(address);
-        /*Memory exceptions (-11): 
+        /*Memory exceptions (-11):
         0. Writing to addr_null
         1. Writing to instruction Memory
         3. Writing to read-only memory zone addr_getc
@@ -193,4 +205,3 @@
             if(check == 4)  addr_putc[address] = value;
         }
     }
-

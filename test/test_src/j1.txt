@@ -1,0 +1,14 @@
+#245
+#j1
+#j
+#Testing basic functionality
+
+j label1
+nop
+jr $0
+nop
+
+label1: j 0x7FFFFFF
+nop
+jr $0
+nop

@@ -19,7 +19,7 @@ class sim_reg{
         void set_hi(int input);
         int get_lo() const;
         void set_lo(int input);
-        
+
 
     private:
         int reg[32];
@@ -30,9 +30,11 @@ class sim_reg{
 class sim_mem{
     private:
         void set_instruc_byte(int address, char value, bool &success);
-     
         std::vector<char> addr_instr;   //0x1000000
+
         std::vector<char> addr_data;    //0x4000000
+        bool emptyData;
+
         char addr_getc[4];
         char addr_putc[4];
         //0x4 to 0x0FFF FFFF            : Blank
@@ -46,13 +48,13 @@ class sim_mem{
 
     public:
         sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess);
-        
+
         void io_read();
-        void io_write(int address);
+        void io_write();
         void io_clear();
 
-        int addressmap(int &address) const;
-        char get_byte(int address) const;
+        int addressmap(int &address);
+        char get_byte(int address);
         void set_byte(int address, char value);
 
 };

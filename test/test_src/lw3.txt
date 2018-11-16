@@ -1,0 +1,10 @@
+#245
+#lw3
+#lw
+#Testing alignment check dependent on: lui, ori, jr
+
+lui $3, 0x2000
+
+lw $2, 0x2($3)
+jr $0
+nop

@@ -1,0 +1,14 @@
+#0
+#jr1
+#jr
+#Testing basic functionality
+
+lui $4, 0x1000
+addiu $4, $4, 0x0014
+jr $4
+nop
+ori $2, $0, 0xFFFF
+
+jr $0
+nop
+ori $2, $0, 0xFFFF
