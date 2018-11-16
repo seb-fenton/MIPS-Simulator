@@ -8,7 +8,7 @@ lui $3, 0x7FFF
 ori $3, $3, 0xFF60
 ori $4, $0, 0x0003
 
-srav $2, $3, $4
+srav $5, $3, $4
 
 #load same value and subtract
 lui $6, 0x0FFF
