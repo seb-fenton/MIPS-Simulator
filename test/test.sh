@@ -34,7 +34,7 @@ for f in $FILES; do
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    printf "$testIndex , $test , $bool , $USER , $message\n" #>> test/output/output.csv          
+    #printf "$testIndex , $test , $bool , $USER , $message\n" #>> test/output/output.csv          
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
         echo "Test failed: $testIndex, output: $output"                          
