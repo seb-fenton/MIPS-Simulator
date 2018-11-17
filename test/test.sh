@@ -64,14 +64,21 @@ for f in $FILES; do
 
     printf "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||\n" #>> test/output/output.csv
 
-    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
+    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
 
 
+$commandline_args
+output=$?
+bool="fail"
 
+if [ $output -eq 236 ]; then
+    bool="pass"
+fi
 
+printf "noinput , nop , $bool , $USER , || Expected outcome: 236 | Actual outcome: $output || Testing no-input error || Dependencies: ||\n"
 
 
 
