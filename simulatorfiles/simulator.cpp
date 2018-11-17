@@ -436,7 +436,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         regFile.set_reg((rs|rt), rd);
     }
-
     void simulator::r_slt(int instruction){
         int rs, rt, rd;
         r_parse(instruction, rs, rt, rd);
