@@ -1,0 +1,21 @@
+#0
+
+#mult1
+#mult
+#Testing function (signed) || Dependencies: lui jr mfhi mflo subu or
+
+
+lui $5, 0x8000
+
+mult $5, $5
+mfhi $3
+mflo $4
+
+lui $6, 0xC000
+
+subu $2, $3, $6
+or $2, $2, $4
+
+jr $0
+
+nop 
