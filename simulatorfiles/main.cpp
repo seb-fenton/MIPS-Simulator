@@ -56,7 +56,7 @@ std::string get_filename(int argc, char* argv[]){
     }     
     else{
         //CHANGE. no instructions. exit due to end of instruction memory
-        std::cerr<< "No binary file given. Exit with error code -11" << std::endl;
+        //std::cerr<< "No binary file given. Exit with error code -20" << std::endl;
         std::exit(-20);
     }
 
