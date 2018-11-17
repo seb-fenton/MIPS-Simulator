@@ -405,27 +405,25 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_mult(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        int64_t multplc = (int64_t)regFile.get_reg(rs);  //src1
-        int64_t multplr = (int64_t)regFile.get_reg(rt);  //src2
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
-        int64_t result = rt*rs;
-        int tophalf = result >> 32;         //NUMTEST
-        int btmhalf = result & 0xffffffff;  //NUMTEST
+        int64_t result = (int64_t)rt*(int64_t)rs;
+        int tophalf = (int32_t)(result>>32);         //NUMTEST
+        int btmhalf = (int32_t)(result&0xffffffff);  //NUMTEST
        
         regFile.set_hi(tophalf);
         regFile.set_lo(btmhalf);
-
     }
     void simulator::r_multu(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
-        uint64_t multplc = (uint64_t)(uint32_t)regFile.get_reg(rs);               //src1
-        uint64_t multplr = (uint64_t)(uint32_t)regFile.get_reg(rt);               //src2
-
-        uint64_t result = rt*rs;
-        uint32_t tophalf = result >> 32;        //NUMTEST
-        uint32_t btmhalf = result & 0xffffffff; //NUMTEST
+        uint64_t result = (uint64_t)(uint32_t)rt*(uint64_t)(uint32_t)rs;
+        uint32_t tophalf = (uint32_t)(result>>32);
+        uint32_t btmhalf = (uint32_t)(result&0xffffffff);
 
         regFile.set_hi(tophalf);        
         regFile.set_lo(btmhalf);
