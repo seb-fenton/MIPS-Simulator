@@ -1,7 +1,7 @@
 #246
 #add1
 #add
-#Testing overflow handling
+#Testing overflow handling || Dependencies: lui, jr
 
 lui $3, 0x8000
 add $2, $3, $3

@@ -1,7 +1,7 @@
 #0
 #add2
 #add
-#Testing zero case functionality
+#Testing zero case functionality || Dependencies: jr
 
 add $2, $3, $4
 jr $0

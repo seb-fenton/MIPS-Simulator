@@ -1,7 +1,7 @@
 #237
 #sra1
 #sra
-#Testing signed arithmetic shift
+#Testing signed arithmetic shift || Dependencies: lui, ori, slti, or, jr
 
 #$3 = 0xffffff60
 lui $3, 0xFFFF

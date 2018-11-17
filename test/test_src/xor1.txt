@@ -1,7 +1,7 @@
 #15
 #xor1
 #xor
-#Testing basic function using last 8 bits
+#Testing basic functionality using last 8 bits || Dependencies: addiu, jr
 
 addiu $3, $0, 0xF0
 addiu $4, $0, 0xFF

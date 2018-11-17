@@ -1,7 +1,7 @@
 #0
 #srav1
 #srav
-#Testing signed arithmetic shift
+#Testing signed arithmetic shift || Dependencies: lui, ori, subu, jr
 
 #$3 = 0xffffff60
 lui $3, 0xFFFF

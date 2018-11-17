@@ -1,7 +1,7 @@
 #0
 #srlv1
 #srlv
-#Testing basic function
+#Testing basic functionality || Dependencies: lui, ori, subu, jr
 
 #$3 = 0xffffff60
 lui $3, 0xFFFF

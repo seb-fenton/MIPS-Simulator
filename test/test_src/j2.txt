@@ -1,7 +1,7 @@
 #1
 #j2
 #j
-#Testing basic functionality
+#Testing basic functionality || Dependencies: ori, jr
 
 j label1
 ori $2, $0, 0x1

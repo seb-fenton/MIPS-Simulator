@@ -1,7 +1,7 @@
 #254
 #addiu1
 #addiu
-#Testing overflow behaviour
+#Testing overflow behaviour || Dependencies: lui, jr
 
 lui $3, 0xFFFF
 addiu $3, $5, 0xFFFF

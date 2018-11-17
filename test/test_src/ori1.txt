@@ -1,7 +1,7 @@
 #3
 #ori1
 #ori
-#Testing basic function & zero extension of immediate dependent on: addiu, andi, slt, sll, lui, sltu,
+#Testing basic functionality & zero extension of immediate || Dependencies: addiu, andi, slt, sll, lui, sltu, or, jr
 
 addiu $5, $0, 0xAF
 ori $6, $5, 0x50

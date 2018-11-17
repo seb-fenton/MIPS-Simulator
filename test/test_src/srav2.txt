@@ -1,7 +1,7 @@
 #0
 #srav2
 #srav
-#Testing unsigned arithmetic shift
+#Testing unsigned arithmetic shift || Dependencies: lui, ori, subu, jr
 
 # $3 = 0x7fffff60
 lui $3, 0x7FFF

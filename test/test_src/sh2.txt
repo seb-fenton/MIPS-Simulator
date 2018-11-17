@@ -1,7 +1,7 @@
 #245
 #sh2
 #sh
-#Testing Alignment / IO
+#Testing Alignment / IO || Dependencies: lui, ori, jr
 
 #alignment failure. D E F G are failures.
 

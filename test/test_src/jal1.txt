@@ -1,7 +1,7 @@
 #3
 #jal1
 #jal
-#Testing basic functionality
+#Testing basic functionality || Dependencies: ori, jr
 
 jal label1
 nop

@@ -1,7 +1,7 @@
 #3
 #jalr1
 #jalr
-#Testing basic functionality dependent on: jr, ori, lui
+#Testing basic functionality || Dependencies: lui, ori, jr
 
 lui $31, 0x1000
 ori $31, $31, 0x001C

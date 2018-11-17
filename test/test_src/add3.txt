@@ -1,7 +1,7 @@
 #94
 #add3
 #add
-#Testing basic functionality
+#Testing basic functionality || Dependencies: addiu, jr
 
 addiu $3, $4, 0x02F
 addiu $4, $5, 0x02F

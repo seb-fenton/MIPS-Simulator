@@ -1,7 +1,7 @@
 #3
 #lw1
 #lw
-#Testing sign extension & basic functionality dependent on: lui, ori, slti, sb, jr
+#Testing sign extension & basic functionality || Dependencies: lui, ori, sw, slti, lui, ori, and, sltu, sll, addu, jr
 
 lui $3, 0x2000
 lui $4, 0xFFFF

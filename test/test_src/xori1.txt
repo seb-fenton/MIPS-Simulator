@@ -1,7 +1,7 @@
 #3
 #xori1
 #xori
-#Testing basic function & zero extension of immediate
+#Testing basic function & zero extension of immediate || Dependencies: addiu, andi, slt, sll, lui, ori, sltu, or, jr
 
 addiu $5, $0, 0xAF
 xori $6, $5, 0x50

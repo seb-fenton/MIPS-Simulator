@@ -1,7 +1,7 @@
 #D&S
-#sw2
+#io5
 #sw
-#IO check
+#IO check || Dependencies: lui, addiu, sw, jr
 
 lui $3, 0x3000
 addiu $3, $3, 0x0004

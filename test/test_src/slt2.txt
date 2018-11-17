@@ -1,7 +1,7 @@
 #8
 #slt2
 #slt
-#Testing comparisons (signed numbers)
+#Testing comparisons (signed numbers) || Dependencies: lui, sll, or, jr
 
 #slt rd, rs, rt
 
