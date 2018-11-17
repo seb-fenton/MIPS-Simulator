@@ -1,7 +1,7 @@
 #254
 #addu1
 #addu
-#Testing overflow behaviour || Dependencies: lui, addiu, jr
+#Testing overflow behaviour || Dependencies: lui addiu jr
 
 lui $3, 0x8000
 addiu $3, $5, 0x00FF

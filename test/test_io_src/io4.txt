@@ -1,7 +1,7 @@
 #D
 #io4
 #sh
-#Testing Alignment / IO || Dependencies: lui, ori, sh, jr
+#Testing Alignment / IO || Dependencies: lui ori sh jr
 
 #writes D. E F G are failures.
 

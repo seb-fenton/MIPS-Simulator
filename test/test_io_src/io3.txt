@@ -1,7 +1,7 @@
 #
 #io3
 #sh
-#Testing Alignment / IO || Dependencies: lui, ori, sh, jr
+#Testing Alignment / IO || Dependencies: lui ori sh jr
 
 #writes nothing. W X Y Z are failures.
 

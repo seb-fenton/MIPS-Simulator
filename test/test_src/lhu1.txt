@@ -1,7 +1,7 @@
 #1
 #lhu1
 #lhu
-#Testing sign extension & basic functionality || Dependencies: lui, ori, sh, slt, jr
+#Testing sign extension & basic functionality || Dependencies: lui ori sh slt jr
 
 lui $3, 0x2000
 ori $4, $0, 0xFFFF

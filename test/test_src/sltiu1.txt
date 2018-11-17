@@ -1,7 +1,7 @@
 #8
 #sltiu1
 #sltiu
-#Testing comparisons ("signed" numbers) || Dependencies: addiu, sll, or, jr
+#Testing comparisons ("signed" numbers) || Dependencies: addiu sll or jr
 
 addiu $5, $0, 0xFFFF    #"-1", 2^32-1
 addiu $6, $0, 0xFFFE    #"-2", 2^32-2

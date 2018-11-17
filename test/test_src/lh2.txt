@@ -1,7 +1,7 @@
 #245
 #lhu2
 #lhu
-#Testing memory access errors || Dependencies: lui, ori, jr
+#Testing memory access errors || Dependencies: lui ori jr
 
 lui $3, 0x1FFF
 ori $3, $3, 0xFFFF

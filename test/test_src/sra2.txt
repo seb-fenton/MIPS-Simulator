@@ -1,7 +1,7 @@
 #237
 #sra2
 #sra
-#Testing unsigned arithmetic shift || Dependencies: lui, ori, sltu, or, jr
+#Testing unsigned arithmetic shift || Dependencies: lui ori sltu or jr
 
 # $3 = 0x7fffff60
 lui $3, 0x7FFF

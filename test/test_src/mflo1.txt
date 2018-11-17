@@ -1,7 +1,7 @@
 #15
 #mflo1
 #mflo
-#Testing basic functionality || Dependencies: ori, mtlo, jr
+#Testing basic functionality || Dependencies: ori mtlo jr
 
 ori $3, $0, 0xF
 mtlo $3

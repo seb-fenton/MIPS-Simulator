@@ -1,7 +1,7 @@
 #
 #io2
 #sb
-#Testing I/O (invalid) || Dependencies: lui, ori, sb, jr
+#Testing I/O (invalid) || Dependencies: lui ori sb jr
 
 lui $6, 0x3000
 lui $5, 0x5758

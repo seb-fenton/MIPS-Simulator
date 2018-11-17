@@ -1,7 +1,7 @@
 #245
 #sw1
 #sw
-#Testing alignment check || Dependencies: lui, addiu, jr
+#Testing alignment check || Dependencies: lui addiu jr
 
 lui $3, 0x2000
 addiu $4, $0, 0xFADC

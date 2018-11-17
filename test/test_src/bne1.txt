@@ -1,7 +1,7 @@
 #15
 #bne1
 #bne
-#Testing conditional, delay slot and branch execution || Dependencies: ori, andi, addiu, jr
+#Testing conditional, delay slot and branch execution || Dependencies: ori andi addiu jr
 
 ori $3, $0, 0x1
 ori $2, $0, 0x1

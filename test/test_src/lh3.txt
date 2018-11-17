@@ -1,7 +1,7 @@
 #245
 #lh3
 #lh
-#Testing alignment check || Dependencies: lui, jr
+#Testing alignment check || Dependencies: lui jr
 
 lui $3, 0x2000
 
