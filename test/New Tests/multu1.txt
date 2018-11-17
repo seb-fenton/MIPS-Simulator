@@ -1,5 +1,4 @@
 #0
-
 #multu1
 #multu
 #Testing function ("signed") || Dependencies: lui jr mfhi mflo subu or
