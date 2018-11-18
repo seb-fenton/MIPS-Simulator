@@ -1,7 +1,7 @@
 #0
 #sll1
 #sll
-#Testing basic function
+#Testing basic functionality || Dependencies: addi lui ori subu jr
 
 #$3 = 0xffffffff
 addi $3, $0, 0xFFFF

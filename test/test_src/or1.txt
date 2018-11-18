@@ -1,7 +1,7 @@
 #31
 #or1
 #or
-#Testing basic functionality dependent on: addiu
+#Testing basic functionality || Dependencies: addiu jr
 
 addiu $3, $0, 0x15
 addiu $4, $0, 0x1A

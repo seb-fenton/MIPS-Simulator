@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 
     if(WriteInSuccess == false){
         //std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
-        std::exit(-11);
+        std::exit(-11); 
     }
 
     //BEGIN CONTROL LOOP WITH SIMULATOR OBJECT
@@ -56,8 +56,8 @@ std::string get_filename(int argc, char* argv[]){
     }     
     else{
         //CHANGE. no instructions. exit due to end of instruction memory
-        std::cerr<< "No binary file given. Exit with error code -11" << std::endl;
-        std::exit(-11);
+        //std::cerr<< "No binary file given. Exit with error code -20" << std::endl;
+        std::exit(-20);
     }
 
 }
@@ -84,7 +84,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
 
     else{
         std::cerr<<"\nUnable to read file.\n";
-        std::exit(-11); //-ISSUE - IS THIS CORRECT???
+        std::exit(-20); //-ISSUE - IS THIS CORRECT???
     }
 }
 

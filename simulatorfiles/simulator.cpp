@@ -10,7 +10,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     branch = false;
     delayedBranch = false;
     delayedJump = false;
-
 }
 //------CPU Control Methods------//
     bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
@@ -46,7 +45,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int check = programCounter;               //CHECK that PC is in an executable area
         check = memory.addressmap(check);
         int instruction = 0;
-        if((check > 1) && (programCounter%4 != 0))  std::exit(-11);                             //11: executing ADDRESS that cannot be executed. different from 12
+        if((check > 1) && (programCounter%4 != 0))  std::exit(-11);         //11: executing ADDRESS that cannot be executed. different from 12
 
         else{
             for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
@@ -345,43 +344,37 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         regFile.set_reg(rt & rs, rd);
     }
-    void simulator::r_div(int instruction){     //WIP THIS CAN'T BE IT
+    void simulator::r_div(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
         rs = regFile.get_reg(rs);               //src1
         rt = regFile.get_reg(rt);               //src2
 
-        if(rt == 0)
-            std::exit(-10);                     //arithmetic overflow if divide by 0 WRONG WIP
-
-        regFile.set_lo(rs/rt);                  //quotient into LO
-        regFile.set_hi(rs%rt);                  //remainder into HI
+        if(rt != 0){
+            regFile.set_lo(rs/rt);                  //quotient into LO
+            regFile.set_hi(rs%rt);                  //remainder into HI
+        }
     }
-    void simulator::r_divu(int instruction){     //WIP
-        uint rs = instruction & 0x3E00000;
-        rs = rs >> 21;
+    void simulator::r_divu(int instruction){
+        int rs,rt,rd;
+        r_parse(instruction,rs,rt,rd);
         rs = regFile.get_reg(rs);               //src1
-
-        uint rt = instruction & 0x1F0000;
-        rt = rt >> 16;
         rt = regFile.get_reg(rt);               //src2
-        if(rt == 0)
-            std::exit(-10);                     //arithmetic overflow if divide by 0
 
-        uint quotient = rs/rt;
-        uint remainder = rs%rt;
-        regFile.set_lo(quotient);               //quotient into LO
-        regFile.set_hi(remainder);              //remainder into HI
+        if(rt != 0){
+            regFile.set_lo((uint32_t)rs/(uint32_t)rt);                  //quotient into LO
+            regFile.set_hi((uint32_t)rs%(uint32_t)rt);                  //remainder into HI
+        }
     }
-    void simulator::r_jalr(int instruction){    //WIP
+    void simulator::r_jalr(int instruction){
         simulator::r_jr(instruction);
         int rd = (instruction >>11) & 0x1F;
         if(rd==0) rd = 31;                      //for the implicit case specified by the documentation
 
         regFile.set_reg(programCounter+8, rd);
     }
-    void simulator::r_jr(int instruction){      //WIP
-        int rs = (instruction >> 21) & 0x1F;  //fetch register number
+    void simulator::r_jr(int instruction){
+        int rs = (instruction >> 21) & 0x1F;        //fetch register number
         rs = regFile.get_reg(rs);                   //fetch register value
 
         jump = true;                                //set jump (for delayed branching)
@@ -403,46 +396,30 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rs = (instruction>>21) & 0x1F;                   //src
         regFile.set_lo(regFile.get_reg(rs));        //destination
     }
-    void simulator::r_mult(int instruction){    //MULT WIP
-
-        bool overflow = false;
+    void simulator::r_mult(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        int64_t multplc = regFile.get_reg(rs);               //src1
-        int64_t multplr = regFile.get_reg(rt);               //src2
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
-        int64_t result = rt*rs;
-        int tophalf = result >> 32;
-        int btmhalf = result & 0xffffffff;
-        //compare both operand signs
-        if((multplr >> 31) == (multplc >> 31))
-            if(tophalf < 0)
-                overflow = true;
-
-        //if different, expect inverted
-        if((multplr >> 31) != (multplc >> 31))
-            if(tophalf > 0)
-                overflow = true;
-
-        if(overflow)    std::exit(-10);
-        else{
-                        regFile.set_hi(tophalf);
-                        regFile.set_lo(btmhalf);
-        }
-    }
-    void simulator::r_multu(int instruction){   //MULT WIP
-        int rs = (instruction & 0x3E00000) >> 21;
-        int64_t multplc = regFile.get_reg(rs);               //src1
-
-        int rt = instruction & 0x1F0000;
-        rt = rt >> 16;
-        int64_t multplr = regFile.get_reg(rt);               //src2
-
-        int64_t result = rt*rs;
-        int tophalf = result >> 32;
-        int btmhalf = result & 0xffffffff;
-
+        int64_t result = (int64_t)rt*(int64_t)rs;
+        int tophalf = (int32_t)(result>>32);         //NUMTEST
+        int btmhalf = (int32_t)(result&0xffffffff);  //NUMTEST
+       
         regFile.set_hi(tophalf);
+        regFile.set_lo(btmhalf);
+    }
+    void simulator::r_multu(int instruction){
+        int rs,rt,rd;
+        r_parse(instruction,rs,rt,rd);
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
+
+        uint64_t result = (uint64_t)(uint32_t)rt*(uint64_t)(uint32_t)rs;
+        uint32_t tophalf = (uint32_t)(result>>32);
+        uint32_t btmhalf = (uint32_t)(result&0xffffffff);
+
+        regFile.set_hi(tophalf);        
         regFile.set_lo(btmhalf);
     }
     void simulator::r_or(int instruction){
@@ -453,7 +430,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         regFile.set_reg((rs|rt), rd);
     }
-
     void simulator::r_slt(int instruction){
         int rs, rt, rd;
         r_parse(instruction, rs, rt, rd);
@@ -572,8 +548,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         regFile.set_reg((rs^rt), rd);
     }
-
-
 
 //--------I Instructions--------//
     void simulator::i_parse(int instruction, int& rs, int& rt, int& imm){
@@ -739,16 +713,14 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
 
         void simulator::i_lbu(int instruction){
-            signed short int offset = instruction & 0xFFFF;          //immediate
-            int base = instruction>>21;                              //base
+            signed short int offset = instruction & 0xFFFF;     //immediate
+            int base = instruction>>21;                         //base
             base = base & 0x1F;
             base = regFile.get_reg(base);
 
-            int memoryAddress = base + offset;                      //effectiveaddr
+            int memoryAddress = base + offset;                  //effectiveaddr
 
-            int rt = (instruction>>16) & 0x1F;                      //destination rt
-
-
+            int rt = (instruction>>16) & 0x1F;                  //destination rt
             char byte = memory.get_byte(memoryAddress);
             int castedByte = byte;
 
@@ -809,11 +781,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int offset = instruction & 0xFFFF;
             offset = offset << 16;
-
             int rt = (instruction >> 16) & 0x1F;
-
             regFile.set_reg(offset, rt);
-
         }
         void simulator::i_lw(int instruction){
             signed short int offset = instruction & 0xFFFF;

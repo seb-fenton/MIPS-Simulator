@@ -1,7 +1,7 @@
 #D
-#sb2
+#io1
 #sb
-#Testing I/O (valid)
+#Testing I/O (valid) || Dependencies: lui ori sb jr
 
 #writes letter D. E F G are failures.
 

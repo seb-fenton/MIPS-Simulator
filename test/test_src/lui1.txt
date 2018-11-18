@@ -1,7 +1,7 @@
 #1
 #lui1
 #lui1
-#Testing basic functionality dependent on: slti
+#Testing basic functionality || Dependencies: ori slti jr
 
 lui $3, 0x8000
 lui $4, 0x8000

@@ -1,7 +1,7 @@
 #0
 #addu2
 #addu
-#Testing basic functionality
+#Testing basic functionality || Dependencies: jr
 
 addu $2, $0, $1
 jr $0

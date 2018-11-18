@@ -1,7 +1,7 @@
 #15
 #lwl1
 #lwl
-#Testing functionality
+#Testing functionality || Dependencies: lui ori sw slt or sll jr
 
 #initialise memory to be accessed
 lui $3, 0xAAAA

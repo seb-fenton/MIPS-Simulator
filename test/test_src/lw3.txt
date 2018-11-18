@@ -1,7 +1,7 @@
 #245
 #lw3
 #lw
-#Testing alignment check dependent on: lui, ori, jr
+#Testing alignment check || Dependencies: lui jr
 
 lui $3, 0x2000
 

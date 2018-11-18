@@ -1,7 +1,7 @@
 #0
 #sh1
 #sh
-#Testing basic function
+#Testing basic functionality || Dependencies: lui ori lw lui subu jr
 
 lui $6, 0x2000
 lui $5, 0x00AB

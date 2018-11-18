@@ -1,7 +1,7 @@
 #3
 #mfhi1
 #mfhi
-#Testing basic functionality dependent on: ori, mthi
+#Testing basic functionality || Dependencies: ori mthi jr
 
 ori $3, $0, 0x3
 mthi $3

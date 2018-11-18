@@ -1,7 +1,7 @@
 #8
 #slt1
 #slt
-#Testing comparisons (unsigned numbers)
+#Testing comparisons (unsigned numbers) || Dependencies: lui addiu sll or jr
 
 #slt rd, rs, rt
 

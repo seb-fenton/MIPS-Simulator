@@ -1,7 +1,7 @@
 #0
 #srl1
 #srl
-#Testing basic function
+#Testing basic functionality || Dependencies: lui ori subu jr
 
 #$3 = 0xffffff60
 lui $3, 0xFFFF

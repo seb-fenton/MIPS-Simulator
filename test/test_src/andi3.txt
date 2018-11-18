@@ -1,7 +1,7 @@
 #255
 #andi3
 #andi
-#Testing edge case
+#Testing edge case || Dependencies: addiu jr
 
 addiu $3, $5, 0xFFFF
 andi $2, $3, 0xFFFF

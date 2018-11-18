@@ -1,7 +1,7 @@
 #15
 #bgez1
 #bgez
-#Testing conditional, delay slot and branch execution
+#Testing conditional, delay slot and branch execution || Dependencies: ori andi lui addiu jr
 
 ori $2, $0, 0x1
 

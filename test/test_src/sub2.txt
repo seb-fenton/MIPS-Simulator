@@ -1,7 +1,7 @@
 #95
 #sub2
 #sub
-#Testing basic function using last 8 bits (+ve result)
+#Testing basic functionality using last 8 bits (+ve result) || Dependencies: addiu jr
 
 addiu $3, $0, 0x7FFF
 addiu $4, $0, 0x7FA0

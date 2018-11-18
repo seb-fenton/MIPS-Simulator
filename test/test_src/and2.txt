@@ -1,7 +1,7 @@
 #0
 #and2
 #and
-#Testing zero case functionality
+#Testing zero case functionality || Dependencies: jr
 
 and $2, $3, $4
 jr $0

@@ -34,7 +34,7 @@ for f in $FILES; do
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    #printf "$testIndex , $test , $bool , $USER , $message\n" #>> test/output/output.csv          
+    #printf "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||\n" #>> test/output/output.csv          
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
         echo "Test failed: $testIndex, output: $output"                          
@@ -62,18 +62,70 @@ for f in $FILES; do
         bool="pass"
     fi
 
-    printf "$testIndex , $test , $bool , $USER , $message\n" #>> test/output/output.csv
+    printf "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||\n" #>> test/output/output.csv
 
-    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
+    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
 
 
+$commandline_args
+output=$?
+bool="fail"
 
+if [ $output -eq 236 ]; then
+    bool="pass"
+fi
 
+printf "noinput , nop , $bool , $USER , || Expected outcome: 236 | Actual outcome: $output || Testing no-input error || Dependencies: ||\n"
 
+FILES="test/test_io_src_manual/*.txt"
+for f in $FILES; do
+    bool="fail"
 
+    exec 5< $f                                                  #reads first 4 lines of our txt files to retrieve metadata
+
+    read -r line <&5
+    expectedOutcome="${line:1:${#line}-1}"
+    read -r line <&5
+    testIndex="${line:1:${#line}-1}"
+    read -r line <&5
+    test="${line:1:${#line}-1}"
+    read -r line <&5
+    message="${line:1:${#line}-1}"
+
+    if [ "$expectedOutcome" = "0" ]; then
+        "0" >> $commandline_args test/test_io_src_manual/$testIndex.bin
+        output=$?
+    fi
+
+    if [ "$expectedOutcome" = "D" ]; then
+        echo "D" >> $commandline_args test/test_io_src_manual/$testIndex.bin
+        output=$?
+    fi
+
+    if [ "$expectedOutcome" = "E" ]; then
+        $commandline_args test/test_io_src_manual/$testIndex.bin
+        "E"
+        output=$?
+    fi
+
+    if [ "$expectedOutcome" = "F" ]; then
+        $commandline_args test/test_io_src_manual/$testIndex.bin "F"
+        output=$?
+    fi
+
+    if [ "$output" = "$expectedOutcome" ]; then
+        bool="pass"
+    fi
+
+    printf "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||\n" #>> test/output/output.csv
+
+    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
+        echo "Test failed: $testIndex, output: $output"                          
+    fi
+done
 
 
 

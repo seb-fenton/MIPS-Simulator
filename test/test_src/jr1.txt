@@ -1,7 +1,7 @@
 #0
 #jr1
 #jr
-#Testing basic functionality
+#Testing basic functionality || Dependencies: lui addiu jr ori
 
 lui $4, 0x1000
 addiu $4, $4, 0x0014

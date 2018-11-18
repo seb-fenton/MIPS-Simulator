@@ -1,7 +1,7 @@
 #31
 #bltzal1
 #bltzal
-#Testing conditional, delay slot and branch execution
+#Testing conditional, delay slot and branch execution || Dependencies: lui ori andi addiu jr
 
 lui $3, 0xF000
 ori $2, $0, 0x1

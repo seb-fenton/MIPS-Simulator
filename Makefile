@@ -32,7 +32,7 @@ clean:
 	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o test/testbenchinitialiser.o
 
 #clean function to remove testbench outputs
-clean_t:
-	rm -r test/output
+#clean_t:
+	#rm -r test/output
 	#rm test/output/output.csv 
 	
