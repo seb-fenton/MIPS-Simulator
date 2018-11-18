@@ -8,7 +8,7 @@ lui $5, 0x8000
 lui $6, 0x7FFF
 ori $6, $6, 0xFFFF
 
-mult $5, $6
+multu $5, $6
 mfhi $3
 mflo $4
 
@@ -21,5 +21,4 @@ subu $11, $4, $8
 or $2, $10, $11
 
 jr $0
-
 nop 

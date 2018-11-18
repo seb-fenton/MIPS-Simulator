@@ -356,7 +356,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::r_divu(int instruction){
-         int rs,rt,rd;
+        int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
         rs = regFile.get_reg(rs);               //src1
         rt = regFile.get_reg(rt);               //src2

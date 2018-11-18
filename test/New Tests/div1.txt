@@ -1,11 +1,11 @@
 #0
 #div1
 #div
-#Testing function (signed) || Dependencies: lui jr mfhi mflo subu or
+#Testing function (signed) || Dependencies: lui jr mfhi mflo subu or ori
 
 lui $5, 0x8000
 lui $6, 0x8
-ori $6, $6, 0x85
+ori $6, 0x85
 
 div $5, $6
 mfhi $3
