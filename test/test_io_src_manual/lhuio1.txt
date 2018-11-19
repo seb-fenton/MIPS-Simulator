@@ -1,0 +1,13 @@
+#0
+#lhuio1
+#lhu
+#Testing IO (aligned, invalid) || Dependencies: lui jr 
+#0
+
+lui $5, 0x3000
+
+lhu $2, 0x0($5)
+
+jr $0
+
+nop 
