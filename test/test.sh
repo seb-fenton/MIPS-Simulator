@@ -69,15 +69,6 @@ for f in $FILES; do
     fi
 done
 
-
-$commandline_args
-output=$?
-bool="fail"
-
-if [ $output -eq 236 ]; then
-    bool="pass"
-fi
-
 FILES="test/test_io_src_manual/*.txt"
 for f in $FILES; do
     bool="fail"
@@ -126,7 +117,15 @@ for f in $FILES; do
     fi
 done
 
-echo "noinput , nop , $bool , $USER , || Expected outcome: 236 | Actual outcome: $output || Testing no-input error || Dependencies: ||"
+$commandline_args
+output=$?
+bool="fail"
+
+if [ $output -eq 235 ]; then
+    bool="pass"
+fi
+
+echo "noinput , nop , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||"
 
 
 
