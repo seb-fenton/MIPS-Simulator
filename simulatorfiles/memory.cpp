@@ -195,7 +195,7 @@
         }
         else{
             if(check == 2){
-                if(addr_data.find(address) != addr_data.end())  addr_data.insert({address, value});
+                if(addr_data.find(address) != addr_data.end())  addr_data.insert(std::pair<int, char> (address, value));
                 else    addr_data[address] = value;
             }
             if(check == 4)  addr_putc[address] = value;

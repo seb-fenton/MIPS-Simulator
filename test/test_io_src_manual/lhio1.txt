@@ -2,6 +2,7 @@
 #lhio1
 #lh
 #Testing IO (aligned, invalid) || Dependencies: lui jr 
+#0
 
 lui $5, 0x3000
 

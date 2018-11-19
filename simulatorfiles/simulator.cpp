@@ -699,6 +699,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             base = regFile.get_reg(base);
 
             int memoryAddress = base + offset;                  //effectiveaddr
+            if(memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
+
 
             int rt = (instruction>>16) & 0x1F;
 
@@ -710,6 +712,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             else            output = byte;                              //casting works fine if byte>=0
 
             regFile.set_reg(output, rt);
+            memory.io_clear();
         }
 
         void simulator::i_lbu(int instruction){
@@ -720,62 +723,59 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int memoryAddress = base + offset;                  //effectiveaddr
 
+            if(memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
+
             int rt = (instruction>>16) & 0x1F;                  //destination rt
             char byte = memory.get_byte(memoryAddress);
             int castedByte = byte;
 
             regFile.set_reg(castedByte, rt);
+            memory.io_clear();
         }
 
         void simulator::i_lh(int instruction){
-            signed short int offset = instruction & 0xFFFF;     //immediate
-
-            int base = (instruction>>21) & 0x1F;                //base address
+            int base, rt, imm;
+            i_parse(instruction, base, rt, imm);
+            sign_extend(imm);
             base = regFile.get_reg(base);
 
-            int memoryAddress = base + offset;
+            int memoryAddress = base + imm;
 
             if((memoryAddress % 2)!= 0){                                      //test for memory access restriction on load halfword
                 //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error" << std::endl;
                 std::exit(-11);
             }
-            int rt = (instruction>>16) & 0x1F;                      //destination rt
 
-            signed short int hword = memory.get_byte(memoryAddress);
+            if(memoryAddress == 0x30000000 || memoryAddress == 0x30000002) memory.io_read();
+
+            int hword = (int32_t)memory.get_byte(memoryAddress);
             hword = hword<<8;
-            hword = hword | memory.get_byte(memoryAddress+1);
+            hword = hword | (int32_t)memory.get_byte(memoryAddress+1);
 
-            unsigned short int uhword = memory.get_byte(memoryAddress);
-            uhword = uhword<<8;
-            uhword = uhword | memory.get_byte(memoryAddress+1);
-
-            int output;
-
-            if(hword < 0)   output = uhword | 0xFFFF0000;               //unsigned is used as ucbyte is cast to integer when added to an integer
-            else            output = hword;                              //casting works fine if byte>=0
-
-            regFile.set_reg(output, rt);
+            regFile.set_reg(hword, rt);
+            memory.io_clear();
         }
         void simulator::i_lhu(int instruction){
-            int offset = instruction & 0xFFFF;     //address src1
-
-            int base = (instruction>>21) & 0x1F;                //base address
+            int base, rt, imm;
+            i_parse(instruction, base, rt, imm);
+            sign_extend(imm);
             base = regFile.get_reg(base);
 
-            int memoryAddress = base + offset;
+            int memoryAddress = base + imm;
 
             if((memoryAddress % 2)!=0){                                        //test for memory access restriction on load halfword
                 //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 
-            short unsigned int output = memory.get_byte(memoryAddress);
-            output = output << 8;
+            if(memoryAddress == 0x30000000 || memoryAddress == 0x30000002) memory.io_read();
 
-            output = output | memory.get_byte(memoryAddress+1);
+            int hword = (uint32_t)(unsigned)memory.get_byte(memoryAddress);
+            hword = hword<<8;
+            hword = hword | (uint32_t)(unsigned)memory.get_byte(memoryAddress+1);
 
-            int rt = (instruction>>16)&0x1F;
-            regFile.set_reg(output, rt);
+            regFile.set_reg(hword, rt);
+            memory.io_clear();
         }
         void simulator::i_lui(int instruction){
 
@@ -795,6 +795,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
                 std::exit(-11);
             }
 
+            if(memoryAddress == 0x30000000) memory.io_read();
+
             int input = memory.get_byte(memoryAddress);
             input = input<<8;
 
@@ -812,6 +814,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int rt = instruction>>16;
             regFile.set_reg(input, rt&0x1F);
 
+            memory.io_clear();
+
         }
         void simulator::i_lwl(int instruction){
             signed short int offset = instruction & 0xFFFF;
@@ -825,6 +829,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int moduAmount = address % 4;
             int input = 0;
+
+            //WIP - GETC MODIFICATION
 
             for(int i = 3 - moduAmount; i >= 0; i--){
                 int temp = (unsigned char)memory.get_byte(address + i);
@@ -846,6 +852,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int moduAmount = address % 4;
             int input = 0;
+
+            if(address == 0x30000004) memory.io_read();
 
             for(int i = 0; i < moduAmount; i++){
                 int temp = (unsigned char)memory.get_byte(address + i);
@@ -887,16 +895,16 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             base = regFile.get_reg(base);
             rt = regFile.get_reg(rt) & 0xFFFF;
+
             int effectiveAddr = base + offset;                  //effectiveaddr
 
-            int test = effectiveAddr % 2;
-            if(test != 0){                                      //test for memory access restriction on load halfword
+            if((effectiveAddr % 2) != 0){                                      //test for memory access restriction on load halfword
                 //std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
                 std::exit(-11);
             }
 
             char msb = (rt>>8) & 0xFF;                                 //msb to be loaded into memory first
-            memory.set_byte((effectiveAddr), msb);
+            memory.set_byte(effectiveAddr, msb);
 
             char lsb = rt & 0xFF;                             //lsb then loaded into memory
             memory.set_byte((effectiveAddr + 1), lsb);
