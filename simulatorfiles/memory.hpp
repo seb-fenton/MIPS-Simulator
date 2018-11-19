@@ -1,6 +1,7 @@
 #ifndef MEMORY_HPP
 #define MEMORY_HPP
 #include <vector>
+#include <map>
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -31,10 +32,7 @@ class sim_mem{
     private:
         void set_instruc_byte(int address, char value, bool &success);
         std::vector<char> addr_instr;   //0x1000000
-
-        std::vector<char> addr_data;    //0x4000000
-        bool emptyData;
-
+        std::map <int,char> addr_data;  //0x4000000
         char addr_getc[4];
         char addr_putc[4];
         //0x4 to 0x0FFF FFFF            : Blank
