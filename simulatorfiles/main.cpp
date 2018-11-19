@@ -57,7 +57,7 @@ std::string get_filename(int argc, char* argv[]){
     else{
         //CHANGE. no instructions. exit due to end of instruction memory
         //std::cerr<< "No binary file given. Exit with error code -20" << std::endl;
-        std::exit(-20);
+        std::exit(-21);
     }
 
 }
@@ -84,7 +84,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
 
     else{
         std::cerr<<"\nUnable to read file.\n";
-        std::exit(-20); //-ISSUE - IS THIS CORRECT???
+        std::exit(-21); //-ISSUE - IS THIS CORRECT???
     }
 }
 

@@ -831,6 +831,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int input = 0;
 
             //WIP - GETC MODIFICATION
+            if(address >= 0x30000000 && address <= 0x30000003) memory.io_read();
 
             for(int i = 3 - moduAmount; i >= 0; i--){
                 int temp = (unsigned char)memory.get_byte(address + i);
@@ -839,6 +840,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             }
 
             regFile.lwl_set_reg(input, rt, moduAmount);
+            memory.io_clear();
         }
         void simulator::i_lwr(int instruction){
             signed short int offset = instruction & 0xFFFF;
