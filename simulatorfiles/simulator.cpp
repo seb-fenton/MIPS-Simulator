@@ -835,8 +835,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             for(int i = 3 - moduAmount; i >= 0; i--){
                 int temp = (unsigned char)memory.get_byte(address + i);
-                temp = temp << 8*(3-i);
-                input = input | temp;
+                temp <<= 8*(3-i);
+                input |= temp;
             }
 
             regFile.lwl_set_reg(input, rt, moduAmount);
@@ -860,8 +860,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             for(int i = 0; i < moduAmount; i++){
                 int temp = (unsigned char)memory.get_byte(address + i);
-                temp = temp << 8*(3-i);
-                input = input | temp;
+                temp <<= 8*(3-i);
+                input |= temp;
             }
 
             regFile.lwr_set_reg(input, rt, moduAmount);
