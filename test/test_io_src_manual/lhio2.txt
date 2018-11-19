@@ -1,8 +1,8 @@
-#E
+#69
 #lhio2
 #lh
 #Testing IO (aligned, valid) || Dependencies: lui jr
-
+#E
 
 lui $5, 0x3000
 

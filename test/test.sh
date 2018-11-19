@@ -34,7 +34,7 @@ for f in $FILES; do
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    #echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
         echo "Test failed: $testIndex, output: $output"                          
@@ -77,8 +77,6 @@ bool="fail"
 if [ $output -eq 236 ]; then
     bool="pass"
 fi
-
-echo "noinput , nop , $bool , $USER , || Expected outcome: 236 | Actual outcome: $output || Testing no-input error || Dependencies: ||"
 
 FILES="test/test_io_src_manual/*.txt"
 for f in $FILES; do
@@ -128,6 +126,7 @@ for f in $FILES; do
     fi
 done
 
+echo "noinput , nop , $bool , $USER , || Expected outcome: 236 | Actual outcome: $output || Testing no-input error || Dependencies: ||"
 
 
 
