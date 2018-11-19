@@ -106,6 +106,18 @@ for f in $FILES; do
         output=$?
     fi
 
+    if [ "$expectedInput" = "G" ]; then
+        echo "G" | $commandline_args test/test_io_src_manual/$testIndex.bin
+        output=$?
+    fi
+
+    if [ "$expectedInput" = "H" ]; then
+        echo "H" | $commandline_args test/test_io_src_manual/$testIndex.bin
+        output=$?
+    fi
+
+
+
     if [ "$output" = "$expectedOutcome" ]; then
         bool="pass"
     fi

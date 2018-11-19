@@ -628,8 +628,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         if(rs >= 0){
             branch = true;                          //branch
             pcOffSet = sigImm;
-            regFile.set_reg(programCounter+8, 31);
         }
+        regFile.set_reg(programCounter+8, 31);
     }
     void simulator::i_bgtz(int instruction){
         int rs,rt,imm;
@@ -673,8 +673,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         if(rs < 0){
             branch = true;
             pcOffSet = imm;
-            regFile.set_reg(programCounter+8, 31);
         }
+        regFile.set_reg(programCounter+8, 31);
     }
     void simulator::i_bne(int instruction){
         int rs,rt,imm;
@@ -727,7 +727,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int rt = (instruction>>16) & 0x1F;                  //destination rt
             char byte = memory.get_byte(memoryAddress);
-            int castedByte = byte;
+            int castedByte = byte & 0x000000FF;
 
             regFile.set_reg(castedByte, rt);
             memory.io_clear();
@@ -770,9 +770,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             if(memoryAddress == 0x30000000 || memoryAddress == 0x30000002) memory.io_read();
 
-            int hword = (uint32_t)(unsigned)memory.get_byte(memoryAddress);
+            uint32_t hword = (uint32_t)(unsigned char)memory.get_byte(memoryAddress);
             hword = hword<<8;
-            hword = hword | (uint32_t)(unsigned)memory.get_byte(memoryAddress+1);
+            hword = hword | (uint32_t)(unsigned char)memory.get_byte(memoryAddress+1);
 
             regFile.set_reg(hword, rt);
             memory.io_clear();
@@ -855,7 +855,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int moduAmount = address % 4;
             int input = 0;
 
-            if(address == 0x30000004) memory.io_read();
+            if(address >= 0x30000000 && address <= 0x30000003) memory.io_read();
+
 
             for(int i = 0; i < moduAmount; i++){
                 int temp = (unsigned char)memory.get_byte(address + i);
@@ -864,6 +865,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             }
 
             regFile.lwr_set_reg(input, rt, moduAmount);
+            memory.io_clear();
         }
 
     /***END GETC WIP***/
