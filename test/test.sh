@@ -3,10 +3,10 @@
 #ISSUE - MAKE SURE TO REMOVE ALL UNNECESSARY ECHOES AND MAKE SURE TO PRINT TO COMMAND LINE!
 
 ###INITIALISATION OF TEST DIRECTORY AND FILES###
-#mkdir -p test/output
-#touch test/output/output.csv
-#touch test/temp.csv
-#printf "TestId , Instruction , Status , Author , Message\n" #>> test/output/output.csv
+mkdir -p test/output
+touch test/output/output.csv
+touch test/temp.csv
+printf "TestId , Instruction , Status , Author , Message\n" #>> test/output/output.csv
 
 ###TAKES FILE INPUT###                                           
 commandline_args=("$@")
@@ -34,7 +34,7 @@ for f in $FILES; do
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" >> test/output/output.csv          
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
         echo "Test failed: $testIndex, output: $output"                          
@@ -62,7 +62,7 @@ for f in $FILES; do
         bool="pass"
     fi
 
-    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" >> test/output/output.csv
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
         echo "Test failed: $testIndex, output: $output"                          
@@ -122,7 +122,7 @@ for f in $FILES; do
         bool="pass"
     fi
 
-    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" >> test/output/output.csv
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
         echo "Test failed: $testIndex, output: $output"                          
@@ -137,7 +137,7 @@ if [ $output -eq 235 ]; then
     bool="pass"
 fi
 
-echo "noinput , nop , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||"
+echo "noinput , nop , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||" >> test/output/output.csv
 
 
 
