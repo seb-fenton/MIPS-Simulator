@@ -115,10 +115,14 @@
         int io_input;
         io_input = getchar(); //eof 0xFFFFFFFF, else 0x000000XX
 
+        if(io_input == EOF) io_input = -1;
+
         addr_getc[0] = (io_input >> 24) & 0xff;
         addr_getc[1] = (io_input >> 16) & 0xff;
         addr_getc[2] = (io_input >> 8) & 0xff;
         addr_getc[3] = io_input & 0xff;
+
+        
 
     }
     void sim_mem::io_write(){

@@ -139,8 +139,25 @@ fi
 
 echo "noinput , nop , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||" #>> test/output/output.csv
 
+cat test/eof.txt | $commandline_args test/test_io_src_manual/lbio1.bin
+output=$?
+bool="fail"
 
+if [ $output -eq 255 ]; then
+    bool="pass"
+fi
 
+echo "eof , lb , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
+
+cat test/eof.txt | $commandline_args test/test_io_src_manual/lwio1.bin
+output=$?
+bool="fail"
+
+if [ $output -eq 255 ]; then
+    bool="pass"
+fi
+
+echo "eof , lw , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
 
 
