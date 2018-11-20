@@ -843,14 +843,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             memory.io_clear();
         }
         void simulator::i_lwr(int instruction){
-            signed short int offset = instruction & 0xFFFF;
-
-            int base = (instruction >> 21) & 0x1F;
+            int base, rt, imm;
+            i_parse(instruction, base, rt, imm);
             base = regFile.get_reg(base);
+            sign_extend(imm);
 
-            int address = base + offset;
-
-            int rt = (instruction >> 16) & 0x1F;
+            int address = base + imm;
 
             int moduAmount = address % 4;
             int input = 0;
@@ -858,9 +856,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             if(address >= 0x30000000 && address <= 0x30000003) memory.io_read();
 
 
-            for(int i = 0; i < moduAmount; i++){
-                int temp = (unsigned char)memory.get_byte(address + i);
-                temp <<= 8*(3-i);
+            for(int i = moduAmount; i >= 0; i--){
+                int temp = (int32_t)(unsigned char)memory.get_byte(address - i);
+                temp <<= 8*(i);
                 input |= temp;
             }
 

@@ -33,9 +33,13 @@
         else if(regNum<32 && regNum>0){
             switch(moduAmount){     //see a similar table in the spec explanation of lwl
                 case 0: reg[regNum] = reg[regNum] & 0x00000000;
+                        break;
                 case 1: reg[regNum] = reg[regNum] & 0x000000FF;
+                        break;
                 case 2: reg[regNum] = reg[regNum] & 0x0000FFFF;
+                        break;
                 case 3: reg[regNum] = reg[regNum] & 0x00FFFFFF;
+                        break;
             }
             reg[regNum] = reg[regNum] | input;
         }
@@ -52,10 +56,13 @@
         else if(regNum<32 && regNum>0){
             switch(moduAmount){         //see a similar table in the spec explanation of lwr
                 case 0: reg[regNum] = reg[regNum] & 0xFFFFFF00;
+                        break;
                 case 1: reg[regNum] = reg[regNum] & 0xFFFF0000;
+                        break;
                 case 2: reg[regNum] = reg[regNum] & 0xFF000000;
+                        break;
                 case 3: reg[regNum] = reg[regNum] & 0x00000000;
-
+                        break;
             }
             reg[regNum] = reg[regNum] | input;
         }

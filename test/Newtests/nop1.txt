@@ -1,0 +1,28 @@
+#1
+#nop1
+#nop
+#Testing program exiting with concurrent noops || Dependencies: ori, jr 
+
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+nop
+ori $2, $0, 1
+jr $0
+nop
