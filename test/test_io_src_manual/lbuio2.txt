@@ -1,0 +1,12 @@
+#71
+#lbuio2
+#lbu
+#Testing IO (aligned, valid) || Dependencies: lui jr 
+#G
+
+lui $5, 0x3000
+
+lbu $2, 0x3($5)
+
+jr $0
+nop 

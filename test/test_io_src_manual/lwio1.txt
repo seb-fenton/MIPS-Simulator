@@ -1,7 +1,8 @@
-#D
+#68
 #lwio1
 #lw
 #Testing IO (aligned) || Dependencies: lui jr
+#D
 
 
 lui $5, 0x3000

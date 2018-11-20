@@ -1,0 +1,13 @@
+#0
+#bgezal2
+#bgezal
+#Testing linking on no branch || Dependencies: lui, addiu, subu
+
+lui $4, 0x8000
+bgezal $4, 0x8
+nop
+lui $3, 0x2000
+addiu $3, $3, 0xC
+subu $2, $31, $3
+jr $0
+nop

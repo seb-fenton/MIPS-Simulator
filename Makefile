@@ -2,6 +2,8 @@
 .DEFAULT_GOAL := simulator
 .PHONY: clean
 
+CPPFLAGS = -c --std=c++11
+
 #target simulator rules
 simulator: simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o
 	mkdir -p bin
@@ -13,26 +15,25 @@ testbench: test/testbenchinitialiser.o
 
 #main object file compilation
 main.o:
-	g++ -c simulatorfiles/main.cpp
+	g++ $(CPPFLAGS) simulatorfiles/main.cpp
 
 #simulator object file compilation
 simulator.o:
-	g++ -c simulatorfiles/simulator.cpp
+	g++ $(CPPFLAGS) simulatorfiles/simulator.cpp
 
 #memory object file compilation
 memory.o:
-	g++ -c simulatorfiles/memory.cpp
+	g++ $(CPPFLAGS) simulatorfiles/memory.cpp
 
 #testbench object file compilation
 testbenchinitialiser.o:
-	g++ -c test/testbenchinitialiser.cpp
+	g++ $(CPPFLAGS) test/testbenchinitialiser.cpp
 
 #clean function to remove all temp files that are not testbench outputs
-clean: 
+clean:
 	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o test/testbenchinitialiser.o
 
 #clean function to remove testbench outputs
 #clean_t:
 	#rm -r test/output
-	#rm test/output/output.csv 
-	
+	#rm test/output/output.csv

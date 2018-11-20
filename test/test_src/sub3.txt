@@ -1,11 +1,12 @@
-#241
+#0
 #sub3
 #sub
 #Testing basic functionality using last 8 bits (-ve result) || Dependencies: addiu jr
 
-addiu $3, $0, 0x7FF0
+addiu $3, $0, 0x7FFE
 addiu $4, $0, 0x7FFF
 sub $2, $3, $4
+addiu $2, $2, 1
 
 jr $0
 nop

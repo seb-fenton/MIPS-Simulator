@@ -23,8 +23,7 @@ lwr $24, 0x0($20)
 #set r2 to 0000 0001 if successful
 lui $6, 0x5555
 addiu $6, $6, 0x55AB
-slt $4, $24, $6
-or $2, $0, $4
+subu $2, $6, $24
 
 #set reg 24; to be overwritten to some degree
 lui $24, 0x5555
@@ -36,7 +35,7 @@ lwr $24, 0x1($20)
 #set r2 to 0000 001X if successful
 lui $6, 0x5555
 ori $6, $6, 0xAAAB
-slt $4, $24, $6
+subu $4, $6, $24
 sll $4, $4, 0x1
 or $2, $2, $4
 
@@ -50,7 +49,7 @@ lwr $24, 0x2($20)
 #set r2 to 0000 01XX if succesful
 lui $6, 0x55AA
 ori $6, $6, 0xAAAB
-slt $4, $24, $6
+subu $4, $6, $24
 sll $4, $4, 0x2
 or $2, $2, $4
 
@@ -64,7 +63,7 @@ lwr $24, 0x3($20)
 #set r2 to 0000 1XXX if successful
 lui $6, 0xAAAA
 ori $6, $6, 0xAAAB
-slt $4, $24, $6
+subu $4, $6, $24
 sll $4, $4, 0x3
 or $2, $2, $4
 

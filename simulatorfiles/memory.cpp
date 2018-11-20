@@ -33,9 +33,13 @@
         else if(regNum<32 && regNum>0){
             switch(moduAmount){     //see a similar table in the spec explanation of lwl
                 case 0: reg[regNum] = reg[regNum] & 0x00000000;
+                        break;
                 case 1: reg[regNum] = reg[regNum] & 0x000000FF;
+                        break;
                 case 2: reg[regNum] = reg[regNum] & 0x0000FFFF;
+                        break;
                 case 3: reg[regNum] = reg[regNum] & 0x00FFFFFF;
+                        break;
             }
             reg[regNum] = reg[regNum] | input;
         }
@@ -52,10 +56,13 @@
         else if(regNum<32 && regNum>0){
             switch(moduAmount){         //see a similar table in the spec explanation of lwr
                 case 0: reg[regNum] = reg[regNum] & 0xFFFFFF00;
+                        break;
                 case 1: reg[regNum] = reg[regNum] & 0xFFFF0000;
+                        break;
                 case 2: reg[regNum] = reg[regNum] & 0xFF000000;
+                        break;
                 case 3: reg[regNum] = reg[regNum] & 0x00000000;
-
+                        break;
             }
             reg[regNum] = reg[regNum] | input;
         }
@@ -84,8 +91,6 @@
 
 //SIMULATOR_MEMORY FUNCTION DEFINITIONS//
     sim_mem::sim_mem(int LengthOfBinary, char* Memblock, bool& InputSuccess){
-        emptyData = true;
-
         //allocate to length of binary chars
         addr_instr.resize(LengthOfBinary);
         io_clear();
@@ -117,10 +122,14 @@
         int io_input;
         io_input = getchar(); //eof 0xFFFFFFFF, else 0x000000XX
 
+        if(io_input == EOF) io_input = -1;
+
         addr_getc[0] = (io_input >> 24) & 0xff;
         addr_getc[1] = (io_input >> 16) & 0xff;
         addr_getc[2] = (io_input >> 8) & 0xff;
         addr_getc[3] = io_input & 0xff;
+
+        
 
     }
     void sim_mem::io_write(){
@@ -149,12 +158,6 @@
         }
         else if ((0x20000000 <= address) && (address < 0x24000000)){
             address = address - 0x20000000;
-
-            if(emptyData){
-                addr_data.resize(0x4000000);
-                emptyData = false;
-            }
-
             return 2; //2 for data
         }
         else if ((0x30000000 <= address) && (address < 0x30000004)){
@@ -178,14 +181,15 @@
             std::exit(-11);
         }
         else{
-            if(check == 1){
-                if(address < addr_instr.size())
-                    return addr_instr[address];
-                else
-                    return 0;
 
+            if(check == 1){
+                if(address < addr_instr.size()) return addr_instr[address];
+                else    return 0;
             }
-            if(check == 2)  return addr_data[address];
+            if(check == 2){
+                if(addr_data.find(address) != addr_data.end())  return addr_data[address];
+                else return 0;
+            }  
             if(check == 3)  return addr_getc[address];
         }
     }
@@ -201,7 +205,10 @@
             std::exit(-11);
         }
         else{
-            if(check == 2)  addr_data[address] = value;
+            if(check == 2){
+                if(addr_data.find(address) != addr_data.end())  addr_data.insert(std::pair<int, char> (address, value));
+                else    addr_data[address] = value;
+            }
             if(check == 4)  addr_putc[address] = value;
         }
     }

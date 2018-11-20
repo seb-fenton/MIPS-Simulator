@@ -1,21 +1,19 @@
-#3
+#0
 #lb1
 #lb
-#Testing sign extension & basic functionality || Dependencies: lui ori sb slti andi slt sll addu jr
+#Testing sign extension & basic functionality || Dependencies: lui ori sb subu jr
 
 lui $3, 0x2000
+
+#stored value
 ori $4, $0, 0xFFFF
-sb $4, 0x1($3)
+sb $4, 0x0($3)
 
-lb $5, 0x1($3)
-slti $2, $5, 0x0
+ori $3, $3, 0x0001
 
-andi $5, $5, 0xFF
-ori $6, $0, 0xFE
-slt $3, $6, $5
-
-sll $2, $2, 1
-addu $2, $2, $3
+lb $5, 0xFFFF($3)
+addiu $6, $0, 0xFFFF
+subu $2, $5, $6
 
 jr $0
 nop

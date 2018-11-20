@@ -6,7 +6,7 @@
 #mkdir -p test/output
 #touch test/output/output.csv
 #touch test/temp.csv
-#printf "TestId , Instruction , Status , Author , Message\n" #>> test/output/output.csv
+echo "TestId , Instruction , Status , Author , Message\n" #>> test/output/output.csv
 
 ###TAKES FILE INPUT###                                           
 commandline_args=("$@")
@@ -34,7 +34,7 @@ for f in $FILES; do
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    #printf "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||\n" #>> test/output/output.csv          
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
         echo "Test failed: $testIndex, output: $output"                          
@@ -62,23 +62,12 @@ for f in $FILES; do
         bool="pass"
     fi
 
-    printf "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||\n" #>> test/output/output.csv
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
-
-
-$commandline_args
-output=$?
-bool="fail"
-
-if [ $output -eq 236 ]; then
-    bool="pass"
-fi
-
-printf "noinput , nop , $bool , $USER , || Expected outcome: 236 | Actual outcome: $output || Testing no-input error || Dependencies: ||\n"
 
 FILES="test/test_io_src_manual/*.txt"
 for f in $FILES; do
@@ -94,42 +83,81 @@ for f in $FILES; do
     test="${line:1:${#line}-1}"
     read -r line <&5
     message="${line:1:${#line}-1}"
+    read -r line <&5
+    expectedInput="${line:1:${#line}-1}"
 
-    if [ "$expectedOutcome" = "0" ]; then
-        "0" >> $commandline_args test/test_io_src_manual/$testIndex.bin
+    if [ "$expectedInput" = "0" ]; then
+        echo "0" | $commandline_args test/test_io_src_manual/$testIndex.bin
         output=$?
     fi
 
-    if [ "$expectedOutcome" = "D" ]; then
-        echo "D" >> $commandline_args test/test_io_src_manual/$testIndex.bin
+    if [ "$expectedInput" = "D" ]; then
+        echo "D" | $commandline_args test/test_io_src_manual/$testIndex.bin
         output=$?
     fi
 
-    if [ "$expectedOutcome" = "E" ]; then
-        $commandline_args test/test_io_src_manual/$testIndex.bin
-        "E"
+    if [ "$expectedInput" = "E" ]; then
+        echo "E" | $commandline_args test/test_io_src_manual/$testIndex.bin
         output=$?
     fi
 
-    if [ "$expectedOutcome" = "F" ]; then
-        $commandline_args test/test_io_src_manual/$testIndex.bin "F"
+    if [ "$expectedInput" = "F" ]; then
+        echo "F" | $commandline_args test/test_io_src_manual/$testIndex.bin
         output=$?
     fi
+
+    if [ "$expectedInput" = "G" ]; then
+        echo "G" | $commandline_args test/test_io_src_manual/$testIndex.bin
+        output=$?
+    fi
+
+    if [ "$expectedInput" = "H" ]; then
+        echo "H" | $commandline_args test/test_io_src_manual/$testIndex.bin
+        output=$?
+    fi
+
+
 
     if [ "$output" = "$expectedOutcome" ]; then
         bool="pass"
     fi
 
-    printf "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||\n" #>> test/output/output.csv
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
 
     if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
 
+$commandline_args
+output=$?
+bool="fail"
 
+if [ $output -eq 235 ]; then
+    bool="pass"
+fi
 
+echo "noinput , nop , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||" #>> test/output/output.csv
 
+cat test/eof.txt | $commandline_args test/test_io_src_manual/lbio1.bin
+output=$?
+bool="fail"
+
+if [ $output -eq 255 ]; then
+    bool="pass"
+fi
+
+echo "eof , lb , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
+
+cat test/eof.txt | $commandline_args test/test_io_src_manual/lwio1.bin
+output=$?
+bool="fail"
+
+if [ $output -eq 255 ]; then
+    bool="pass"
+fi
+
+echo "eof , lw , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
 
 
