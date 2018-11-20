@@ -12,12 +12,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     delayedJump = false;
 }
 //------CPU Control Methods------//
-    bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
+    bool simulator::finished_sim(){ 
         //condition 1: pc has jumped to zero
         if(programCounter == 0) return true;
         else                    return false;
     }
-    void simulator::updatePC(){    //WIP if branch in delayed slot, just follows latest branch.
+    void simulator::updatePC(){    
         programCounter = programCounter + 4;
 
         if(branch || jump){
@@ -690,7 +690,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     }
 
 
-    /***GETC WIP*** (NOT UPDATED WITH IPARSE)*/
+    /***GETC*** (NOT UPDATED WITH IPARSE)*/
         void simulator::i_lb(int instruction){
             signed short int offset = instruction & 0xFFFF;     //offset
 
@@ -830,7 +830,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int moduAmount = address % 4;
             int input = 0;
 
-            //WIP - GETC MODIFICATION
             if(address >= 0x30000000 && address <= 0x30000003) memory.io_read();
 
             for(int i = 3 - moduAmount; i >= 0; i--){
@@ -866,7 +865,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             memory.io_clear();
         }
 
-    /***END GETC WIP***/
+    /***END GETC***/
 
     void simulator::i_ori(int instruction){
         int rs,rt,imm;
@@ -961,7 +960,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rs = regFile.get_reg(rs);
         imm = sign_extend(imm);
 
-        unsigned int immediate = (unsigned)imm; //ISSUE AREA
+        unsigned int immediate = (unsigned)imm; 
 
         int comparison;
         if(rs<immediate)    comparison = 1;
@@ -980,7 +979,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
 
 //--------J Instructions--------//
-    void simulator::j_j(int instruction){ //WIP
+    void simulator::j_j(int instruction){ 
         int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
         jump = true;
         pcOffSet = instr + ((programCounter+4) & 0xF0000000);

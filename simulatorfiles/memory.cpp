@@ -15,20 +15,17 @@
 
     void sim_reg::set_reg(int input, int regNum){
         if(regNum == 0){
-            //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
             reg[regNum] = input;
         }
         else{
-            //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
             std::exit(-11);
         }
     }
 
     void sim_reg::lwl_set_reg(int input, int regNum, int moduAmount){
         if(regNum == 0){
-            //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
             switch(moduAmount){     //see a similar table in the spec explanation of lwl
@@ -44,14 +41,12 @@
             reg[regNum] = reg[regNum] | input;
         }
         else{
-            //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
             std::exit(-11);
         }
     }
 
     void sim_reg::lwr_set_reg(int input, int regNum, int moduAmount){
         if(regNum == 0){
-            //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
             switch(moduAmount){         //see a similar table in the spec explanation of lwr
@@ -67,12 +62,10 @@
             reg[regNum] = reg[regNum] | input;
         }
         else{
-            //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
             std::exit(-11);
         }
     }
 
-    //WIP: THERE IS CERTAIN ALLOWED ACCESS TO HI AND LO AFTER A MULT/DIV
     int sim_reg::get_hi() const{
         return hi;
     }

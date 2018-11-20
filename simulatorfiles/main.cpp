@@ -1,4 +1,3 @@
-#include "main.hpp"
 #include "simulator.hpp"
 #include "memory.hpp"
 #include <iostream>
@@ -12,22 +11,15 @@ std::string get_filename(int argc, char* argv[]);
 char* write_binary_in(std::string FileName, int& LengthOfBinary);
 
 int main(int argc, char* argv[]){
-    //enables hexadecimal input in cin/out? WIP
-    std::cin.unsetf(std::ios::dec);
-    std::cin.unsetf(std::ios::hex);
-    std::cin.unsetf(std::ios::oct);
 
-    //std::cerr<<"\nRetrieving file name..."<<std::endl;              
     std::string FileName = get_filename(argc, argv);                                    //process binary file to stream into memory
     int LengthOfBinary;                                                                 //initialise integer to tell length of binary file
 
-    //std::cerr<<"Writing binary data to character array..."<<std::endl;                  
     char* Memblock = write_binary_in(FileName, LengthOfBinary);                         //initialise array of pointers and write into it from the binary file
     bool WriteInSuccess = false;                                                        //create boolean to measure
     simulator mips_sim(LengthOfBinary, Memblock, WriteInSuccess);                       //move into instruction memory
 
     if(WriteInSuccess == false){
-        //std::cerr<<"\nMemory write-in failed. Exiting with error code -11\n";
         std::exit(-11); 
     }
 
@@ -41,9 +33,7 @@ int main(int argc, char* argv[]){
         mips_sim.update_exit_code(exitCode);
     }
     
-    //std::cerr << "\nSimulation Completed.\n";
     std::exit(exitCode);
-    //return 0;
 }
 
 std::string get_filename(int argc, char* argv[]){
@@ -55,8 +45,7 @@ std::string get_filename(int argc, char* argv[]){
         return InputBinaryFile;
     }     
     else{
-        //CHANGE. no instructions. exit due to end of instruction memory
-        //std::cerr<< "No binary file given. Exit with error code -20" << std::endl;
+        //no instructions. exit due to end of instruction memory
         std::exit(-21);
     }
 
@@ -84,19 +73,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
 
     else{
         std::cerr<<"\nUnable to read file.\n";
-        std::exit(-21); //-ISSUE - IS THIS CORRECT???
+        std::exit(-21); 
     }
 }
 
-//MEMORY WRITEIN TESTING
-    /*int Address = 0x10000000;
-    for(int i=0; i<LengthOfBinary; i++){
-        bool read;
-        MemModule.get_byte(Address, read);
-        std::stringstream ss;
-        ss << std::hex;
-        ss << std::setw(2) << std::setfill('0') << (unsigned int)Memblock[i];
-        std::cout<<"\nAddress "<<Address<<": "<<ss.str();
-        std::cout<<"\n"<<read;
-        Address = Address+0x1;
-    }*/
