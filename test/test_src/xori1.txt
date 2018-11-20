@@ -7,7 +7,8 @@ addiu $5, $0, 0xAF
 xori $6, $5, 0x50
 #$6 should be 0xFF
 
-subiu $3, $6, 0xFF
+addiu $7, $0, 0xFF
+subu $3, $6, $7
 
 #$10 = 0xffffffff
 addiu $10, $0, 0xFFFF

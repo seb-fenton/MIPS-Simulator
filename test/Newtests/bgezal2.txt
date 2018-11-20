@@ -1,7 +1,0 @@
-#3
-#bgezal2
-#bgezal
-#Testing linking on no branch || Dependencies: 
-
-ori $3, $0, 1
-bgezal $

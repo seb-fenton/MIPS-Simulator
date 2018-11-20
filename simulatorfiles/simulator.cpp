@@ -736,7 +736,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         void simulator::i_lh(int instruction){
             int base, rt, imm;
             i_parse(instruction, base, rt, imm);
-            sign_extend(imm);
+            imm = sign_extend(imm);
             base = regFile.get_reg(base);
 
             int memoryAddress = base + imm;
@@ -758,7 +758,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         void simulator::i_lhu(int instruction){
             int base, rt, imm;
             i_parse(instruction, base, rt, imm);
-            sign_extend(imm);
+            imm = sign_extend(imm);
             base = regFile.get_reg(base);
 
             int memoryAddress = base + imm;
@@ -846,7 +846,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             int base, rt, imm;
             i_parse(instruction, base, rt, imm);
             base = regFile.get_reg(base);
-            sign_extend(imm);
+            imm = sign_extend(imm);
 
             int address = base + imm;
 

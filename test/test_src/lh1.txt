@@ -5,12 +5,12 @@
 
 lui $3, 0x2000
 #stored value
-ori $4, $0, 0x7FFF
+ori $4, $0, 0xFFFF
 sh $4, 0x2($3)
 
 ori $3, $3, 0x0003
 lh $5, 0xFFFF($3)
-subu $2, $5, $4
+addiu $2, $5, 1
 
 jr $0
 nop
