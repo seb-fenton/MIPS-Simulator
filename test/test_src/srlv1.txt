@@ -16,6 +16,5 @@ ori $6, $6, 0xFFEC
 
 subu $2, $5, $6
 
-
 jr $0
 nop

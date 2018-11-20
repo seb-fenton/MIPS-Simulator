@@ -1,4 +1,4 @@
-#3
+#0
 #xori1
 #xori
 #Testing basic function & zero extension of immediate || Dependencies: addiu andi slt sll lui ori sltu or jr
@@ -6,22 +6,16 @@
 addiu $5, $0, 0xAF
 xori $6, $5, 0x50
 #$6 should be 0xFF
-andi $6, $6, 0xFF
 
-#0xFE($7) should be less than $6
-addiu $7, $0, 0xFE
-slt $3, $7, $6
-sll $3, $3, 1
-
+subiu $3, $6, 0xFF
 
 #$10 = 0xffffffff
 addiu $10, $0, 0xFFFF
 
-#$11 = 0xFFFF0000, greater than fffeffff($12)
+#$11 = 0xFFFF0000
 xori $11, $10, 0xFFFF
-lui $12, 0xFFFE
-ori $12, $12, 0xFFFF
-sltu $4, $12, $11
+lui $12, 0xFFFF
+sub $4, $11, $12
 
 or $2, $3, $4
 jr $0

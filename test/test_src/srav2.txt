@@ -3,7 +3,7 @@
 #srav
 #Testing unsigned arithmetic shift || Dependencies: lui ori subu jr
 
-# $3 = 0x7fffff60
+#$3 = 0x7fffff60
 lui $3, 0x7FFF
 ori $3, $3, 0xFF60
 ori $4, $0, 0x0003
