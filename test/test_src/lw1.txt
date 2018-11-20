@@ -1,7 +1,7 @@
 #0
 #lw1
 #lw
-#Testing sign extension of immediate & basic function || Dependencies: lui ori sw slti lui ori and sltu sll addiu jr
+#Testing sign extension of immediate & basic function || Dependencies: lui ori sw addiu subu jr
 
 lui $3, 0x2000
 ori $3, $3, 0x0001

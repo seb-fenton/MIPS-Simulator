@@ -1,13 +1,12 @@
-#1
+#0
 #lui1
 #lui1
-#Testing basic functionality || Dependencies: ori slti jr
+#Testing basic functionality || Dependencies: ori addiu jr
 
-lui $3, 0x8000
-lui $4, 0x8000
-ori $4, $4, 0x0001
+lui $3, 0xFFFF
+ori $3, $3, 0xFFFF
 
-slt $2, $3, $4
+addiu $2, $3, 1
 
 jr $0
 nop
