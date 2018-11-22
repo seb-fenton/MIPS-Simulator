@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     else {
         //ISSUE!!! 
         //Error catcher incase of illegal filename
-        std::cerr<<"Error: No file input"<<std::endl;
-        std::exit(0);
+        //std::cerr<<"Error: No file input"<<std::endl;
+        std::exit(-21);
     }
 }
