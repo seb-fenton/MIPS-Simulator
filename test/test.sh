@@ -147,7 +147,7 @@ if [ $output -eq 255 ]; then
     bool="pass"
 fi
 
-echo "eof , lb , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
+echo "eof1 , lb , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
 cat test/eof.txt | $commandline_args test/test_io_src_manual/lwio1.bin
 output=$?
@@ -157,7 +157,7 @@ if [ $output -eq 255 ]; then
     bool="pass"
 fi
 
-echo "eof , lw , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
+echo "eof2 , lw , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
 
 
