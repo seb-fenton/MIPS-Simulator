@@ -115,7 +115,11 @@
         int io_input;
         io_input = getchar(); //eof 0xFFFFFFFF, else 0x000000XX
 
-        if(io_input == EOF) io_input = -1;
+        if(io_input == EOF || feof(stdin)){
+            int error = ferror(stdin);
+            if(error) std::exit(-21);
+            else io_input = -1;
+        }
 
         addr_getc[0] = (io_input >> 24) & 0xff;
         addr_getc[1] = (io_input >> 16) & 0xff;

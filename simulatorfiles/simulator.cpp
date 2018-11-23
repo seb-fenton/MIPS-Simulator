@@ -801,15 +801,15 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             input = input<<8;
 
             int temp = memory.get_byte(memoryAddress + 1);
-            input = input + temp;
+            input = input | temp;
             input = input<<8;
 
             temp = memory.get_byte(memoryAddress + 2);
-            input = input + temp;
+            input = input | temp;
             input = input<<8;
 
             temp = memory.get_byte(memoryAddress + 3);
-            input = input + temp;
+            input = input | temp;
 
             int rt = instruction>>16;
             regFile.set_reg(input, rt&0x1F);
