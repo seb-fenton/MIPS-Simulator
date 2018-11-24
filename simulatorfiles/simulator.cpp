@@ -355,7 +355,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             regFile.set_hi(rs%rt);                  //remainder into HI
         }
     }
-    void simulator::r_divu(int instruction){
+    void simulator::r_divu(int instruction){        //WIP
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
         rs = regFile.get_reg(rs);               //src1
@@ -365,6 +365,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             regFile.set_lo((uint32_t)rs/(uint32_t)rt);                  //quotient into LO
             regFile.set_hi((uint32_t)rs%(uint32_t)rt);                  //remainder into HI
         }
+        else std::exit(-10);
     }
     void simulator::r_jalr(int instruction){
         simulator::r_jr(instruction);
@@ -750,7 +751,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             int hword = (int32_t)memory.get_byte(memoryAddress);
             hword = hword<<8;
-            hword = hword | (int32_t)memory.get_byte(memoryAddress+1);
+            hword = hword | (uint32_t)(unsigned char)memory.get_byte(memoryAddress+1);
 
             regFile.set_reg(hword, rt);
             memory.io_clear();
