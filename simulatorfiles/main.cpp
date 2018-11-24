@@ -36,27 +36,22 @@ int main(int argc, char* argv[]){
 }
 
 std::string get_filename(int argc, char* argv[]){
-    std::string InputBinaryFile;
-    //if argc holds more than executable path
+    std::string InputBinaryFile;                                                        //if argc holds more than executable path
     if(argc>1){
-        //let filename string = first input in command line after executable
-        InputBinaryFile = argv[1];
+        InputBinaryFile = argv[1];                                                      //let filename string = first input in command line after executable
         return InputBinaryFile;
     }     
     else{
-        //no instructions. exit due to end of instruction memory
-        std::exit(-21);
+        std::exit(-21);                                                                 //no instructions. exit due to i/o error
     }
 
 }
 
-//function to write binary data into memory; returns a boolean to check for memory exception -11
 char* write_binary_in(std::string FileName, int& LengthOfBinary){
 
     std::ifstream InputBinary(FileName.c_str(), std::ifstream::binary);     //open the file using fstream library
     char* Memblock;
 
-    //if a file has managed to be initialised using std::ifstream
     if(InputBinary){
         InputBinary.seekg(0, InputBinary.end);              //move the file reader pointer to the end of the binary
         LengthOfBinary = InputBinary.tellg();               //find value of pointer
@@ -66,8 +61,7 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         InputBinary.read(Memblock, LengthOfBinary);
         InputBinary.close();
 
-        //return whether or not memory write was successful
-        return(Memblock);
+        return(Memblock);                                   //array of chars containing instructions
     }
 
     else{
