@@ -184,7 +184,7 @@
                 else    return 0;
             }
             if(check == 2){
-                if(addr_data.find(address) != addr_data.end())  return addr_data[address];
+                if(addr_data.find(address) != addr_data.end()) return addr_data[address];
                 else return 0;
             }  
             if(check == 3)  return addr_getc[address];

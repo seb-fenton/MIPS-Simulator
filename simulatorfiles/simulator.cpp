@@ -797,25 +797,21 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
             if(memoryAddress == 0x30000000) memory.io_read();
 
-            int input = memory.get_byte(memoryAddress);
-            input = input<<8;
+            int input = (uint32_t)(unsigned char)memory.get_byte(memoryAddress);
+            input <<= 8;
 
-            int temp = memory.get_byte(memoryAddress + 1);
-            input = input | temp;
-            input = input<<8;
+            input |= (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 1);
+            input <<= 8;
 
-            temp = memory.get_byte(memoryAddress + 2);
-            input = input | temp;
-            input = input<<8;
+            input |= (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 2);
+            input <<= 8;
 
-            temp = memory.get_byte(memoryAddress + 3);
-            input = input | temp;
+            input |= (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 3);
 
-            int rt = instruction>>16;
-            regFile.set_reg(input, rt&0x1F);
+            int rt = (instruction>>16) & 0x1F;
+            regFile.set_reg(input, rt);
 
             memory.io_clear();
-
         }
         void simulator::i_lwl(int instruction){
             signed short int offset = instruction & 0xFFFF;

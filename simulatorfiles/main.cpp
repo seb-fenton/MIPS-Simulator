@@ -32,7 +32,6 @@ int main(int argc, char* argv[]){
         mips_sim.updatePC();
         mips_sim.update_exit_code(exitCode);
     }
-    
     std::exit(exitCode);
 }
 
