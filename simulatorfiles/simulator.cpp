@@ -692,17 +692,13 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
     /***GETC*** (NOT UPDATED WITH IPARSE)*/
         void simulator::i_lb(int instruction){
-            signed short int offset = instruction & 0xFFFF;     //offset
-
-            int base = instruction>>21;                         //base
-            base = base & 0xFF;
+            int base, rt, imm;
+            i_parse(instruction, base, rt, imm);
+            imm = sign_extend(imm);
             base = regFile.get_reg(base);
 
-            int memoryAddress = base + offset;                  //effectiveaddr
+            int memoryAddress = base + imm;                  //effectiveaddr
             if(memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
-
-
-            int rt = (instruction>>16) & 0x1F;
 
             char byte = memory.get_byte(memoryAddress);
             unsigned char ucbyte = memory.get_byte(memoryAddress);
@@ -716,20 +712,18 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
 
         void simulator::i_lbu(int instruction){
-            signed short int offset = instruction & 0xFFFF;     //immediate
-            int base = instruction>>21;                         //base
-            base = base & 0x1F;
+            int base, rt, imm;
+            i_parse(instruction, base, rt, imm);
+            imm = sign_extend(imm);
             base = regFile.get_reg(base);
 
-            int memoryAddress = base + offset;                  //effectiveaddr
+            int memoryAddress = base + imm;                  //effectiveaddr
 
             if(memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
 
-            int rt = (instruction>>16) & 0x1F;                  //destination rt
-            char byte = memory.get_byte(memoryAddress);
-            int castedByte = byte & 0x000000FF;
+            int output = (uint32_t)(unsigned char)memory.get_byte(memoryAddress);
 
-            regFile.set_reg(castedByte, rt);
+            regFile.set_reg(output, rt);
             memory.io_clear();
         }
 
