@@ -1,5 +1,4 @@
 #include "memory.hpp"
-
 //SIMULATOR_REGISTERS FUNCTION DEFINITIONS
     //Constructor to initialise all register values to 0
     sim_reg::sim_reg(){
@@ -178,13 +177,12 @@
             std::exit(-11);
         }
         else{
-
             if(check == 1){
                 if(address < addr_instr.size()) return addr_instr[address];
                 else    return 0;
             }
             if(check == 2){
-                if(addr_data.find(address) != addr_data.end()) return addr_data[address];
+                if(addr_data.find(address) != addr_data.end())  return addr_data[address];
                 else return 0;
             }  
             if(check == 3)  return addr_getc[address];
@@ -203,7 +201,7 @@
         }
         else{
             if(check == 2){
-                if(addr_data.find(address) != addr_data.end())  addr_data.insert(std::pair<int, char> (address, value));
+                if(addr_data.find(address) == addr_data.end())  addr_data.insert(std::pair<int, char> (address, value));
                 else    addr_data[address] = value;
             }
             if(check == 4)  addr_putc[address] = value;
