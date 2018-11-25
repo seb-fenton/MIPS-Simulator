@@ -1,28 +1,23 @@
-Lau Jun Kit Darrick
-Sebastian Alexander William Fenton
-EIE2 Computer Architecture MIPS Simulator
+###Lau Jun Kit Darrick
 
-This readme serves to illustrate the design perspectives adopted with respect to ambiguous parts of the program specification. The various assumptions made in implementing them will be explained here.
+###Sebastian Alexander William Fenton
 
-
-I/O Specification:
-Given the largely undefined nature of many aspects of the I/O behaviours of this project, a few points to note are as follows:
-The simulated I/O devices, GetC and PutC, are accessed with valid memory calls to the 4-byte areas at 0x30000000 and 0x30000004 respectively.
-
-Instruction         Granularity(bits)       Allowed Accesses(w.r.t. I/O)        Notes
-LW                  32                      0x30000000                          Must be word aligned. Only one possible address.
-LWL                 32                      ~                                   Must be word aligned. Only one possible address.
-LWR                 32                      ~                                   Must be word aligned. Only one possible address.
-
-LH(U)               16                      0x30000000 or 0x30000002            Odd addresses within I/O range should be unaligned reads.
-
-LB(U)               8                       nil.                                Should not be allowed as there is no way to differentiate
-                                                                                0xFF from -1(EOF)
+#####EIE2 Computer Architecture MIPS Simulator
 
 
-SW                  32                      0x30000004                          Must be word aligned. Only one possible address.
 
-SH                  16                      0x30000004 or 0x30000006            Odd addresses within I/O range should be unaligned reads.
+####Using the simulator
+* make simulator
+* make testbench
+* (runs the simulator against every test binary in the catalogue) bin/mips_testbench bin/mips_simulator
+* (for individual tests): bin/mips_simulator test/..../testbinary.bin
+Directory names are self-explanatory. However, the output CSV file for running a simulator can be found in test/output.
 
-SB                  8                       0x30000004 - 0x30000007             All writes trigger I/O, but the char value is only written for 
-                                                                                the write to 0x30000007 (LSB)
+
+####The following write-ups illustrate the design perspectives adopted with respect to ambiguous parts of the program specification.
+
+#####Input/Output
+This was the group that tightened the specification for I/O (shown [here](https://github.com/m8pple/arch2-2018-cw/issues/42#issuecomment-437190800)), and will thus adopt that interpretation in our simulator. In short, any properly aligned load/store in the assigned memory space will trigger I/O, but only reads/writes that access the least significant byte (0x30000003 and 0x30000007) will properly process a given character value. EOFs, however, should be readable throughout the entire 32-bit memory space as 0xFF per byte.
+
+#####Branch/Jumps
+JALR: If unspecified, the link return address is stored by default in register $31, as per specification. However, specification sheets online state that an assembler might return this "unspecified" register rd as 0 in the instruction binary. We would thus consider a user calling JALR and specifying the link register to $0 to be undefined behaviour. As such, our implementation is such that if one tries to compile a binary involving "JALR $0, $5", for example, the link register would still be defaulted to register $31.
