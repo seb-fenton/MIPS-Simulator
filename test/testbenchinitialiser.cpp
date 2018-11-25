@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <cstdlib>
 
+//this shell cpp file allows the line: "bin/mips_testbench bin/mips_simulator", specifically the "bin/mips_testbench" part, to be executed easily by automated testing
+
 int main(int argc, char* argv[]){
 
     //initialise variable fileName to store input
@@ -22,7 +24,7 @@ int main(int argc, char* argv[]){
     else {
         //ISSUE!!! 
         //Error catcher incase of illegal filename
-        std::cerr<<"Error: No file input"<<std::endl;
-        std::exit(0);
+        //std::cerr<<"Error: No file input"<<std::endl;
+        std::exit(-21);
     }
 }

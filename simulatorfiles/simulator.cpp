@@ -12,12 +12,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     delayedJump = false;
 }
 //------CPU Control Methods------//
-    bool simulator::finished_sim(){ //WIP, resolves if the simulator is done.
+    bool simulator::finished_sim(){ 
         //condition 1: pc has jumped to zero
         if(programCounter == 0) return true;
         else                    return false;
     }
-    void simulator::updatePC(){    //WIP if branch in delayed slot, just follows latest branch.
+    void simulator::updatePC(){    
         programCounter = programCounter + 4;
 
         if(branch || jump){
@@ -170,15 +170,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int destination = instruction & 0b11111;
 
         switch(destination){
-
             case 0b00001: return 8;  //BGEZ
-
             case 0b10001: return 9;  //BGEZAL
-
             case 0b00000: return 12;  //BLTZ
-
             case 0b10000: return 13;  //BLTZAL
-
             default:    std::cerr<<"Branch instruction decoding failed - invalid instruction. Exiting program...";
                         std::exit(-12);
         }
@@ -302,12 +297,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
 //--------R Instructions--------//
     void simulator::r_parse(int instruction, int& rs, int& rt, int& rd){
-        rs = (instruction >> 21) &0x1F;
+        rs = (instruction >> 21) & 0x1F;
         rt = (instruction >> 16) & 0x1F;
         rd = (instruction >> 11) & 0x1F;
     }
     void simulator::r_parse(int instruction, int& rs, int& rt, int& rd, int& shamt){
-        rs = (instruction >> 21) &0x1F;
+        rs = (instruction >> 21) & 0x1F;
         rt = (instruction >> 16) & 0x1F;
         rd = (instruction >> 11) & 0x1F;
         shamt = (instruction >> 6) & 0x1F;
@@ -322,9 +317,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int result = rt+rs;
 
         //if both operands are same sign, set overflow if result sign is different
-        if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
-            overflow = true;
-        }
+        if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)) overflow = true;
+
         if(overflow)    std::exit(-10);
         else            regFile.set_reg(result, rd);
     }
@@ -347,15 +341,15 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_div(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        rs = regFile.get_reg(rs);               //src1
-        rt = regFile.get_reg(rt);               //src2
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
         if(rt != 0){
-            regFile.set_lo(rs/rt);                  //quotient into LO
-            regFile.set_hi(rs%rt);                  //remainder into HI
+            regFile.set_lo(rs/rt);//quotient into LO
+            regFile.set_hi(rs%rt);//remainder into HI
         }
     }
-    void simulator::r_divu(int instruction){
+    void simulator::r_divu(int instruction){        
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
         rs = regFile.get_reg(rs);               //src1
@@ -366,9 +360,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             regFile.set_hi((uint32_t)rs%(uint32_t)rt);                  //remainder into HI
         }
     }
-    void simulator::r_jalr(int instruction){
+    void simulator::r_jalr(int instruction){ //CHECK WIPWIPWIPWIP
         simulator::r_jr(instruction);
-        int rd = (instruction >>11) & 0x1F;
+        int rd = (instruction >> 11) & 0x1F;
         if(rd==0) rd = 31;                      //for the implicit case specified by the documentation
 
         regFile.set_reg(programCounter+8, rd);
@@ -403,8 +397,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);
 
         int64_t result = (int64_t)rt*(int64_t)rs;
-        int tophalf = (int32_t)(result>>32);         //NUMTEST
-        int btmhalf = (int32_t)(result&0xffffffff);  //NUMTEST
+        int tophalf = (int32_t)(result>>32);
+        int btmhalf = (int32_t)(result&0xffffffff);
        
         regFile.set_hi(tophalf);
         regFile.set_lo(btmhalf);
@@ -437,21 +431,21 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);
 
         int comparison;
-        if(rs<rt){comparison = 1;}
-        else{comparison = 0;}
+        if(rs<rt)   comparison = 1;
+        else        comparison = 0;
 
         regFile.set_reg(comparison, rd);
     }
     void simulator::r_sltu(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        unsigned int rsu = regFile.get_reg(rs);
-        unsigned int rtu = regFile.get_reg(rt);
+        uint32_t rsu = (uint32_t)regFile.get_reg(rs);
+        uint32_t rtu = (uint32_t)regFile.get_reg(rt);
 
         int comparison;
 
-        if(rsu<rtu){comparison = 1;}
-        else{comparison = 0;}
+        if(rsu<rtu)     comparison = 1;
+        else            comparison = 0;
 
         regFile.set_reg(comparison, rd);
     }
@@ -476,11 +470,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_sra(int instruction){
         int rs, rt, rd, sa;
         r_parse(instruction, rs, rt, rd, sa);
-
-        rt = regFile.get_reg(rt);   //val of rt
+        rt = regFile.get_reg(rt);
 
         rt = rt>>sa;
-        regFile.set_reg(rt, rd);    //shifted val of rt into rd
+        regFile.set_reg(rt, rd);
     }
     void simulator::r_srav(int instruction){    //g++ compiler does arithmetic shift for signed data types
         int rs, rt, rd;
@@ -499,14 +492,13 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);
 
         unsigned int result = (unsigned)rt >> (unsigned)sa; //try removing unsigned casting for sa!
-
         regFile.set_reg(result, rd);
     }
-    void simulator::r_srlv(int instruction){
+    void simulator::r_srlv(int instruction){    //FIXED, RS WAS MISSING 5 BIT MASK
         int rs, rt, rd;
         r_parse(instruction, rs,rt,rd);
         rt = regFile.get_reg(rt);
-        rs = regFile.get_reg(rs);
+        rs = regFile.get_reg(rs) & 0x1F;            
 
         unsigned int result = (unsigned)rt >> (unsigned)rs; //try removing unsigned casting for rs!
 
@@ -520,25 +512,18 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);               //src2
 
         int result = rs-rt;
-        //if both operands are same sign, set overflow if result sign is different
-        if(((rs >> 31) != (rt >>31)) && (result>>31 != rs>>31)){
-            overflow = true;
-        }
-        if(overflow){
-            //std::cerr<<"Exiting with error -10";
-            std::exit(-10);
-        }
-        else{
-            regFile.set_reg(result, rd);
-        }
+        //if both operands are of different signs, set overflow if result sign is different from first operand
+        if(((rs >> 31) != (rt >>31)) && (result>>31 != rs>>31)) overflow = true;
+        if(overflow)    std::exit(-10);
+        else    regFile.set_reg(result, rd);
     }
     void simulator::r_subu(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        rs = regFile.get_reg(rs);               //src1
-        rt = regFile.get_reg(rt);               //src2
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
-        regFile.set_reg(rs-rt, rd);             //no overflow
+        regFile.set_reg(rs-rt, rd);
     }
     void simulator::r_xor(int instruction){
         int rs,rt,rd;
@@ -555,34 +540,30 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = (instruction >> 16) & 0x1F;    //index number of rt
         imm = instruction & 0xFFFF;         //zero extended by default
     }
-
     int simulator::sign_extend(int imm){   //use if you want a signed value
         int output;
-        if((imm>>15) == 1)   output = 0xFFFF0000 | imm;
-        else        output = imm;
+        if((imm>>15) == 1)     output = 0xFFFF0000 | imm;
+        else                   output = imm;
         return output;
     }
-
     void simulator::i_addi(int instruction){
         bool overflow = false;
-        int rs, rt;
-        int imm;
+        int rs, rt, imm;
         i_parse(instruction, rs, rt, imm);
-        int sigImm = sign_extend(imm);
+        imm = sign_extend(imm);
         rs = regFile.get_reg(rs);               //value of rs
 
-        int result = rs + sigImm;
+        int result = rs + imm;
         //if both operands are same sign, set overflow if result sign is different
-        if(((rs >> 31) == (sigImm >> 15)) && (result>>31 != rs>>31))   overflow = true;
+        if(((rs >> 31) == (imm >> 31)) && (result>>31 != rs>>31))   overflow = true;
 
         if(overflow)    std::exit(-10);
         else            regFile.set_reg(result, rt);
     }
     void simulator::i_addiu(int instruction){
-        int rs, rt;
-        int imm;
+        int rs, rt, imm;
         i_parse(instruction, rs, rt, imm);
-        rs = regFile.get_reg(rs);               //value
+        rs = regFile.get_reg(rs);
         imm = sign_extend(imm);
 
         int result = rs + imm;
@@ -591,7 +572,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::i_andi(int instruction){
         int rs, rt, imm;
         i_parse(instruction, rs, rt, imm);
-        rs = regFile.get_reg(rs);               //src1
+        rs = regFile.get_reg(rs);
 
         regFile.set_reg(rs & imm, rt);
     }
@@ -612,7 +593,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rs,rt, imm;
         i_parse(instruction, rs, rt, imm);
         imm = sign_extend(imm) << 2;
-        rs = regFile.get_reg(rs);               //src1
+        rs = regFile.get_reg(rs);
 
         if(rs >= 0){
             branch = true;
@@ -622,12 +603,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::i_bgezal(int instruction){
         int rs,rt,imm;
         i_parse(instruction, rs, rt, imm);
-        int sigImm = sign_extend(imm) << 2;
+        imm = sign_extend(imm) << 2;
         rs = regFile.get_reg(rs);                   //src1
 
         if(rs >= 0){
             branch = true;                          //branch
-            pcOffSet = sigImm;
+            pcOffSet = imm;
         }
         regFile.set_reg(programCounter+8, 31);
     }
@@ -657,7 +638,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rs,rt,imm;
         i_parse(instruction, rs, rt, imm);
         imm = sign_extend(imm) << 2;
-        rs = regFile.get_reg(rs);                   //src1
+        rs = regFile.get_reg(rs);
 
         if(rs < 0){
             branch = true;
@@ -668,7 +649,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rs,rt,imm;
         i_parse(instruction, rs, rt, imm);
         imm = sign_extend(imm) << 2;
-        rs = regFile.get_reg(rs);                   //src1
+        rs = regFile.get_reg(rs);
 
         if(rs < 0){
             branch = true;
@@ -688,186 +669,155 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             pcOffSet = imm;
         }
     }
+    void simulator::i_lb(int instruction){
+        int base, rt, imm;
+        i_parse(instruction, base, rt, imm);
+        imm = sign_extend(imm);
+        base = regFile.get_reg(base);
 
+        int memoryAddress = base + imm;
+        if (memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
 
-    /***GETC WIP*** (NOT UPDATED WITH IPARSE)*/
-        void simulator::i_lb(int instruction){
-            signed short int offset = instruction & 0xFFFF;     //offset
+        int output = (int32_t)memory.get_byte(memoryAddress);
 
-            int base = instruction>>21;                         //base
-            base = base & 0xFF;
-            base = regFile.get_reg(base);
+        regFile.set_reg(output, rt);
+        memory.io_clear();
+    }
+    void simulator::i_lbu(int instruction){
+        int base, rt, imm;
+        i_parse(instruction, base, rt, imm);
+        imm = sign_extend(imm);
+        base = regFile.get_reg(base);
 
-            int memoryAddress = base + offset;                  //effectiveaddr
-            if(memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
+        int memoryAddress = base + imm;
 
+        if (memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
 
-            int rt = (instruction>>16) & 0x1F;
+        int output = (uint32_t)(unsigned char)memory.get_byte(memoryAddress);
 
-            char byte = memory.get_byte(memoryAddress);
-            unsigned char ucbyte = memory.get_byte(memoryAddress);
+        regFile.set_reg(output, rt);
+        memory.io_clear();
+    }
+    void simulator::i_lh(int instruction){
+        int base, rt, imm;
+        i_parse(instruction, base, rt, imm);
+        imm = sign_extend(imm);
+        base = regFile.get_reg(base);
 
-            int output;
-            if(byte < 0)    output = ucbyte | 0xFFFFFF00;               //unsigned is used as ucbyte is cast to integer when added to an integer
-            else            output = byte;                              //casting works fine if byte>=0
+        int memoryAddress = base + imm;
 
-            regFile.set_reg(output, rt);
-            memory.io_clear();
+        if ((memoryAddress % 2) != 0)   std::exit(-11);
+        if (memoryAddress == 0x30000000 || memoryAddress == 0x30000002) memory.io_read();
+
+        int hword = (int32_t)memory.get_byte(memoryAddress);
+        hword = hword << 8;
+        hword = hword | (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 1);
+
+        regFile.set_reg(hword, rt);
+        memory.io_clear();
+    }
+    void simulator::i_lhu(int instruction){
+        int base, rt, imm;
+        i_parse(instruction, base, rt, imm);
+        imm = sign_extend(imm);
+        base = regFile.get_reg(base);
+
+        int memoryAddress = base + imm;
+
+        if ((memoryAddress % 2) != 0)   std::exit(-11);
+        if (memoryAddress == 0x30000000 || memoryAddress == 0x30000002) memory.io_read();
+
+        uint32_t hword = (uint32_t)(unsigned char)memory.get_byte(memoryAddress);
+        hword = hword << 8;
+        hword = hword | (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 1);
+
+        regFile.set_reg(hword, rt);
+        memory.io_clear();
+    }
+    void simulator::i_lui(int instruction){
+        int rs, rt, imm;
+        i_parse(instruction, rs, rt, imm);
+        imm = (imm << 16) & 0xFFFF0000;
+
+        regFile.set_reg(imm, rt);
+    }
+    void simulator::i_lw(int instruction){
+        int base, rt, offset;
+        i_parse(instruction, base, rt, offset);
+        offset = sign_extend(offset);
+        base = regFile.get_reg(base);
+
+        int memoryAddress = base + offset;
+        if ((memoryAddress % 4) != 0)   std::exit(-11);
+
+        if (memoryAddress == 0x30000000)    memory.io_read();
+
+        int input = (uint32_t)(unsigned char)memory.get_byte(memoryAddress);
+        input <<= 8;
+
+        input |= (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 1);
+        input <<= 8;
+
+        input |= (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 2);
+        input <<= 8;
+
+        input |= (uint32_t)(unsigned char)memory.get_byte(memoryAddress + 3);
+
+        regFile.set_reg(input, rt);
+        memory.io_clear();
+    }
+    void simulator::i_lwl(int instruction) //WIP
+    {
+        signed short int offset = instruction & 0xFFFF;
+
+        int base = (instruction >> 21) & 0x1F;
+        base = regFile.get_reg(base);
+
+        int address = base + offset;
+
+        int rt = (instruction >> 16) & 0x1F;
+
+        int moduAmount = address % 4;
+        int input = 0;
+
+        if (address >= 0x30000000 && address <= 0x30000003)
+            memory.io_read();
+
+        for (int i = 3 - moduAmount; i >= 0; i--)
+        {
+            int temp = (unsigned char)memory.get_byte(address + i);
+            temp <<= 8 * (3 - i);
+            input |= temp;
         }
 
-        void simulator::i_lbu(int instruction){
-            signed short int offset = instruction & 0xFFFF;     //immediate
-            int base = instruction>>21;                         //base
-            base = base & 0x1F;
-            base = regFile.get_reg(base);
+        regFile.lwl_set_reg(input, rt, moduAmount);
+        memory.io_clear();
+    }
+    void simulator::i_lwr(int instruction) //WIP
+    {
+        int base, rt, imm;
+        i_parse(instruction, base, rt, imm);
+        base = regFile.get_reg(base);
+        imm = sign_extend(imm);
 
-            int memoryAddress = base + offset;                  //effectiveaddr
+        int address = base + imm;
 
-            if(memoryAddress >= 0x30000000 && memoryAddress <= 0x30000003) memory.io_read();
+        int moduAmount = address % 4;
+        int input = 0;
 
-            int rt = (instruction>>16) & 0x1F;                  //destination rt
-            char byte = memory.get_byte(memoryAddress);
-            int castedByte = byte & 0x000000FF;
+        if (address >= 0x30000000 && address <= 0x30000003)
+            memory.io_read();
 
-            regFile.set_reg(castedByte, rt);
-            memory.io_clear();
+        for (int i = moduAmount; i >= 0; i--)
+        {
+            int temp = (int32_t)(unsigned char)memory.get_byte(address - i);
+            temp <<= 8 * (i);
+            input |= temp;
         }
 
-        void simulator::i_lh(int instruction){
-            int base, rt, imm;
-            i_parse(instruction, base, rt, imm);
-            imm = sign_extend(imm);
-            base = regFile.get_reg(base);
-
-            int memoryAddress = base + imm;
-
-            if((memoryAddress % 2)!= 0){                                      //test for memory access restriction on load halfword
-                //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error" << std::endl;
-                std::exit(-11);
-            }
-
-            if(memoryAddress == 0x30000000 || memoryAddress == 0x30000002) memory.io_read();
-
-            int hword = (int32_t)memory.get_byte(memoryAddress);
-            hword = hword<<8;
-            hword = hword | (int32_t)memory.get_byte(memoryAddress+1);
-
-            regFile.set_reg(hword, rt);
-            memory.io_clear();
-        }
-        void simulator::i_lhu(int instruction){
-            int base, rt, imm;
-            i_parse(instruction, base, rt, imm);
-            imm = sign_extend(imm);
-            base = regFile.get_reg(base);
-
-            int memoryAddress = base + imm;
-
-            if((memoryAddress % 2)!=0){                                        //test for memory access restriction on load halfword
-                //std::cerr<<"Memory offset unaligned in load halfword. Exiting with bad access error"<<std::endl;
-                std::exit(-11);
-            }
-
-            if(memoryAddress == 0x30000000 || memoryAddress == 0x30000002) memory.io_read();
-
-            uint32_t hword = (uint32_t)(unsigned char)memory.get_byte(memoryAddress);
-            hword = hword<<8;
-            hword = hword | (uint32_t)(unsigned char)memory.get_byte(memoryAddress+1);
-
-            regFile.set_reg(hword, rt);
-            memory.io_clear();
-        }
-        void simulator::i_lui(int instruction){
-
-            int offset = instruction & 0xFFFF;
-            offset = offset << 16;
-            int rt = (instruction >> 16) & 0x1F;
-            regFile.set_reg(offset, rt);
-        }
-        void simulator::i_lw(int instruction){
-            signed short int offset = instruction & 0xFFFF;
-            int base = (instruction>>21) & 0x1F;                                    //address src2
-            base = regFile.get_reg(base);
-
-            int memoryAddress = base + offset;
-            if((memoryAddress % 4) != 0){                                        //test for memory access restriction on load word
-                //std::cerr<<"Memory offset unaligned in load word. Exiting with bad access error"<<std::endl;
-                std::exit(-11);
-            }
-
-            if(memoryAddress == 0x30000000) memory.io_read();
-
-            int input = memory.get_byte(memoryAddress);
-            input = input<<8;
-
-            int temp = memory.get_byte(memoryAddress + 1);
-            input = input + temp;
-            input = input<<8;
-
-            temp = memory.get_byte(memoryAddress + 2);
-            input = input + temp;
-            input = input<<8;
-
-            temp = memory.get_byte(memoryAddress + 3);
-            input = input + temp;
-
-            int rt = instruction>>16;
-            regFile.set_reg(input, rt&0x1F);
-
-            memory.io_clear();
-
-        }
-        void simulator::i_lwl(int instruction){
-            signed short int offset = instruction & 0xFFFF;
-
-            int base = (instruction >> 21) & 0x1F;
-            base = regFile.get_reg(base);
-
-            int address = base + offset;
-
-            int rt = (instruction >> 16) & 0x1F;
-
-            int moduAmount = address % 4;
-            int input = 0;
-
-            //WIP - GETC MODIFICATION
-            if(address >= 0x30000000 && address <= 0x30000003) memory.io_read();
-
-            for(int i = 3 - moduAmount; i >= 0; i--){
-                int temp = (unsigned char)memory.get_byte(address + i);
-                temp <<= 8*(3-i);
-                input |= temp;
-            }
-
-            regFile.lwl_set_reg(input, rt, moduAmount);
-            memory.io_clear();
-        }
-        void simulator::i_lwr(int instruction){
-            int base, rt, imm;
-            i_parse(instruction, base, rt, imm);
-            base = regFile.get_reg(base);
-            imm = sign_extend(imm);
-
-            int address = base + imm;
-
-            int moduAmount = address % 4;
-            int input = 0;
-
-            if(address >= 0x30000000 && address <= 0x30000003) memory.io_read();
-
-
-            for(int i = moduAmount; i >= 0; i--){
-                int temp = (int32_t)(unsigned char)memory.get_byte(address - i);
-                temp <<= 8*(i);
-                input |= temp;
-            }
-
-            regFile.lwr_set_reg(input, rt, moduAmount);
-            memory.io_clear();
-        }
-
-    /***END GETC WIP***/
-
+        regFile.lwr_set_reg(input, rt, moduAmount);
+        memory.io_clear();
+    }
     void simulator::i_ori(int instruction){
         int rs,rt,imm;
         i_parse(instruction,rs,rt,imm);
@@ -875,96 +825,89 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         regFile.set_reg((rs|imm), rt);
     }
+    void simulator::i_sb(int instruction){
+        int base, rt, imm;
+        i_parse(instruction, base, rt, imm);
+        imm = sign_extend(imm);
 
-    /***PUTC***(ADDRESS ARITHMETIC IS NOT UNSIGNED YET)*/
-        void simulator::i_sb(int instruction){
-            int base, rt, imm;
-            i_parse(instruction, base, rt, imm);
-            imm = sign_extend(imm);
+        base = regFile.get_reg(base);    //value of base
+        rt = regFile.get_reg(rt) & 0xFF; //value of rt (LS 8 bits)
+        int effectiveAddr = base + imm;  //effective address
 
-            base = regFile.get_reg(base);           //value of base
-            rt = regFile.get_reg(rt) & 0xFF;        //value of rt (LS 8 bits)
-            int effectiveAddr = base + imm;         //effective address
+        memory.set_byte(effectiveAddr, rt);
 
-            memory.set_byte(effectiveAddr, rt);
+        if (effectiveAddr >= 0x30000004 && effectiveAddr < 0x30000008)
+            memory.io_write();
+    }
+    void simulator::i_sh(int instruction){
+        int base, rt, offset;
+        i_parse(instruction, base, rt, offset);
+        offset = sign_extend(offset);
 
-            if(effectiveAddr >= 0x30000004 && effectiveAddr < 0x30000008) memory.io_write();
-        }
-        void simulator::i_sh(int instruction){
-            int base, rt, offset;
-            i_parse(instruction, base, rt, offset);
-            offset = sign_extend(offset);
+        base = regFile.get_reg(base);
+        rt = regFile.get_reg(rt) & 0xFFFF;
 
-            base = regFile.get_reg(base);
-            rt = regFile.get_reg(rt) & 0xFFFF;
+        int effectiveAddr = base + offset;
 
-            int effectiveAddr = base + offset;                  //effectiveaddr
+        if ((effectiveAddr % 2) != 0)
+            std::exit(-11);
 
-            if((effectiveAddr % 2) != 0){                                      //test for memory access restriction on load halfword
-                //std::cerr<<"Memory offset unaligned in set halfword. Exiting with bad access error"<<std::endl;
-                std::exit(-11);
-            }
+        char msb = (rt >> 8) & 0xFF; //msb to be loaded into memory first
+        memory.set_byte(effectiveAddr, msb);
 
-            char msb = (rt>>8) & 0xFF;                                 //msb to be loaded into memory first
-            memory.set_byte(effectiveAddr, msb);
+        char lsb = rt & 0xFF; //lsb then loaded into memory
+        memory.set_byte((effectiveAddr + 1), lsb);
 
-            char lsb = rt & 0xFF;                             //lsb then loaded into memory
-            memory.set_byte((effectiveAddr + 1), lsb);
+        if (effectiveAddr == 0x30000004 || effectiveAddr == 0x30000006)
+            memory.io_write();
+    }
+    void simulator::i_sw(int instruction){
+        int base, rt, offset;
+        i_parse(instruction, base, rt, offset);
+        offset = sign_extend(offset);
+        base = regFile.get_reg(base);
+        rt = regFile.get_reg(rt);
 
-            if(effectiveAddr == 0x30000004 || effectiveAddr == 0x30000006)  memory.io_write();
-        }
-        void simulator::i_sw(int instruction){
-            int base, rt, offset;
-            i_parse(instruction, base, rt, offset);
-            offset = sign_extend(offset);
-            base = regFile.get_reg(base);
-            rt = regFile.get_reg(rt);
+        int memoryAddress = base + offset;
 
-            int memoryAddress = base + offset;
+        if ((memoryAddress % 4) != 0)
+            std::exit(-11);
 
-            if((memoryAddress % 4) != 0){                                //test for memory access restriction on load word
-                //std::cerr<<"Memory offset unaligned in set word. Exiting with bad access error"<<std::endl;
-                std::exit(-11);
-            }
+        unsigned char byte = ((rt >> 24) & 0xFF);
+        memory.set_byte((memoryAddress), byte);
 
-            char byte = rt>>24;                                             //msb
-            memory.set_byte((memoryAddress), byte);
+        byte = ((rt >> 16) & 0xFF);
+        memory.set_byte((memoryAddress + 1), byte);
 
-            byte = ((rt>>16)&0xFF);
-            memory.set_byte((memoryAddress + 1), byte);
+        byte = ((rt >> 8) & 0xFF);
+        memory.set_byte((memoryAddress + 2), byte);
 
-            byte = ((rt>>8)&0xFF);
-            memory.set_byte((memoryAddress + 2), byte);
+        byte = ((rt & 0xFF));
+        memory.set_byte((memoryAddress + 3), byte);
 
-            byte = ((rt&0xFF));                                        //lsb
-            memory.set_byte((memoryAddress + 3), byte);
-
-            if(memoryAddress == 0x30000004) memory.io_write();
-        }
-
+        if (memoryAddress == 0x30000004)
+            memory.io_write();
+    }
     void simulator::i_slti(int instruction){
         int rs,rt,imm;
         i_parse(instruction, rs, rt, imm);
         imm = sign_extend(imm);
         rs = regFile.get_reg(rs);
+        
         int comparison;
-
-
         if(rs<imm)  comparison = 1;
         else        comparison = 0;
 
         regFile.set_reg(comparison, rt);
     }
-    void simulator::i_sltiu(int instruction){ //WIP - confused by documentation
+    void simulator::i_sltiu(int instruction){
         int rs,rt,imm;
         i_parse(instruction, rs, rt, imm);
         rs = regFile.get_reg(rs);
         imm = sign_extend(imm);
 
-        unsigned int immediate = (unsigned)imm; //ISSUE AREA
-
         int comparison;
-        if(rs<immediate)    comparison = 1;
+        if((uint32_t)rs<(uint32_t)imm)    comparison = 1;
         else                comparison = 0;
 
         regFile.set_reg(comparison, rt);
@@ -977,13 +920,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.set_reg((rs^imm), rt);
     }
 
-
-
 //--------J Instructions--------//
-    void simulator::j_j(int instruction){ //WIP
+    void simulator::j_j(int instruction){ 
         int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
         jump = true;
-        pcOffSet = instr + ((programCounter+4) & 0xF0000000);
+        pcOffSet = instr | ((programCounter+4) & 0xF0000000);
     }
 
     void simulator::j_jal(int instruction){

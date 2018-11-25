@@ -1,5 +1,4 @@
 #include "memory.hpp"
-
 //SIMULATOR_REGISTERS FUNCTION DEFINITIONS
     //Constructor to initialise all register values to 0
     sim_reg::sim_reg(){
@@ -15,20 +14,17 @@
 
     void sim_reg::set_reg(int input, int regNum){
         if(regNum == 0){
-            //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
             reg[regNum] = input;
         }
         else{
-            //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
             std::exit(-11);
         }
     }
 
     void sim_reg::lwl_set_reg(int input, int regNum, int moduAmount){
         if(regNum == 0){
-            //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
             switch(moduAmount){     //see a similar table in the spec explanation of lwl
@@ -44,14 +40,12 @@
             reg[regNum] = reg[regNum] | input;
         }
         else{
-            //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
             std::exit(-11);
         }
     }
 
     void sim_reg::lwr_set_reg(int input, int regNum, int moduAmount){
         if(regNum == 0){
-            //std::cerr<<"Write to $0. No action taken...\n";
         }
         else if(regNum<32 && regNum>0){
             switch(moduAmount){         //see a similar table in the spec explanation of lwr
@@ -67,12 +61,10 @@
             reg[regNum] = reg[regNum] | input;
         }
         else{
-            //std::cerr<<"\n"<<"Register Out of Range exit code -11"<<"\n";
             std::exit(-11);
         }
     }
 
-    //WIP: THERE IS CERTAIN ALLOWED ACCESS TO HI AND LO AFTER A MULT/DIV
     int sim_reg::get_hi() const{
         return hi;
     }
@@ -122,7 +114,11 @@
         int io_input;
         io_input = getchar(); //eof 0xFFFFFFFF, else 0x000000XX
 
-        if(io_input == EOF) io_input = -1;
+        if(io_input == EOF || feof(stdin)){
+            int error = ferror(stdin);
+            if(error) std::exit(-21);
+            else io_input = -1;
+        }
 
         addr_getc[0] = (io_input >> 24) & 0xff;
         addr_getc[1] = (io_input >> 16) & 0xff;
@@ -181,7 +177,6 @@
             std::exit(-11);
         }
         else{
-
             if(check == 1){
                 if(address < addr_instr.size()) return addr_instr[address];
                 else    return 0;
@@ -206,7 +201,7 @@
         }
         else{
             if(check == 2){
-                if(addr_data.find(address) != addr_data.end())  addr_data.insert(std::pair<int, char> (address, value));
+                if(addr_data.find(address) == addr_data.end())  addr_data.insert(std::pair<int, char> (address, value));
                 else    addr_data[address] = value;
             }
             if(check == 4)  addr_putc[address] = value;
