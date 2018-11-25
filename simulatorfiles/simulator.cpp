@@ -170,15 +170,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int destination = instruction & 0b11111;
 
         switch(destination){
-
             case 0b00001: return 8;  //BGEZ
-
             case 0b10001: return 9;  //BGEZAL
-
             case 0b00000: return 12;  //BLTZ
-
             case 0b10000: return 13;  //BLTZAL
-
             default:    std::cerr<<"Branch instruction decoding failed - invalid instruction. Exiting program...";
                         std::exit(-12);
         }
@@ -302,12 +297,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
 //--------R Instructions--------//
     void simulator::r_parse(int instruction, int& rs, int& rt, int& rd){
-        rs = (instruction >> 21) &0x1F;
+        rs = (instruction >> 21) & 0x1F;
         rt = (instruction >> 16) & 0x1F;
         rd = (instruction >> 11) & 0x1F;
     }
     void simulator::r_parse(int instruction, int& rs, int& rt, int& rd, int& shamt){
-        rs = (instruction >> 21) &0x1F;
+        rs = (instruction >> 21) & 0x1F;
         rt = (instruction >> 16) & 0x1F;
         rd = (instruction >> 11) & 0x1F;
         shamt = (instruction >> 6) & 0x1F;
@@ -322,9 +317,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int result = rt+rs;
 
         //if both operands are same sign, set overflow if result sign is different
-        if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)){
-            overflow = true;
-        }
+        if(((rs >> 31) == (rt >>31)) && (result>>31 != rs>>31)) overflow = true;
+
         if(overflow)    std::exit(-10);
         else            regFile.set_reg(result, rd);
     }
@@ -347,12 +341,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_div(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        rs = regFile.get_reg(rs);               //src1
-        rt = regFile.get_reg(rt);               //src2
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
         if(rt != 0){
-            regFile.set_lo(rs/rt);                  //quotient into LO
-            regFile.set_hi(rs%rt);                  //remainder into HI
+            regFile.set_lo(rs/rt);//quotient into LO
+            regFile.set_hi(rs%rt);//remainder into HI
         }
     }
     void simulator::r_divu(int instruction){        
@@ -366,9 +360,9 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             regFile.set_hi((uint32_t)rs%(uint32_t)rt);                  //remainder into HI
         }
     }
-    void simulator::r_jalr(int instruction){
+    void simulator::r_jalr(int instruction){ //CHECK WIPWIPWIPWIP
         simulator::r_jr(instruction);
-        int rd = (instruction >>11) & 0x1F;
+        int rd = (instruction >> 11) & 0x1F;
         if(rd==0) rd = 31;                      //for the implicit case specified by the documentation
 
         regFile.set_reg(programCounter+8, rd);
@@ -403,8 +397,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);
 
         int64_t result = (int64_t)rt*(int64_t)rs;
-        int tophalf = (int32_t)(result>>32);         //NUMTEST
-        int btmhalf = (int32_t)(result&0xffffffff);  //NUMTEST
+        int tophalf = (int32_t)(result>>32);
+        int btmhalf = (int32_t)(result&0xffffffff);
        
         regFile.set_hi(tophalf);
         regFile.set_lo(btmhalf);
@@ -437,21 +431,21 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);
 
         int comparison;
-        if(rs<rt){comparison = 1;}
-        else{comparison = 0;}
+        if(rs<rt)   comparison = 1;
+        else        comparison = 0;
 
         regFile.set_reg(comparison, rd);
     }
     void simulator::r_sltu(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        unsigned int rsu = regFile.get_reg(rs);
-        unsigned int rtu = regFile.get_reg(rt);
+        uint32_t rsu = (uint32_t)regFile.get_reg(rs);
+        uint32_t rtu = (uint32_t)regFile.get_reg(rt);
 
         int comparison;
 
-        if(rsu<rtu){comparison = 1;}
-        else{comparison = 0;}
+        if(rsu<rtu)     comparison = 1;
+        else            comparison = 0;
 
         regFile.set_reg(comparison, rd);
     }
@@ -476,11 +470,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_sra(int instruction){
         int rs, rt, rd, sa;
         r_parse(instruction, rs, rt, rd, sa);
-
-        rt = regFile.get_reg(rt);   //val of rt
+        rt = regFile.get_reg(rt);
 
         rt = rt>>sa;
-        regFile.set_reg(rt, rd);    //shifted val of rt into rd
+        regFile.set_reg(rt, rd);
     }
     void simulator::r_srav(int instruction){    //g++ compiler does arithmetic shift for signed data types
         int rs, rt, rd;
@@ -499,14 +492,13 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);
 
         unsigned int result = (unsigned)rt >> (unsigned)sa; //try removing unsigned casting for sa!
-
         regFile.set_reg(result, rd);
     }
-    void simulator::r_srlv(int instruction){
+    void simulator::r_srlv(int instruction){    //FIXED, RS WAS MISSING 5 BIT MASK
         int rs, rt, rd;
         r_parse(instruction, rs,rt,rd);
         rt = regFile.get_reg(rt);
-        rs = regFile.get_reg(rs);
+        rs = regFile.get_reg(rs) & 0x1F;            
 
         unsigned int result = (unsigned)rt >> (unsigned)rs; //try removing unsigned casting for rs!
 
@@ -520,25 +512,18 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         rt = regFile.get_reg(rt);               //src2
 
         int result = rs-rt;
-        //if both operands are same sign, set overflow if result sign is different
-        if(((rs >> 31) != (rt >>31)) && (result>>31 != rs>>31)){
-            overflow = true;
-        }
-        if(overflow){
-            //std::cerr<<"Exiting with error -10";
-            std::exit(-10);
-        }
-        else{
-            regFile.set_reg(result, rd);
-        }
+        //if both operands are of different signs, set overflow if result sign is different from first operand
+        if(((rs >> 31) != (rt >>31)) && (result>>31 != rs>>31)) overflow = true;
+        if(overflow)    std::exit(-10);
+        else    regFile.set_reg(result, rd);
     }
     void simulator::r_subu(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
-        rs = regFile.get_reg(rs);               //src1
-        rt = regFile.get_reg(rt);               //src2
+        rs = regFile.get_reg(rs);
+        rt = regFile.get_reg(rt);
 
-        regFile.set_reg(rs-rt, rd);             //no overflow
+        regFile.set_reg(rs-rt, rd);
     }
     void simulator::r_xor(int instruction){
         int rs,rt,rd;
@@ -934,8 +919,6 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
 
         regFile.set_reg((rs^imm), rt);
     }
-
-
 
 //--------J Instructions--------//
     void simulator::j_j(int instruction){ 
