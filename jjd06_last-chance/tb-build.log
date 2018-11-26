@@ -1,0 +1,4 @@
+make[1]: Entering directory '/media/sf_shared/cw/last-chance/working/YouAreMyDad'
+g++  -c --std=c++11  -c -o test/testbenchinitialiser.o test/testbenchinitialiser.cpp
+g++ test/testbenchinitialiser.o -o bin/mips_testbench
+make[1]: Leaving directory '/media/sf_shared/cw/last-chance/working/YouAreMyDad'
