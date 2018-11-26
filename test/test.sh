@@ -6,7 +6,7 @@
 #mkdir -p test/output
 #touch test/output/output.csv
 #touch test/temp.csv
-echo "TestId , Instruction , Status , Author , Message\n" #>> test/output/output.csv
+echo "TestId , Instruction , Status , Author , Message" #>> test/output/output.csv
 
 ###TAKES FILE INPUT###                                           
 commandline_args=("$@")
