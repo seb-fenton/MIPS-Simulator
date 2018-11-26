@@ -1,0 +1,8 @@
+#245
+#memCheck5
+#INTERNAL
+#Checks for restricted access of memory regions: 0x0000 0001 || Dependencies: sb jr
+
+sb $2, 1($0)
+jr $0
+nop

@@ -13,5 +13,5 @@ simulatorfiles/.vscode
 simulatorfiles/simulator.o
 
 test/testbenchinitialiser.o
-test/output
+
 

@@ -1,7 +1,7 @@
 #245
 #instrAlign
 #INTERNAL
-#Checks that unaligned execution of instructions is caught
+#Checks that unaligned execution of instructions is caught || Dependencies: lui addi jr
 
 lui $3, 0x10000000
 addi $3, $3, 1
@@ -9,3 +9,4 @@ jr $3
 nop
 nop
 jr $0
+nop
