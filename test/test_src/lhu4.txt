@@ -1,13 +1,13 @@
 #1
-#lh4
-#lh
+#lhu4
+#lhu
 #Testing correct sign extension of loaded halfword || Dependencies: lui addiu sh jr subu
 
 lui $3 0x2000
 addiu $4, $0, 0x0080
 sh $4, 0x0($3)
 
-lh $2, 0x0($3)
+lhu $2, 0x0($3)
 addiu $2, $2, 0x1
 subu $2, $2, $4
 
