@@ -66,44 +66,44 @@ class simulator{
             void r_xor(int instruction);
 
         //I INSTRUCTIONS//
-        void i_parse(int instruction, int& rs, int& rt, int& imm);
-        int sign_extend(int imm);
+            void i_parse(int instruction, int& rs, int& rt, int& imm);
+            int sign_extend(int imm);
 
-        void i_addi(int instruction);
-        void i_addiu(int instruction);
-        void i_andi(int instruction);
+            void i_addi(int instruction);
+            void i_addiu(int instruction);
+            void i_andi(int instruction);
 
-        void i_beq(int instruction);
-        void i_bgez(int instruction);
-        void i_bgezal(int instruction);
-        void i_bgtz(int instruction);
-        void i_blez(int instruction);
-        void i_bltz(int instruction);
-        void i_bltzal(int instruction);
-        void i_bne(int instruction);
+            void i_beq(int instruction);
+            void i_bgez(int instruction);
+            void i_bgezal(int instruction);
+            void i_bgtz(int instruction);
+            void i_blez(int instruction);
+            void i_bltz(int instruction);
+            void i_bltzal(int instruction);
+            void i_bne(int instruction);
 
-        void i_lb(int instruction);
-        void i_lbu(int instruction);
-        void i_lh(int instruction);
-        void i_lhu(int instruction);
-        void i_lui(int instruction);
-        void i_lw(int instruction);
-        void i_lwl(int instruction);
-        void i_lwr(int instruction);
+            void i_lb(int instruction);
+            void i_lbu(int instruction);
+            void i_lh(int instruction);
+            void i_lhu(int instruction);
+            void i_lui(int instruction);
+            void i_lw(int instruction);
+            void i_lwl(int instruction);
+            void i_lwr(int instruction);
 
-        void i_ori(int instruction);
+            void i_ori(int instruction);
 
-        void i_sb(int instruction);
-        void i_sh(int instruction);
+            void i_sb(int instruction);
+            void i_sh(int instruction);
 
-        void i_slti(int instruction);
-        void i_sltiu(int instruction);
+            void i_slti(int instruction);
+            void i_sltiu(int instruction);
 
-        void i_sw(int instruction);
-        void i_xori(int instruction);
+            void i_sw(int instruction);
+            void i_xori(int instruction);
         
         //J INSTRUCTIONS//  
-        void j_j(int instruction);
-        void j_jal(int instruction);
+            void j_j(int instruction);
+            void j_jal(int instruction);
 };
 #endif

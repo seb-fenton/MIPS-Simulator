@@ -41,14 +41,13 @@ std::string get_filename(int argc, char* argv[]){
         InputBinaryFile = argv[1];                                                      //let filename string = first input in command line after executable
         return InputBinaryFile;
     }     
+    
     else{
-        std::exit(-21);                                                                 //no instructions. exit due to i/o error
+        std::exit(-21);                                                                 //no binary. exit due to i/o error
     }
-
 }
 
 char* write_binary_in(std::string FileName, int& LengthOfBinary){
-
     std::ifstream InputBinary(FileName.c_str(), std::ifstream::binary);     //open the file using fstream library
     char* Memblock;
 
