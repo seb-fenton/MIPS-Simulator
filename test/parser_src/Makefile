@@ -15,6 +15,7 @@ clean:
 	rm -f -rf src/*.o bin
 
 clean_binaries:
-	rm -f -rf ../test_src/*.bin
-	rm -f -rf ../test_io_src/*.bin
-	rm -f -rf ../test_io_src_manual/*.bin
+	rm -f -rf ../test_instruction_src/*.bin
+	rm -f -rf ../test_io_instruction_src/*.bin
+	rm -f -rf ../test_io_instruction_src_manual/*.bin
+	rm -f -rf ../test_simulator_instruction_src/*.bin
