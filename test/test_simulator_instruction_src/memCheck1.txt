@@ -1,0 +1,7 @@
+#245
+#memCheck1
+#INTERNAL
+#Checks for restricted access of memory regions
+
+lb $0, 0($0)
+jr $0

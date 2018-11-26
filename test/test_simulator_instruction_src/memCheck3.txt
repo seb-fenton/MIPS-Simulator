@@ -1,0 +1,7 @@
+#245
+#memCheck2
+#INTERNAL
+#Checks for restricted access of memory regions
+
+lb $1, 0x7FFF($0)
+jr $0

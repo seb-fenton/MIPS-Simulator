@@ -12,12 +12,12 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     delayedJump = false;
 }
 //------CPU Control Methods------//
-    bool simulator::finished_sim(){ 
+    bool simulator::finished_sim(){
         //condition 1: pc has jumped to zero
         if(programCounter == 0) return true;
         else                    return false;
     }
-    void simulator::updatePC(){    
+    void simulator::updatePC(){
         programCounter = programCounter + 4;
 
         if(branch || jump){
@@ -45,7 +45,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int check = programCounter;               //CHECK that PC is in an executable area
         check = memory.addressmap(check);
         int instruction = 0;
-        if((check > 1) && (programCounter%4 != 0))  std::exit(-11);         //11: executing ADDRESS that cannot be executed. different from 12
+        if((check > 1) || (programCounter%4 != 0) || (check == -1))  std::exit(-11);         //11: executing ADDRESS that cannot be executed. different from 12
 
         else{
             for(int i=0; i<4; i++){                     //fetch and append 4 bytes to create a full 32 byte instruction
@@ -349,7 +349,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             regFile.set_hi(rs%rt);//remainder into HI
         }
     }
-    void simulator::r_divu(int instruction){        
+    void simulator::r_divu(int instruction){
         int rs,rt,rd;
         r_parse(instruction,rs,rt,rd);
         rs = regFile.get_reg(rs);               //src1
@@ -399,7 +399,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int64_t result = (int64_t)rt*(int64_t)rs;
         int tophalf = (int32_t)(result>>32);
         int btmhalf = (int32_t)(result&0xffffffff);
-       
+
         regFile.set_hi(tophalf);
         regFile.set_lo(btmhalf);
     }
@@ -413,7 +413,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         uint32_t tophalf = (uint32_t)(result>>32);
         uint32_t btmhalf = (uint32_t)(result&0xffffffff);
 
-        regFile.set_hi(tophalf);        
+        regFile.set_hi(tophalf);
         regFile.set_lo(btmhalf);
     }
     void simulator::r_or(int instruction){
@@ -498,7 +498,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         int rs, rt, rd;
         r_parse(instruction, rs,rt,rd);
         rt = regFile.get_reg(rt);
-        rs = regFile.get_reg(rs) & 0x1F;            
+        rs = regFile.get_reg(rs) & 0x1F;
 
         unsigned int result = (unsigned)rt >> (unsigned)rs; //try removing unsigned casting for rs!
 
@@ -893,7 +893,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         i_parse(instruction, rs, rt, imm);
         imm = sign_extend(imm);
         rs = regFile.get_reg(rs);
-        
+
         int comparison;
         if(rs<imm)  comparison = 1;
         else        comparison = 0;
@@ -921,7 +921,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     }
 
 //--------J Instructions--------//
-    void simulator::j_j(int instruction){ 
+    void simulator::j_j(int instruction){
         int instr = (instruction & 0x03FFFFFF) << 2; //extract lower 26 bits
         jump = true;
         pcOffSet = instr | ((programCounter+4) & 0xF0000000);
