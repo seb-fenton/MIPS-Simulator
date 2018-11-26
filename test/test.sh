@@ -1,19 +1,19 @@
 #!/bin/bash
 
-#ISSUE - MAKE SURE TO REMOVE ALL UNNECESSARY ECHOES AND MAKE SURE TO PRINT TO COMMAND LINE!
+###OPTIONAL INITIALISATION OF TEST DIRECTORY AND FILES IF CSV NEEDED###
 
-###INITIALISATION OF TEST DIRECTORY AND FILES###
 #mkdir -p test/output
 #touch test/output/output.csv
 #touch test/temp.csv
-echo "TestId , Instruction , Status , Author , Message" #>> test/output/output.csv
+#echo "TestId , Instruction , Status , Author , Message" #>> test/output/output.csv
 
 ###TAKES FILE INPUT###                                           
 commandline_args=("$@")
 
-###CREATES BINARY FILES AND CALLS THEM WITH SIMULATOR EXECUTABLE, OUTPUTTING TO CSV###
+###CALLS BINARIES WITH SIMULATOR EXECUTABLE###
 
-#TestId , Instruction , Status , Author [, Message]
+###START OF BASIC FUNCTION TESTS###
+
 FILES="test/test_instruction_src/*.txt"
 for f in $FILES; do
     bool="fail"
@@ -40,6 +40,10 @@ for f in $FILES; do
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
+
+###END OF BASIC FUNCTION TESTS###
+
+###START OF BASIC SIMULATOR FUNCTION TESTS###
 
 FILES="test/test_simulator_instruction_src/*.txt"
 for f in $FILES; do
@@ -68,6 +72,10 @@ for f in $FILES; do
     fi
 done
 
+###END OF BASIC SIMULATOR FUNCTION TESTS###
+
+###START OF OUTPUT FUNCTION TESTS###
+
 FILES="test/test_io_instruction_src/*.txt"
 for f in $FILES; do
     bool="fail"
@@ -95,6 +103,10 @@ for f in $FILES; do
         echo "Test failed: $testIndex, output: $output"                          
     fi
 done
+
+###END OF OUTPUT FUNCTION TESTS###
+
+###START OF 'MANUAL' (aka INPUT) FUNCTION TESTS###
 
 FILES="test/test_io_instruction_src_manual/*.txt"
 for f in $FILES; do
@@ -156,6 +168,8 @@ for f in $FILES; do
     fi
 done
 
+#SUBSECTION: START OF NO_INPUT AND EOF TESTS#
+
 $commandline_args
 output=$?
 bool="fail"
@@ -186,44 +200,6 @@ fi
 
 echo "eof2 , lw , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
+#SUBSECTION: END OF NO_INPUT AND EOF TESTS#
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#BINARY FILE GENERATING CODE
-
-
-#MIPS_CC = mips-linux-gnu-gcc
-#MIPS_OBJCOPY = mips-linux-gnu-objcopy 
-
-#MIPS_CPPFLAGS = -W -Wall -03 -fno-bullitin -march=mips1 -mfp32
-#MIPS_LDFLAGS = -nostdlib -Wl,-melf32bitsnip -march=mips1 -nostartfile =mno-check-zero-division -Wl, --gpsize=0 -static -Wl, -BStatic
-#MIPS_LDFLAGS += -Wl, --build-id=none
-
-#s.mips.o: %.mips.s
-#    $(MIPS_CC) $(MIPS_CPPFLAGS) -c $< -o $@
-
-#%.mips.elf: %.mips.o
-#    $(MIPS_CC) $(MIPS_CPPFLAGS) $(MIPS_LDFLAGS) -T linker.id $< -o $@
-
-#bin/mips_simulator: src/simulator.cpp
-#    mkdir -p bin
-#    g++ -W Wall src/simulator.cpp -o bin/mips_simulator
+###END OF 'MANUAL' (aka INPUT) FUNCTION TESTS###
