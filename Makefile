@@ -12,6 +12,10 @@ simulator: simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memor
 #target testbench rules
 testbench: test/testbenchinitialiser.o
 	g++ test/testbenchinitialiser.o -o bin/mips_testbench
+	#compiles all binaries on each initialisation of testbench; uses olly-larkin's licensed software
+	make -C test/parser_src -f ./Makefile parser 
+	test/parser_src/binarycompiler.sh			
+	
 
 #main object file compilation
 main.o:
@@ -32,6 +36,8 @@ testbenchinitialiser.o:
 #clean function to remove all temp files that are not testbench outputs
 clean:
 	rm bin/mips_simulator bin/mips_testbench simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o test/testbenchinitialiser.o
+	make -C test/parser_src -f ./Makefile clean
+	make -C test/parser_src -f ./Makefile clean_binaries
 
 #clean function to remove testbench outputs
 #clean_t:

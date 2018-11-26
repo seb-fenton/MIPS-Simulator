@@ -125,8 +125,6 @@
         addr_getc[2] = (io_input >> 8) & 0xff;
         addr_getc[3] = io_input & 0xff;
 
-        
-
     }
     void sim_mem::io_write(){
         putchar(addr_putc[3]);
