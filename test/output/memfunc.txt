@@ -1,0 +1,30 @@
+#4
+#memwrite
+#STACK
+#Tests multiple loads/stores with overwrites || Dependencies: ori addiu sw lw jr
+
+lui $3, 0x22AF
+
+addiu $10, $0, 2
+sw $10, 0x0($3)
+sw $10, 0x4($3)
+sw $10, 0x8($3)
+sw $10, 0xC($3)
+
+addiu $10, $0, 1
+sw $10, 0x0($3)
+sw $10, 0x4($3)
+sw $10, 0x8($3)
+sw $10, 0xC($3)
+
+lw $5, 0x0($3)
+add $2, $2, $5
+lw $5, 0x4($3)
+add $2, $2, $5
+lw $5, 0x8($3)
+add $2, $2, $5
+lw $5, 0xC($3)
+add $2, $2, $5
+
+jr $0
+nop

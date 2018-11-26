@@ -1,0 +1,10 @@
+#ANYTHING BUT 245
+#div2
+#div
+#Testing for arithmetic exception || Dependencies: lui jr mfhi mflo subu or
+
+lui $5, 0x8000
+div $5, $0
+
+jr $0
+nop 
