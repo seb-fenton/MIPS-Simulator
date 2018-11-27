@@ -1,0 +1,10 @@
+#245
+#memCheck18
+#INTERNAL
+#Checks for restricted access of memory regions: 0xFFFF FFFF || Dependencies: lui ori lb jr
+
+lui $3, 0xFFFF
+ori $3, $3, 0xFFFF
+lb $2, 0($3)
+jr $0
+nop

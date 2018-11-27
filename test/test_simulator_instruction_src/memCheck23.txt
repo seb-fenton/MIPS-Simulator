@@ -1,0 +1,10 @@
+#245
+#memCheck1
+#INTERNAL
+#Checks for restricted access of memory regions: 0x0000 0000 || Dependencies: sb jr
+
+sb $0, 0($0)
+jr $0
+nop
+
+#we're mugs and didnt remember to put this in as memcheck 2 sorry x

@@ -1,0 +1,18 @@
+#3
+#jalr1
+#jalr
+#Testing basic functionality - specifically, implicit & non-implicit $31 || Dependencies: lui ori jr
+
+lui $31, 0x1000
+ori $31, $31, 0x001C
+jalr $4, $31
+nop
+ori $2, $2, 0x1
+jr $0
+nop
+
+jr $4
+ori $2, $2, 0x2
+nop
+jr $0
+nop

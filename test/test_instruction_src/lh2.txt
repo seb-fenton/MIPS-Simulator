@@ -1,0 +1,11 @@
+#245
+#lh2
+#lh
+#Testing memory access errors || Dependencies: lui ori jr
+
+lui $3, 0x1FFF
+ori $3, $3, 0xFFFF
+
+lh $2, 0x0($3)
+jr $0
+nop
