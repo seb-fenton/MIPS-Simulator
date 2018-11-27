@@ -1,13 +1,14 @@
 #!/bin/bash
 
-###OPTIONAL INITIALISATION OF TEST DIRECTORY AND FILES IF CSV NEEDED###
+###OPTIONAL INITIALISATION OF TEST FILES IF CSV NEEDED###
 
-#mkdir -p test/output
+mkdir -p test/output
+mkdir -p test/temp
 #touch test/output/output.csv
 #touch test/temp.csv
 #echo "TestId , Instruction , Status , Author , Message" #>> test/output/output.csv
 
-###TAKES FILE INPUT###                                           
+###TAKES FILE INPUT###
 commandline_args=("$@")
 
 ###START OF BASIC FUNCTION TESTS###
@@ -26,13 +27,13 @@ for f in $FILES; do
     test="${line:1:${#line}-1}"
     read -r line <&5
     message="${line:1:${#line}-1}"
-    
+
     $commandline_args test/test_instruction_src/$testIndex.bin              #executes next executable
     output=$?
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
 done
 
 ###END OF BASIC FUNCTION TESTS###
@@ -53,13 +54,13 @@ for f in $FILES; do
     test="${line:1:${#line}-1}"
     read -r line <&5
     message="${line:1:${#line}-1}"
-    
+
     $commandline_args test/test_simulator_instruction_src/$testIndex.bin              #executes next executable
     output=$?
     if [ $output -eq $expectedOutcome ]; then
         bool="pass"
     fi
-    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
+    echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
 done
 
 ###END OF BASIC SIMULATOR FUNCTION TESTS###
