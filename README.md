@@ -37,5 +37,5 @@ This was the group that tightened the specification for I/O (shown [here](https:
 ##### Branch/Jumps
 JALR: If unspecified, the link return address is stored by default in register $31, as per specification. However, specification sheets online state that an assembler might return this "unspecified" register rd as 0 in the instruction binary. We would thus consider a user calling JALR and specifying the link register to $0 to be undefined behaviour. As such, our implementation is such that if one tries to compile a binary involving "JALR $0, $5", for example, the link register would still be defaulted to register $31.
 
-#### LWL/LWR
+##### LWL/LWR
 LWL and LWR, in this implementation, have the same access privileges as LB would. We made this choice so that the simulator would have as much functionality as possible, and to reflect what we thought would be a realistic representation of hardware. 
