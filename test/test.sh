@@ -10,8 +10,6 @@
 ###TAKES FILE INPUT###                                           
 commandline_args=("$@")
 
-###CALLS BINARIES WITH SIMULATOR EXECUTABLE###
-
 ###START OF BASIC FUNCTION TESTS###
 
 FILES="test/test_instruction_src/*.txt"
@@ -95,7 +93,6 @@ done
 ###END OF OUTPUT FUNCTION TESTS###
 
 ###START OF INPUT FUNCTION TESTS###
-#named as such as this is the region to put custom tests that require modified bash script
 
 FILES="test/test_io_instruction_src_input/*.txt"
 for f in $FILES; do
@@ -127,6 +124,7 @@ done
 ###END OF INPUT FUNCTION TESTS###
 
 #START OF MANUAL TESTS#
+#named as such as this is the region to put custom tests that require modified bash script
 
 $commandline_args test/test_io_instruction_src_manual/manual1.bin
 output=$?
