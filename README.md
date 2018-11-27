@@ -1,9 +1,6 @@
-### Lau Jun Kit Darrick
-
-### Sebastian Alexander William Fenton
-
-##### EIE2 Computer Architecture MIPS Simulator
-
+### EIE2 Computer Architecture MIPS Simulator
+##### Lau Jun Kit Darrick
+##### Sebastian Alexander William Fenton
 
 
 #### Using the simulator
@@ -11,6 +8,7 @@
 * make testbench
 * (runs the simulator against every test binary in the catalogue) bin/mips_testbench bin/mips_simulator
 * (for individual tests): bin/mips_simulator test/..../testbinary.bin
+* (to clean) make clean 
 Directory names are self-explanatory. However, the output CSV file for running a simulator can be found in test/output.
 
 #### Extending the testbench
