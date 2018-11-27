@@ -1,4 +1,4 @@
-#ANYTHING BUT 245
+#245
 #div2
 #div
 #Testing for arithmetic exception || Dependencies: lui jr mfhi mflo subu or

@@ -1,5 +1,5 @@
 #4
-#memwrite
+#memfunc
 #STACK
 #Tests multiple loads/stores with overwrites || Dependencies: ori addiu sw lw jr
 
