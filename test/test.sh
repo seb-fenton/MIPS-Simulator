@@ -35,10 +35,6 @@ for f in $FILES; do
         bool="pass"
     fi
     echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
-
-    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
-        echo "Test failed: $testIndex, output: $output"                          
-    fi
 done
 
 ###END OF BASIC FUNCTION TESTS###
@@ -66,17 +62,13 @@ for f in $FILES; do
         bool="pass"
     fi
     echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv          
-
-    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has faile
-        echo "Test failed: $testIndex, output: $output"                          
-    fi
 done
 
 ###END OF BASIC SIMULATOR FUNCTION TESTS###
 
 ###START OF OUTPUT FUNCTION TESTS###
 
-FILES="test/test_io_instruction_src/*.txt"
+FILES="test/test_io_instruction_src_output/*.txt"
 for f in $FILES; do
     bool="fail"
 
@@ -91,24 +83,21 @@ for f in $FILES; do
     read -r line <&5
     message="${line:1:${#line}-1}"
 
-    output=$($commandline_args test/test_io_instruction_src/$testIndex.bin)           #executes next executable
+    output=$($commandline_args test/test_io_instruction_src_output/$testIndex.bin)           #executes next executable
 
     if [ "$output" = "$expectedOutcome" ]; then
         bool="pass"
     fi
 
     echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
-
-    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
-        echo "Test failed: $testIndex, output: $output"                          
-    fi
 done
 
 ###END OF OUTPUT FUNCTION TESTS###
 
-###START OF 'MANUAL' (aka INPUT) FUNCTION TESTS###
+###START OF INPUT FUNCTION TESTS###
+#named as such as this is the region to put custom tests that require modified bash script
 
-FILES="test/test_io_instruction_src_manual/*.txt"
+FILES="test/test_io_instruction_src_input/*.txt"
 for f in $FILES; do
     bool="fail"
 
@@ -123,52 +112,32 @@ for f in $FILES; do
     read -r line <&5
     message="${line:1:${#line}-1}"
     read -r line <&5
-    expectedInput="${line:1:${#line}-1}"
+    getcInput="${line:1:${#line}-1}"
 
-    if [ "$expectedInput" = "0" ]; then
-        echo "0" | $commandline_args test/test_io_instruction_src_manual/$testIndex.bin
-        output=$?
-    fi
-
-    if [ "$expectedInput" = "D" ]; then
-        echo "D" | $commandline_args test/test_io_instruction_src_manual/$testIndex.bin
-        output=$?
-    fi
-
-    if [ "$expectedInput" = "E" ]; then
-        echo "E" | $commandline_args test/test_io_instruction_src_manual/$testIndex.bin
-        output=$?
-    fi
-
-    if [ "$expectedInput" = "F" ]; then
-        echo "F" | $commandline_args test/test_io_instruction_src_manual/$testIndex.bin
-        output=$?
-    fi
-
-    if [ "$expectedInput" = "G" ]; then
-        echo "G" | $commandline_args test/test_io_instruction_src_manual/$testIndex.bin
-        output=$?
-    fi
-
-    if [ "$expectedInput" = "H" ]; then
-        echo "H" | $commandline_args test/test_io_instruction_src_manual/$testIndex.bin
-        output=$?
-    fi
-
-
+    echo "$getcInput" | $commandline_args test/test_io_instruction_src_input/$testIndex.bin
+    output=$?
 
     if [ "$output" = "$expectedOutcome" ]; then
         bool="pass"
     fi
 
     echo "$testIndex , $test , $bool , $USER , || Expected outcome: "$expectedOutcome" | Actual outcome: "$output" || $message ||" #>> test/output/output.csv
-
-    if [ $bool = "fail" ]; then                                #prints in console whether or not particular test has failed
-        echo "Test failed: $testIndex, output: $output"                          
-    fi
 done
 
-#SUBSECTION: START OF NO_INPUT AND EOF TESTS#
+###END OF INPUT FUNCTION TESTS###
+
+#START OF MANUAL TESTS#
+
+$commandline_args test/test_io_instruction_src_manual/manual1.bin
+output=$?
+bool="fail"
+
+if [ "$output" -ne 245 ]; then
+    bool="pass"
+fi
+
+echo "manual1 , div , $bool , $USER , || Expected outcome: !245 | Actual outcome: $output || Testing division by 0 no arithmetic exception || Dependencies: lui||" #>> test/output/output.csv
+
 
 $commandline_args
 output=$?
@@ -180,7 +149,7 @@ fi
 
 echo "noinput , nop , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||" #>> test/output/output.csv
 
-cat test/eof.txt | $commandline_args test/test_io_instruction_src_manual/lhio1.bin
+cat test/test_text_files/eof.txt | $commandline_args test/test_io_instruction_src_input/lhio1.bin
 output=$?
 bool="fail"
 
@@ -190,7 +159,7 @@ fi
 
 echo "eof1 , lh , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
-cat test/eof.txt | $commandline_args test/test_io_instruction_src_manual/lwio1.bin
+cat test/test_text_files/eof.txt | $commandline_args test/test_io_instruction_src_input/lwio1.bin
 output=$?
 bool="fail"
 
@@ -200,6 +169,4 @@ fi
 
 echo "eof2 , lw , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
-#SUBSECTION: END OF NO_INPUT AND EOF TESTS#
-
-###END OF 'MANUAL' (aka INPUT) FUNCTION TESTS###
+###END OF MANUAL TESTS###
