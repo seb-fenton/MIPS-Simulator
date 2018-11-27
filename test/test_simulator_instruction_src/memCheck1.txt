@@ -1,7 +1,7 @@
 #245
 #memCheck1
 #INTERNAL
-#Checks for restricted access of memory regions || Dependencies: lb jr
+#Checks for restricted access of memory regions: 0x0000 0000 || Dependencies: lb jr
 
 lb $0, 0($0)
 jr $0

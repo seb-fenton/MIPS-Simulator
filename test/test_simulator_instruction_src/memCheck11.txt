@@ -1,7 +1,7 @@
 #245
 #memCheck11
 #INTERNAL
-#Checks for restricted access of memory regions: 0x2400 0001 || Dependencies: lui ori sb jr
+#Checks for restricted access of memory regions: 0x1FFF FFFF || Dependencies: lui ori sb jr
 
 lui $3, 0x1FFF
 ori $3, $3, 0xFFFF

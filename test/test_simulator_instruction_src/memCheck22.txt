@@ -1,5 +1,5 @@
 #245
-#memCheck20
+#memCheck22
 #INTERNAL
 #Checks for restricted access of memory regions: 0x3000 0004 || Dependencies: lui ori lb jr
 
