@@ -115,19 +115,17 @@
         io_input = getchar(); //eof 0xFFFFFFFF, else 0x000000XX
 
         if(io_input == EOF || feof(stdin)){
-            int error = ferror(stdin);
-            if(error) std::exit(-21);
+            if(ferror(stdin)) std::exit(-21);
             else io_input = -1;
         }
-
         addr_getc[0] = (io_input >> 24) & 0xff;
         addr_getc[1] = (io_input >> 16) & 0xff;
         addr_getc[2] = (io_input >> 8) & 0xff;
         addr_getc[3] = io_input & 0xff;
-
     }
     void sim_mem::io_write(){
         putchar(addr_putc[3]);
+        if (ferror(stdout)) std::exit(-21); //CHANGE
         io_clear();
     }
     void sim_mem::io_clear(){
@@ -182,7 +180,7 @@
             if(check == 2){
                 if(addr_data.find(address) != addr_data.end())  return addr_data[address];
                 else return 0;
-            }  
+            }
             if(check == 3)  return addr_getc[address];
         }
     }

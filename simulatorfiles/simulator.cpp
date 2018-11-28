@@ -309,8 +309,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     }
     void simulator::r_add(int instruction){
         bool overflow = false;
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd,shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if(shamt != 0)  std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
@@ -323,24 +326,32 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         else            regFile.set_reg(result, rd);
     }
     void simulator::r_addu(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd,shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if(shamt != 0)  std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
         regFile.set_reg(rt+rs, rd);             //no overflow
     }
     void simulator::r_and(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd,shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if(shamt != 0)  std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
         regFile.set_reg(rt & rs, rd);
     }
     void simulator::r_div(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd, shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if((rd != 0) && (shamt != 0)) std::exit(-12);
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
@@ -350,8 +361,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         }
     }
     void simulator::r_divu(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd, shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if((rd != 0) && (shamt != 0)) std::exit(-12);
+
         rs = regFile.get_reg(rs);               //src1
         rt = regFile.get_reg(rt);               //src2
 
@@ -360,39 +374,63 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
             regFile.set_hi((uint32_t)rs%(uint32_t)rt);                  //remainder into HI
         }
     }
-    void simulator::r_jalr(int instruction){ //CHECK WIPWIPWIPWIP
-        simulator::r_jr(instruction);
-        int rd = (instruction >> 11) & 0x1F;
-        if(rd==0) rd = 31;                      //for the implicit case specified by the documentation
+    void simulator::r_jalr(int instruction){ //CHECK
+        int rs, rt, rd, hint;
+        r_parse(instruction, rs, rt, rd, hint);
+        rs = regFile.get_reg(rs);                   //fetch register value
+        if(rd == 0) rd = 31;
 
+        if((rt+hint) != 0)  std::exit(-12);
+
+        jump = true;                                //set jump (for delayed branching)
+        pcOffSet = rs;                              //set regval into pcOffSet
         regFile.set_reg(programCounter+8, rd);
     }
     void simulator::r_jr(int instruction){
-        int rs = (instruction >> 21) & 0x1F;        //fetch register number
+        int rs, rt, rd, hint;
+        r_parse(instruction, rs, rt, rd, hint);
         rs = regFile.get_reg(rs);                   //fetch register value
+
+        if((rt+rd+hint) != 0)  std::exit(-12);
 
         jump = true;                                //set jump (for delayed branching)
         pcOffSet = rs;                              //set regval into pcOffSet
     }
     void simulator::r_mfhi(int instruction){
-        int rd = (instruction>>11) & 0x1F;            //src
+        int rs, rt, rd, shamt;
+        r_parse(instruction, rs, rt, rd, shamt);
+
+        if((rs+rt+shamt) != 0)  std::exit(-12);
         regFile.set_reg(regFile.get_hi(), rd);        //destination
     }
     void simulator::r_mflo(int instruction){
-        int rd = (instruction>>11) & 0x1F;            //src
+      int rs, rt, rd, shamt;
+      r_parse(instruction, rs, rt, rd, shamt);
+
+      if((rs+rt+shamt) != 0)  std::exit(-12);
+
         regFile.set_reg(regFile.get_lo(), rd);        //destination
     }
     void simulator::r_mthi(int instruction){
-        int rs = (instruction>>21) & 0x1F;                   //src
+        int rs, rt, rd, shamt;
+        r_parse(instruction, rs, rt, rd, shamt);
+        if((rt+rd+shamt) != 0)  std::exit(-12);
+
         regFile.set_hi(regFile.get_reg(rs));        //destination
     }
     void simulator::r_mtlo(int instruction){
-        int rs = (instruction>>21) & 0x1F;                   //src
+        int rs, rt, rd, shamt;
+        r_parse(instruction, rs, rt, rd, shamt);
+        if((rt+rd+shamt) != 0)  std::exit(-12);
+
         regFile.set_lo(regFile.get_reg(rs));        //destination
     }
     void simulator::r_mult(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd,shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if((rd+shamt) != 0)  std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
@@ -404,8 +442,11 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.set_lo(btmhalf);
     }
     void simulator::r_multu(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd,shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if((rd+shamt) != 0)  std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
@@ -417,16 +458,22 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.set_lo(btmhalf);
     }
     void simulator::r_or(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd,shamt;
+        r_parse(instruction,rs,rt,rd,shamt);
+
+        if(shamt != 0)  std::exit(-12);
+
         rs = regFile.get_reg(rs);               //src1
         rt = regFile.get_reg(rt);               //src2
 
         regFile.set_reg((rs|rt), rd);
     }
     void simulator::r_slt(int instruction){
-        int rs, rt, rd;
-        r_parse(instruction, rs, rt, rd);
+        int rs, rt, rd, shamt;
+        r_parse(instruction, rs, rt, rd, shamt);
+
+        if(shamt != 0)  std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
@@ -437,8 +484,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.set_reg(comparison, rd);
     }
     void simulator::r_sltu(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs, rt, rd, shamt;
+        r_parse(instruction, rs, rt, rd, shamt);
+
+        if(shamt != 0)  std::exit(-12);
         uint32_t rsu = (uint32_t)regFile.get_reg(rs);
         uint32_t rtu = (uint32_t)regFile.get_reg(rt);
 
@@ -452,14 +501,20 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_sll(int instruction){
         int rs, rt, rd, sa;
         r_parse(instruction, rs,rt,rd,sa);
+
+        if(rs != 0) std::exit(-12);
+
         rt = regFile.get_reg(rt);
 
         int result = rt << sa;
         regFile.set_reg(result, rd);
     }
     void simulator::r_sllv(int instruction){
-        int rs, rt, rd;
-        r_parse(instruction, rs,rt,rd);
+        int rs, rt, rd, sa;
+        r_parse(instruction, rs,rt,rd, sa);
+
+        if(sa != 0) std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rs = rs & 0x1F;
         rt = regFile.get_reg(rt);
@@ -470,14 +525,19 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_sra(int instruction){
         int rs, rt, rd, sa;
         r_parse(instruction, rs, rt, rd, sa);
+
+        if(rs != 0) std::exit(-12);
+
         rt = regFile.get_reg(rt);
 
         rt = rt>>sa;
         regFile.set_reg(rt, rd);
     }
     void simulator::r_srav(int instruction){    //g++ compiler does arithmetic shift for signed data types
-        int rs, rt, rd;
-        r_parse(instruction, rs, rt, rd);
+        int rs, rt, rd, sa;
+        r_parse(instruction, rs, rt, rd, sa);
+        if(sa != 0) std::exit(-12);
+
         rs = regFile.get_reg(rs);
         rs = rs & 0x1F; 	        //last 5 bits of rs
 
@@ -489,14 +549,18 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::r_srl(int instruction){
         int rs, rt, rd, sa;
         r_parse(instruction, rs,rt,rd,sa);
+        if(rs != 0) std::exit(-12);
+
         rt = regFile.get_reg(rt);
 
         unsigned int result = (unsigned)rt >> (unsigned)sa; //try removing unsigned casting for sa!
         regFile.set_reg(result, rd);
     }
     void simulator::r_srlv(int instruction){    //FIXED, RS WAS MISSING 5 BIT MASK
-        int rs, rt, rd;
-        r_parse(instruction, rs,rt,rd);
+        int rs, rt, rd, sa;
+        r_parse(instruction, rs,rt,rd, sa);
+        if(sa != 0) std::exit(-12);
+
         rt = regFile.get_reg(rt);
         rs = regFile.get_reg(rs) & 0x1F;
 
@@ -506,8 +570,10 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     }
     void simulator::r_sub(int instruction){
         bool overflow = false;
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd, sa;
+        r_parse(instruction,rs,rt,rd, sa);
+        if(sa != 0) std::exit(-12);
+
         rs = regFile.get_reg(rs);               //src1
         rt = regFile.get_reg(rt);               //src2
 
@@ -518,16 +584,20 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         else    regFile.set_reg(result, rd);
     }
     void simulator::r_subu(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd, sa;
+        r_parse(instruction,rs,rt,rd,sa);
+
+        if(sa != 0) std::exit(-12);
         rs = regFile.get_reg(rs);
         rt = regFile.get_reg(rt);
 
         regFile.set_reg(rs-rt, rd);
     }
     void simulator::r_xor(int instruction){
-        int rs,rt,rd;
-        r_parse(instruction,rs,rt,rd);
+        int rs,rt,rd, sa;
+        r_parse(instruction,rs,rt,rd,sa);
+        if(sa != 0) std::exit(-12);
+
         rs = regFile.get_reg(rs);               //src1
         rt = regFile.get_reg(rt);               //src2
 
@@ -737,6 +807,8 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::i_lui(int instruction){
         int rs, rt, imm;
         i_parse(instruction, rs, rt, imm);
+        if(rs != 0) std::exit(-12);
+
         imm = (imm << 16) & 0xFFFF0000;
 
         regFile.set_reg(imm, rt);
@@ -766,8 +838,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.set_reg(input, rt);
         memory.io_clear();
     }
-    void simulator::i_lwl(int instruction) //WIP
-    {
+    void simulator::i_lwl(int instruction){
         signed short int offset = instruction & 0xFFFF;
 
         int base = (instruction >> 21) & 0x1F;
@@ -793,8 +864,7 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
         regFile.lwl_set_reg(input, rt, moduAmount);
         memory.io_clear();
     }
-    void simulator::i_lwr(int instruction) //WIP
-    {
+    void simulator::i_lwr(int instruction){
         int base, rt, imm;
         i_parse(instruction, base, rt, imm);
         base = regFile.get_reg(base);
@@ -930,83 +1000,4 @@ simulator::simulator(int LengthOfBinary, char* Memblock, bool& InputSuccess) : m
     void simulator::j_jal(int instruction){
         simulator::j_j(instruction);            //jump
         regFile.set_reg(programCounter+8, 31);  //and link
-    }
-
-
-//------Memory Diagnostics------//
-    void simulator::diagnostics(){
-        bool successfultest = true;
-        std::cout << "Starting Memory Test.\n";
-        for (int i = 0 ; i<32 ; i++){
-            if(regFile.get_reg(i) != 0){
-                std::cout << "\nRegister[" << i << "] is non-zero: "<< regFile.get_reg(i);
-                successfultest = false;
-            }
-        }
-        simulator::CheckMemZeroes(successfultest);
-        simulator::GetAccessCheck(successfultest);
-        simulator::CheckBlankRegions(successfultest);
-        if(successfultest)
-            std::cout << "\nMemory reads as intended\n";
-        else
-            std::cout << "\nMemory function failure\n";
-    }
-
-    void simulator::CheckMemZeroes(bool &success){  //checks readable regions for zeroes
-        for(int i=0x10000000; i<0x11000000; i++){ //instr
-            if(memory.get_byte(i) != 0)
-                success = false;
-        }
-
-        for(int i=0x20000000; i<0x24000000; i++){ //data
-            if(memory.get_byte(i) != 0)
-                success = false;
-        }
-
-        for(int i=0x30000000; i<0x30000004; i++){ //getc
-            if(memory.get_byte(i) != 0)
-                success = false;
-        }
-    }
-
-    void simulator::GetAccessCheck(bool &success){ //check that unreadable regions are unreadable
-        char readbyte;
-        for(int i=0x0; i<0x4; i++){ //null
-            readbyte = memory.get_byte(i);
-            if(readbyte != 0)
-                success = false;
-        }
-
-        for(int i=0x30000004; i<0x30000008; i++){ //putc
-            readbyte = memory.get_byte(i);
-            if(readbyte != 4)
-                success = false;
-        }
-    }
-
-    void simulator::CheckBlankRegions(bool &success){
-        char readbyte;
-        for(int i=0x4; i<0x10000000; i++){ //null
-            readbyte = memory.get_byte(i);
-            if(readbyte != -1)
-                success = false;
-        }
-
-        for(int i=0x11000000; i<0x20000000; i++){ //null
-            readbyte = memory.get_byte(i);
-            if(readbyte != -1)
-                success = false;
-        }
-
-        for(int i=0x24000000; i<0x30000000; i++){ //null
-            readbyte = memory.get_byte(i);
-            if(readbyte != -1)
-                success = false;
-        }
-
-        for(int i=0x30000008; i<=0xFFFFFFFF; i++){ //null
-            readbyte = memory.get_byte(i);
-            if(readbyte != -1)
-                success = false;
-        }
     }
