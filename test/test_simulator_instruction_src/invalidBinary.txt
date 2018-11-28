@@ -1,4 +1,0 @@
-#235
-#invalidBinary
-#INTERNAL
-#Inputs a binary with no instructions in it || Dependencies: 

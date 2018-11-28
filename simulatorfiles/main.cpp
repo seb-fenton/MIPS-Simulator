@@ -56,10 +56,6 @@ char* write_binary_in(std::string FileName, int& LengthOfBinary){
         LengthOfBinary = InputBinary.tellg();               //find value of pointer
         InputBinary.seekg(0, InputBinary.beg);              //move pointer back to beginnning of binary file
 
-        if (LengthOfBinary<=0){
-            std::exit(-21);
-        }
-
         Memblock = new char[LengthOfBinary];                //allocate sufficient memory for Memblock to contain full binary
         InputBinary.read(Memblock, LengthOfBinary);
         InputBinary.close();
