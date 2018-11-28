@@ -1,0 +1,8 @@
+#0
+#mflo2
+#mflo
+#Testing basic functionality || Dependencies: jr
+
+mflo $2
+jr $0
+nop

@@ -1,0 +1,8 @@
+#0
+#mfhi2
+#mfhi
+#Testing basic functionality || Dependencies: jr
+
+mfhi $2
+jr $0
+nop

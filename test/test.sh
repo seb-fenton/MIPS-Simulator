@@ -146,9 +146,9 @@ if [ $output -eq 235 ]; then
     bool="pass"
 fi
 
-echo "noinput , nop , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||" #>> test/output/output.csv
+echo "noinput , INTERNAL , $bool , $USER , || Expected outcome: 235 | Actual outcome: $output || Testing no-input error || Dependencies: ||" #>> test/output/output.csv
 
-cat test/test_text_files/eof.txt | $commandline_args test/test_io_instruction_src_input/lhio1.bin
+cat test/test_extra_files/eof.txt | $commandline_args test/test_io_instruction_src_input/lhio1.bin
 output=$?
 bool="fail"
 
@@ -158,7 +158,7 @@ fi
 
 echo "eof1 , lh , $bool , $USER , || Expected outcome: 255 | Actual outcome: $output || Testing eof output || Dependencies: lui, jr ||" #>> test/output/output.csv
 
-cat test/test_text_files/eof.txt | $commandline_args test/test_io_instruction_src_input/lwio1.bin
+cat test/test_extra_files/eof.txt | $commandline_args test/test_io_instruction_src_input/lwio1.bin
 output=$?
 bool="fail"
 
