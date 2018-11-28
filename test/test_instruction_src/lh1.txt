@@ -10,6 +10,7 @@ sh $4, 0x2($3)
 
 ori $3, $3, 0x0003
 lh $5, 0xFFFF($3)
+nop
 addiu $2, $5, 1
 
 jr $0

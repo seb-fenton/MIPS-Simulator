@@ -11,6 +11,7 @@ sw $4, 0xFFFF($3)
 
 addiu $3, $3, 0xFFFF
 lw $5, 0x0($3)
+nop
 subu $2, $5, $4
 
 jr $0
