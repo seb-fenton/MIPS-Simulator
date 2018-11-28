@@ -5,6 +5,8 @@
         for(int i = 0; i<32; i++){
             reg[i] = 0;
         }
+        hi = 0;
+        lo = 0;
     }
 
     int sim_reg::get_reg(int regNum) const{
