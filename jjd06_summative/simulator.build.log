@@ -1,0 +1,7 @@
+make[1]: Entering directory '/media/sf_shared/cw/summative/working/YouAreMyDad'
+g++  -c --std=c++11  -c -o simulatorfiles/main.o simulatorfiles/main.cpp
+g++  -c --std=c++11  -c -o simulatorfiles/simulator.o simulatorfiles/simulator.cpp
+g++  -c --std=c++11  -c -o simulatorfiles/memory.o simulatorfiles/memory.cpp
+mkdir -p bin
+g++ simulatorfiles/main.o simulatorfiles/simulator.o simulatorfiles/memory.o -o bin/mips_simulator
+make[1]: Leaving directory '/media/sf_shared/cw/summative/working/YouAreMyDad'

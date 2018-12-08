@@ -1,0 +1,654 @@
+make[1]: Entering directory '/media/sf_shared/cw/summative/working/YouAreMyDad'
+g++  -c --std=c++11  -c -o test/testbenchinitialiser.o test/testbenchinitialiser.cpp
+g++ test/testbenchinitialiser.o -o bin/mips_testbench
+#compiles all binaries on each initialisation of testbench; uses olly-larkin's licensed software
+make -C test/parser_src -f ./Makefile parser 
+make[2]: Entering directory '/media/sf_shared/cw/summative/working/YouAreMyDad/test/parser_src'
+g++ --std=c++11 -c src/main.cpp -o src/main.o
+g++ --std=c++11 -c src/parser.cpp -o src/parser.o
+g++ --std=c++11 -c src/instructionList.cpp -o src/instructionList.o
+mkdir -p bin
+g++ src/main.o src/parser.o src/instructionList.o -o bin/parser
+make[2]: Leaving directory '/media/sf_shared/cw/summative/working/YouAreMyDad/test/parser_src'
+test/parser_src/binarycompiler.sh			
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/add1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/add2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/add3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/addi1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/addi2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/addi3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/addiu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/addiu2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/addu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/addu2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/and1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/and2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/and3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/and4.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/andi1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/andi2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/andi3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/andi4.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/beq1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/bgez1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/bgezal1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/bgezal2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/bgtz1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/blez1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/bltz1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/bltzal1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/bne1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/div1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/divu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/j1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/j2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/jal1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/jalr1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/jr1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lb1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lb2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lbu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lbu2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lh1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lh2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lh3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lh4.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lhu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lhu2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lhu3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lhu4.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lui1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lw1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lw2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lw3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lwl1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/lwr1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/mfhi1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/mfhi2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/mflo1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/mflo2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/mthi1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/mtlo1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/mult1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/multu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/nop1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/or1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/ori1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sb1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sh1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sh2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sll1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sllv1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/slt1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/slt2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/slti1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/slti2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sltiu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sltu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sra1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sra2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/srav1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/srav2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/srl1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/srlv1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sub1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sub2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sub3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sub4.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/subu1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/sw1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/xor1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_instruction_src/xori1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/instrAlign.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck10.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck11.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck12.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck13.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck14.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck15.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck16.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck17.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck18.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck19.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck20.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck21.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck22.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck23.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck4.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck5.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck6.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck7.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck8.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memCheck9.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_simulator_instruction_src/memfunc.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_manual/manual1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lbio1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lbio2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lbuio1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lbuio2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lhio1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lhio2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lhuio1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lhuio2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_input/lwio1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_output/io1.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_output/io2.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_output/io3.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_output/io4.bin
+
+
+
+Commands passed successfully.
+Output file generated: test/test_io_instruction_src_output/io5.bin
+
+make[1]: Leaving directory '/media/sf_shared/cw/summative/working/YouAreMyDad'

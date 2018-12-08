@@ -1,0 +1,131 @@
+add1 , add , pass , james , || Expected outcome: 246 | Actual outcome: 246 || Testing overflow handling || Dependencies: lui jr ||
+add2 , add , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing zero case functionality || Dependencies: jr ||
+add3 , add , pass , james , || Expected outcome: 94 | Actual outcome: 94 || Testing basic functionality || Dependencies: addiu jr ||
+addi1 , addi , pass , james , || Expected outcome: 246 | Actual outcome: 246 || Testing overflow handling || Dependencies: lui jr ||
+addi2 , addi , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing zero case functionality || Dependencies: jr ||
+addi3 , addi , pass , james , || Expected outcome: 94 | Actual outcome: 94 || Testing basic functionality || Dependencies: addiu jr ||
+addiu1 , addiu , pass , james , || Expected outcome: 254 | Actual outcome: 254 || Testing overflow behaviour || Dependencies: lui jr ||
+addiu2 , addiu , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: jr ||
+addu1 , addu , pass , james , || Expected outcome: 254 | Actual outcome: 254 || Testing overflow behaviour || Dependencies: lui addiu jr ||
+addu2 , addu , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: jr ||
+and1 , and , pass , james , || Expected outcome: 240 | Actual outcome: 240 || Testing basic functionality || Dependencies: addiu jr ||
+and2 , and , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing zero case functionality || Dependencies: jr ||
+and3 , and , pass , james , || Expected outcome: 255 | Actual outcome: 255 || Testing edge case || Dependencies: addiu jr ||
+and4 , and , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing edge case || Dependencies: addiu jr ||
+andi1 , andi , pass , james , || Expected outcome: 240 | Actual outcome: 240 || Testing basic functionality || Dependencies: addiu jr ||
+andi2 , andi , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing zero case functionality || Dependencies: jr ||
+andi3 , andi , pass , james , || Expected outcome: 255 | Actual outcome: 255 || Testing edge case || Dependencies: addiu jr ||
+andi4 , andi , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing edge case || Dependencies: addiu jr ||
+beq1 , beq , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing conditional, delay slot and branch execution || Dependencies: ori andi addiu jr ||
+bgez1 , bgez , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing conditional, delay slot and branch execution || Dependencies: ori andi lui addiu jr ||
+bgezal1 , bgezal , pass , james , || Expected outcome: 31 | Actual outcome: 31 || Testing conditional, delay slot and branch execution || Dependencies: ori andi lui addiu jr ||
+bgezal2 , bgezal , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing linking on no branch || Dependencies: lui, addiu, subu ||
+bgtz1 , bgtz , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing conditional, delay slot and branch execution || Dependencies: ori andi addiu jr ||
+blez1 , blez , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing conditional, delay slot and branch execution || Dependencies: ori andi addiu jr ||
+bltz1 , bltz , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing conditional, delay slot and branch execution || Dependencies: lui ori andi addiu jr ||
+bltzal1 , bltzal , pass , james , || Expected outcome: 31 | Actual outcome: 31 || Testing conditional, delay slot and branch execution || Dependencies: lui ori andi addiu jr ||
+bne1 , bne , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing conditional, delay slot and branch execution || Dependencies: ori andi addiu jr ||
+div1 , div , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing function (signed) || Dependencies: lui jr mfhi mflo subu or ||
+divu1 , divu , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing function (unsigned) || Dependencies: lui jr mfhi mflo subu or ori ||
+j1 , j , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing basic functionality || Dependencies: jr ||
+j2 , j , pass , james , || Expected outcome: 1 | Actual outcome: 1 || Testing basic functionality || Dependencies: ori jr ||
+jal1 , jal , pass , james , || Expected outcome: 3 | Actual outcome: 3 || Testing basic functionality || Dependencies: ori jr ||
+jalr1 , jalr , pass , james , || Expected outcome: 3 | Actual outcome: 3 || Testing basic functionality - specifically, implicit & non-implicit $31 || Dependencies: lui ori jr ||
+jr1 , jr , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: lui addiu jr ori ||
+lb1 , lb , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing sign extension & basic functionality || Dependencies: lui ori sb subu jr ||
+lbu2 , lbu , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing memory access errors || Dependencies: lui ori jr ||
+lbu1 , lbu , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing sign extension & basic functionality || Dependencies: lui ori sb subu jr ||
+lbu2 , lbu , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing memory access errors || Dependencies: lui ori jr ||
+lh1 , lh , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing sign extension & basic functionality || Dependencies: lui ori sh subu jr ||
+lh2 , lh , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing memory access errors || Dependencies: lui ori jr ||
+lh3 , lh , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing alignment check || Dependencies: lui jr ||
+lh4 , lh , pass , james , || Expected outcome: 1 | Actual outcome: 1 || Testing correct sign extension of loaded halfword || Dependencies: lui addiu sh jr subu ||
+lhu1 , lhu , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing sign extension & basic functionality || Dependencies: lui ori sh subu jr ||
+lhu2 , lhu , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing memory access errors || Dependencies: lui ori jr ||
+lhu3 , lhu , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing memory access errors || Dependencies: lui jr ||
+lhu4 , lhu , pass , james , || Expected outcome: 1 | Actual outcome: 1 || Testing correct sign extension of loaded halfword || Dependencies: lui addiu sh jr subu ||
+lui1 , lui1 , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: ori addiu jr ||
+lw1 , lw , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing sign extension of immediate & basic function || Dependencies: lui ori sw addiu subu jr ||
+lw2 , lw , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing memory access errors || Dependencies: lui ori jr ||
+lw3 , lw , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing alignment check || Dependencies: lui jr ||
+lwl1 , lwl , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing functionality || Dependencies: lui ori sw slt or sll jr ||
+lwr1 , lwr , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing functionality || Dependencies: lui ori sw addiu slt or sll jr ||
+mfhi1 , mfhi , pass , james , || Expected outcome: 3 | Actual outcome: 3 || Testing basic functionality || Dependencies: ori mthi jr ||
+mfhi2 , mfhi , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: jr ||
+mflo1 , mflo , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing basic functionality || Dependencies: ori mtlo jr ||
+mflo2 , mflo , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: jr ||
+mthi1 , mthi , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing basic functionality || Dependencies: ori mfhi jr ||
+mtlo1 , mtlo , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing basic functionality || Dependencies: ori mflo jr ||
+mult1 , mult , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing function (signed) || Dependencies: lui jr mfhi mflo subu or ||
+multu1 , multu , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing function ("signed") || Dependencies: lui jr mfhi mflo subu or ||
+nop1 , nop , pass , james , || Expected outcome: 1 | Actual outcome: 1 || Testing program exiting with concurrent noops || Dependencies: ori, jr ||
+or1 , or , pass , james , || Expected outcome: 31 | Actual outcome: 31 || Testing basic functionality || Dependencies: addiu jr ||
+ori1 , ori , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality & zero extension of immediate || Dependencies: addiu subu lui jr srl or ||
+sb1 , sb , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: lui ori lw lui subu jr ||
+sh1 , sh , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: lui ori lw lui subu jr ||
+sh2 , sh , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing Alignment / IO || Dependencies: lui ori jr ||
+sll1 , sll , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: addi lui ori subu jr ||
+sllv1 , sllv , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: addi lui ori subu jr ||
+slt1 , slt , pass , james , || Expected outcome: 8 | Actual outcome: 8 || Testing comparisons (unsigned numbers) || Dependencies: lui addiu sll or jr ||
+slt2 , slt , pass , james , || Expected outcome: 8 | Actual outcome: 8 || Testing comparisons (signed numbers) || Dependencies: lui sll or jr ||
+slti1 , slti , pass , james , || Expected outcome: 8 | Actual outcome: 8 || Testing comparisons (unsigned numbers) || Dependencies: lui addiu sll or jr ||
+slti2 , slti , pass , james , || Expected outcome: 8 | Actual outcome: 8 || Testing comparisons (signed numbers) || Dependencies: lui addiu sll or jr ||
+sltiu1 , sltiu , pass , james , || Expected outcome: 8 | Actual outcome: 8 || Testing comparisons ("signed" numbers) || Dependencies: addiu sll or jr ||
+sltu1 , sltu , pass , james , || Expected outcome: 8 | Actual outcome: 8 || Testing comparisons ("signed" numbers) || Dependencies: addiu sll or jr ||
+sra1 , sra , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing signed arithmetic shift || Dependencies: lui ori slti or jr ||
+sra2 , sra , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing unsigned arithmetic shift || Dependencies: lui ori or jr sub ||
+srav1 , srav , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing signed arithmetic shift || Dependencies: lui ori subu jr ||
+srav2 , srav , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing unsigned arithmetic shift || Dependencies: lui ori subu jr ||
+srl1 , srl , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: lui ori subu jr ||
+srlv1 , srlv , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality || Dependencies: lui ori subu jr ||
+sub1 , subu , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing zero case || Dependencies: jr ||
+sub2 , sub , pass , james , || Expected outcome: 95 | Actual outcome: 95 || Testing basic functionality using last 8 bits (+ve result) || Dependencies: addiu jr ||
+sub3 , sub , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic functionality using last 8 bits (-ve result) || Dependencies: addiu jr ||
+sub4 , sub , pass , james , || Expected outcome: 246 | Actual outcome: 246 || Testing overflowed result || Dependencies: lui ori jr ||
+subu1 , subu , pass , james , || Expected outcome: 1 | Actual outcome: 1 || Testing overflowed result || Dependencies: lui ori jr ||
+sw1 , sw , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Testing alignment check || Dependencies: lui addiu jr ||
+xor1 , xor , pass , james , || Expected outcome: 15 | Actual outcome: 15 || Testing basic functionality using last 8 bits || Dependencies: addiu jr ||
+xori1 , xori , pass , james , || Expected outcome: 0 | Actual outcome: 0 || Testing basic function & zero extension of immediate || Dependencies: addiu andi slt sll lui ori sltu or jr ||
+instrAlign , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks that unaligned execution of instructions is caught || Dependencies: lui addi jr ||
+memCheck10 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x1FFF FFFF || Dependencies: lui ori lb jr ||
+memCheck11 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x1FFF FFFF || Dependencies: lui ori sb jr ||
+memCheck12 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x2400 0001 || Dependencies: lui ori lb jr ||
+memCheck13 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x2400 0001 || Dependencies: lui ori sb jr ||
+memCheck14 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x2FFF FFFF || Dependencies: lui ori lb jr ||
+memCheck15 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x2FFF FFFF || Dependencies: lui ori sb jr ||
+memCheck16 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x3000 0009 || Dependencies: lui ori lb jr ||
+memCheck17 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x3000 0009 || Dependencies: lui ori sb jr ||
+memCheck18 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0xFFFF FFFF || Dependencies: lui ori lb jr ||
+memCheck19 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0xFFFF FFFF || Dependencies: lui ori sb jr ||
+memCheck1 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 0000 || Dependencies: lb jr ||
+memCheck20 , INTERNAL , fail , james , || Expected outcome: 245 | Actual outcome: 236 || Checks for restricted access of memory regions: 0x3000 0003 || Dependencies: lui ori sb jr ||
+memCheck21 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x1000 0000 || Dependencies: lui ori sb jr ||
+ memCheck22 , INTERNAL , fail , james , || Expected outcome: 245 | Actual outcome: 0 || Checks for restricted access of memory regions: 0x3000 0004 || Dependencies: lui ori lb jr ||
+memCheck1 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 0000 || Dependencies: sb jr ||
+memCheck2 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 7FFF || Dependencies: lb jr ||
+memCheck3 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 7FFF || Dependencies: lb jr ||
+memCheck4 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 0001 || Dependencies: lb jr ||
+memCheck5 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 0001 || Dependencies: sb jr ||
+memCheck6 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0FFF FFFF || Dependencies: lui ori lb jr ||
+memCheck7 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0FFF FFFF || Dependencies: lui ori sb jr ||
+memCheck8 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x1100 0001 || Dependencies: lui ori sb jr ||
+memCheck9 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x1100 0001 || Dependencies: lui ori lb jr ||
+memfunc , STACK , pass , james , || Expected outcome: 4 | Actual outcome: 4 || Tests multiple loads/stores with overwrites || Dependencies: ori addiu sw lw jr ||
+io1 , sb , fail , james , || Expected outcome: D | Actual outcome:   || Testing I/O (valid) || Dependencies: lui ori sb jr ||
+io2 , sb , fail , james , || Expected outcome:  | Actual outcome: Z || Testing I/O (invalid) || Dependencies: lui ori sb jr ||
+io3 , sh , fail , james , || Expected outcome:  | Actual outcome: Z || Testing Alignment / IO || Dependencies: lui ori sh jr ||
+io4 , sh , fail , james , || Expected outcome: D | Actual outcome:  || Testing Alignment / IO || Dependencies: lui ori sh jr ||
+io5 , sw , pass , james , || Expected outcome: D&S | Actual outcome: D&S || IO check || Dependencies: lui addiu sw jr ||
+lbio1 , lb , fail , james , || Expected outcome: 0 | Actual outcome: 12 || Testing IO (aligned, invalid) || Dependencies: lui jr ||
+lbio2 , lb , fail , james , || Expected outcome: 70 | Actual outcome: 8 || Testing IO (aligned, valid) || Dependencies: lui jr ||
+lbuio1 , lbu , fail , james , || Expected outcome: 0 | Actual outcome: 48 || Testing IO (aligned, invalid) || Dependencies: lui jr ||
+lbuio2 , lbu , fail , james , || Expected outcome: 71 | Actual outcome: 8 || Testing IO (aligned, valid) || Dependencies: lui jr ||
+lhio1 , lh , fail , james , || Expected outcome: 0 | Actual outcome: 208 || Testing IO (aligned, invalid) || Dependencies: lui jr ||
+lhio2 , lh , fail , james , || Expected outcome: 69 | Actual outcome: 239 || Testing IO (aligned, valid) || Dependencies: lui jr ||
+lhuio1 , lhu , fail , james , || Expected outcome: 0 | Actual outcome: 208 || Testing IO (aligned, invalid) || Dependencies: lui jr ||
+lhio2 , lh , fail , james , || Expected outcome: 72 | Actual outcome: 238 || Testing IO (aligned, valid) || Dependencies: lui jr ||
+lwio1 , lw , pass , james , || Expected outcome: 68 | Actual outcome: 68 || Testing IO (aligned) || Dependencies: lui jr ||
+manual1 , div , pass , james , || Expected outcome: !245 | Actual outcome: 0 || Testing division by 0 no arithmetic exception || Dependencies: lui||
+noinput , INTERNAL , pass , james , || Expected outcome: 235 | Actual outcome: 235 || Testing no-input error || Dependencies: ||
+eof1 , lh , fail , james , || Expected outcome: 255 | Actual outcome: 1 || Testing eof output || Dependencies: lui, jr ||
+eof2 , lw , pass , james , || Expected outcome: 255 | Actual outcome: 255 || Testing eof output || Dependencies: lui, jr ||

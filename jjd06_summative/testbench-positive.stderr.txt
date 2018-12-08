@@ -1,0 +1,53 @@
+Exception :   overflow: s=-2147483648, t=-2147483648
+Exception : Overflow.
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception : Address is not aligned.
+Exception :     overflow, s=-2147483648, t=2147483647
+Exception : Address is not aligned.
+Exception : Attempt to execute instruction at mis-aligned address 0x00000001.
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Exception : Attempt to access range [0,INSTR_ADDR).
+sub-word access to GETC.
+Timeout from MIPS simulator after running for 60 seconds
+Exception : Attempt to write to instruction memory.
+sub-word access to PUTC.
+Exception : Attempt to access range [0,INSTR_ADDR).
+Exception : Attempt to access range [0,INSTR_ADDR).
+Exception : Attempt to access range [0,INSTR_ADDR).
+Exception : Attempt to access range [0,INSTR_ADDR).
+Exception : Attempt to access range [0,INSTR_ADDR).
+Exception : Attempt to access range [0,INSTR_ADDR).
+Exception : Attempt to access range [0,INSTR_ADDR).
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+sub-word access to PUTC.
+sub-word access to PUTC.
+sub-word access to PUTC.
+sub-word access to PUTC.
+sub-word access to GETC.
+sub-word access to GETC.
+sub-word access to GETC.
+sub-word access to GETC.
+sub-word access to GETC.
+sub-word access to GETC.
+sub-word access to GETC.
+sub-word access to GETC.
+Exception : Couldn't open binary ''
+sub-word access to GETC.

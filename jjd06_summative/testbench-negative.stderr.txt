@@ -1,0 +1,181 @@
+Exception :   overflow: s=-2147483648, t=-2147483648
+Disable instruction ' add ' for test 'add1 '
+Disable instruction ' add ' for test 'add2 '
+Disable instruction ' add ' for test 'add3 '
+Exception : Overflow.
+Disable instruction ' addi ' for test 'addi1 '
+Disable instruction ' addi ' for test 'addi2 '
+Disable instruction ' addi ' for test 'addi3 '
+Disable instruction ' addiu ' for test 'addiu1 '
+Disable instruction ' addiu ' for test 'addiu2 '
+Disable instruction ' addu ' for test 'addu1 '
+Disable instruction ' addu ' for test 'addu2 '
+Disable instruction ' and ' for test 'and1 '
+Disable instruction ' and ' for test 'and2 '
+Disable instruction ' and ' for test 'and3 '
+Disable instruction ' and ' for test 'and4 '
+Disable instruction ' andi ' for test 'andi1 '
+Disable instruction ' andi ' for test 'andi2 '
+Disable instruction ' andi ' for test 'andi3 '
+Disable instruction ' andi ' for test 'andi4 '
+Disable instruction ' beq ' for test 'beq1 '
+Disable instruction ' bgez ' for test 'bgez1 '
+Disable instruction ' bgezal ' for test 'bgezal1 '
+Disable instruction ' bgezal ' for test 'bgezal2 '
+Disable instruction ' bgtz ' for test 'bgtz1 '
+Disable instruction ' blez ' for test 'blez1 '
+Disable instruction ' bltz ' for test 'bltz1 '
+Disable instruction ' bltzal ' for test 'bltzal1 '
+Disable instruction ' bne ' for test 'bne1 '
+Disable instruction ' div ' for test 'div1 '
+Disable instruction ' divu ' for test 'divu1 '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' j ' for test 'j1 '
+Disable instruction ' j ' for test 'j2 '
+Disable instruction ' jal ' for test 'jal1 '
+Disable instruction ' jalr ' for test 'jalr1 '
+Disable instruction ' jr ' for test 'jr1 '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' lb ' for test 'lb1 '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' lbu ' for test 'lbu2 '
+Disable instruction ' lbu ' for test 'lbu1 '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' lbu ' for test 'lbu2 '
+Disable instruction ' lh ' for test 'lh1 '
+Exception : Address is not aligned.
+Disable instruction ' lh ' for test 'lh2 '
+Exception : Address is not aligned.
+Disable instruction ' lh ' for test 'lh3 '
+Disable instruction ' lh ' for test 'lh4 '
+Disable instruction ' lhu ' for test 'lhu1 '
+Exception : Address is not aligned.
+Disable instruction ' lhu ' for test 'lhu2 '
+Exception : Address is not aligned.
+Disable instruction ' lhu ' for test 'lhu3 '
+Disable instruction ' lhu ' for test 'lhu4 '
+Disable instruction ' lui1 ' for test 'lui1 '
+Disable instruction ' lw ' for test 'lw1 '
+Exception : Address is not aligned.
+Disable instruction ' lw ' for test 'lw2 '
+Exception : Address is not aligned.
+Disable instruction ' lw ' for test 'lw3 '
+Disable instruction ' lwl ' for test 'lwl1 '
+Disable instruction ' lwr ' for test 'lwr1 '
+Disable instruction ' mfhi ' for test 'mfhi1 '
+Disable instruction ' mfhi ' for test 'mfhi2 '
+Disable instruction ' mflo ' for test 'mflo1 '
+Disable instruction ' mflo ' for test 'mflo2 '
+Disable instruction ' mthi ' for test 'mthi1 '
+Disable instruction ' mtlo ' for test 'mtlo1 '
+Disable instruction ' mult ' for test 'mult1 '
+Disable instruction ' multu ' for test 'multu1 '
+Disable instruction ' nop ' for test 'nop1 '
+Disable instruction ' or ' for test 'or1 '
+Disable instruction ' ori ' for test 'ori1 '
+Disable instruction ' sb ' for test 'sb1 '
+Disable instruction ' sh ' for test 'sh1 '
+Disable instruction ' sh ' for test 'sh2 '
+Disable instruction ' sll ' for test 'sll1 '
+Disable instruction ' sllv ' for test 'sllv1 '
+Disable instruction ' slt ' for test 'slt1 '
+Disable instruction ' slt ' for test 'slt2 '
+Disable instruction ' slti ' for test 'slti1 '
+Disable instruction ' slti ' for test 'slti2 '
+Disable instruction ' sltiu ' for test 'sltiu1 '
+Disable instruction ' sltu ' for test 'sltu1 '
+Disable instruction ' sra ' for test 'sra1 '
+Disable instruction ' sra ' for test 'sra2 '
+Disable instruction ' srav ' for test 'srav1 '
+Disable instruction ' srav ' for test 'srav2 '
+Disable instruction ' srl ' for test 'srl1 '
+Disable instruction ' srlv ' for test 'srlv1 '
+Disable instruction ' subu ' for test 'sub1 '
+Disable instruction ' sub ' for test 'sub2 '
+Disable instruction ' sub ' for test 'sub3 '
+Exception :     overflow, s=-2147483648, t=2147483647
+Disable instruction ' sub ' for test 'sub4 '
+Disable instruction ' subu ' for test 'subu1 '
+Exception : Address is not aligned.
+Disable instruction ' sw ' for test 'sw1 '
+Disable instruction ' xor ' for test 'xor1 '
+Disable instruction ' xori ' for test 'xori1 '
+Exception : Attempt to execute instruction at mis-aligned address 0x00000001.
+Disable instruction ' INTERNAL ' for test 'instrAlign '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck10 '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck11 '
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck12 '
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck13 '
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck14 '
+Exception : Attempt to access range [DATA_ADDR+DATA_LEN,GETC_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck15 '
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Disable instruction ' INTERNAL ' for test 'memCheck16 '
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Disable instruction ' INTERNAL ' for test 'memCheck17 '
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Disable instruction ' INTERNAL ' for test 'memCheck18 '
+Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
+Disable instruction ' INTERNAL ' for test 'memCheck19 '
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck1 '
+sub-word access to GETC.
+Timeout from MIPS simulator after running for 60 seconds
+Disable instruction ' INTERNAL ' for test 'memCheck20 '
+Exception : Attempt to write to instruction memory.
+Disable instruction ' INTERNAL ' for test 'memCheck21 '
+sub-word access to PUTC.
+Disable instruction '' for test ''
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck1 '
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck2 '
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck3 '
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck4 '
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck5 '
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck6 '
+Exception : Attempt to access range [0,INSTR_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck7 '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck8 '
+Exception : Attempt to access range [INSTR_ADDR+INSTR_LEN,DATA_ADDR).
+Disable instruction ' INTERNAL ' for test 'memCheck9 '
+Disable instruction ' STACK ' for test 'memfunc '
+sub-word access to PUTC.
+Disable instruction ' sb ' for test 'io1 '
+Disable instruction ' sb ' for test 'io2 '
+sub-word access to PUTC.
+Disable instruction ' sh ' for test 'io3 '
+Disable instruction ' sh ' for test 'io4 '
+Disable instruction ' sw ' for test 'io5 '
+sub-word access to GETC.
+Disable instruction ' lb ' for test 'lbio1 '
+sub-word access to GETC.
+Disable instruction ' lb ' for test 'lbio2 '
+sub-word access to GETC.
+Disable instruction ' lbu ' for test 'lbuio1 '
+sub-word access to GETC.
+Disable instruction ' lbu ' for test 'lbuio2 '
+sub-word access to GETC.
+Disable instruction ' lh ' for test 'lhio1 '
+sub-word access to GETC.
+Disable instruction ' lh ' for test 'lhio2 '
+sub-word access to GETC.
+Disable instruction ' lhu ' for test 'lhuio1 '
+sub-word access to GETC.
+Disable instruction ' lh ' for test 'lhio2 '
+Disable instruction ' lw ' for test 'lwio1 '
+Disable instruction ' div ' for test 'manual1 '
+Exception : Couldn't open binary ''
+Disable instruction ' INTERNAL ' for test 'noinput '
+sub-word access to GETC.
+Disable instruction ' lh ' for test 'eof1 '
