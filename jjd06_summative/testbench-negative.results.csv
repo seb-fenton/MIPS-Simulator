@@ -98,9 +98,9 @@ memCheck17 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome
 memCheck18 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0xFFFF FFFF || Dependencies: lui ori lb jr ||
 memCheck19 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0xFFFF FFFF || Dependencies: lui ori sb jr ||
 memCheck1 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 0000 || Dependencies: lb jr ||
-memCheck20 , INTERNAL , fail , james , || Expected outcome: 245 | Actual outcome: 236 || Checks for restricted access of memory regions: 0x3000 0003 || Dependencies: lui ori sb jr ||
+memCheck20 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x3000 0003 || Dependencies: lui ori sb jr ||
 memCheck21 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x1000 0000 || Dependencies: lui ori sb jr ||
- memCheck22 , INTERNAL , fail , james , || Expected outcome: 245 | Actual outcome: 0 || Checks for restricted access of memory regions: 0x3000 0004 || Dependencies: lui ori lb jr ||
+memCheck22 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x3000 0004 || Dependencies: lui ori lb jr ||
 memCheck1 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 0000 || Dependencies: sb jr ||
 memCheck2 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 7FFF || Dependencies: lb jr ||
 memCheck3 , INTERNAL , pass , james , || Expected outcome: 245 | Actual outcome: 245 || Checks for restricted access of memory regions: 0x0000 7FFF || Dependencies: lb jr ||

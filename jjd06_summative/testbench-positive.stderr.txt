@@ -24,10 +24,9 @@ Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
 Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
 Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
 Exception : Attempt to access range [0,INSTR_ADDR).
-sub-word access to GETC.
-Timeout from MIPS simulator after running for 60 seconds
+Exception : Attempt to write to GETC
 Exception : Attempt to write to instruction memory.
-sub-word access to PUTC.
+Exception : Attempt to read from GETC
 Exception : Attempt to access range [0,INSTR_ADDR).
 Exception : Attempt to access range [0,INSTR_ADDR).
 Exception : Attempt to access range [0,INSTR_ADDR).

@@ -123,12 +123,11 @@ Exception : Attempt to access range [PUTC_ADDR+4,0xFFFFFFFF).
 Disable instruction ' INTERNAL ' for test 'memCheck1 '
 Exception : Attempt to access range [0,INSTR_ADDR).
 Disable instruction ' INTERNAL ' for test 'memCheck20 '
-sub-word access to GETC.
-Timeout from MIPS simulator after running for 60 seconds
+Exception : Attempt to write to GETC
 Disable instruction ' INTERNAL ' for test 'memCheck21 '
 Exception : Attempt to write to instruction memory.
-Disable instruction '' for test ''
-sub-word access to PUTC.
+Disable instruction ' INTERNAL ' for test 'memCheck22 '
+Exception : Attempt to read from GETC
 Disable instruction ' INTERNAL ' for test 'memCheck1 '
 Exception : Attempt to access range [0,INSTR_ADDR).
 Disable instruction ' INTERNAL ' for test 'memCheck2 '
